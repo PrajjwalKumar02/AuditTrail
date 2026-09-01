@@ -5,9 +5,7 @@
  */
 
 const ContainerReadModel = require('./models/ContainerReadModel');
-const InventoryReadModel = require('./models/InventoryReadModel');
 
 module.exports = {
   ContainerReadModel,
-  InventoryReadModel,
 };
