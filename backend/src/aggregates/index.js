@@ -1,5 +1,6 @@
 const {
   createInitialContainerState,
+  applyEvent,
 } = require("./containerAggregate");
 
 const {
@@ -9,6 +10,7 @@ const {
 
 module.exports = {
   createInitialContainerState,
+  applyEvent,
   INITIAL_CONTAINER_STATE,
   getInitialContainerState,
 };
