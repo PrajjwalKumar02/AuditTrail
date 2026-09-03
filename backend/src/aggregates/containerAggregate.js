@@ -11,13 +11,33 @@ function applyEvent(state, event) {
     throw new TypeError("Event must be an object");
   }
 
-  const { type } = event;
+  const { eventType } = event;
 
-  if (!type || typeof type !== "string") {
+  if (!eventType || typeof eventType !== "string") {
     throw new TypeError("Event type is required");
   }
 
-  return state;
+  switch (eventType) {
+    case "CONTAINER_CREATED":
+      return applyContainerCreated(state, event);
+
+    default:
+      return state;
+  }
+}
+
+function applyContainerCreated(state, event) {
+  const payload = event.payload || {};
+
+  return {
+    ...state,
+    aggregateId: event.aggregateId,
+    status: "CREATED",
+    location: payload.location ?? null,
+    version: event.version ?? state.version,
+    lastEventType: event.eventType,
+    lastEventAt: event.timestamp ?? null,
+  };
 }
 
 module.exports = {
