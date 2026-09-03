@@ -1,3 +1,4 @@
+// Dashboard page - Member 5
 import { useState } from "react";
 
 function DashboardPage({ onLogout }) {
