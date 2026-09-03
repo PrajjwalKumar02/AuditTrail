@@ -2,8 +2,8 @@ const successResponse = (res, data = null, message = 'Success', statusCode = 200
   const response = {
     success: true,
     message,
-    ...(data && { data }),
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    ...(data !== null && { data })
   };
   return res.status(statusCode).json(response);
 };
@@ -12,8 +12,8 @@ const errorResponse = (res, message = 'Error occurred', statusCode = 500, detail
   const response = {
     success: false,
     error: message,
-    ...(details && { details }),
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    ...(details && { details })
   };
   return res.status(statusCode).json(response);
 };
@@ -31,7 +31,9 @@ const paginatedResponse = (res, items, total, page, limit, message = 'Success') 
         totalItems: total,
         limit,
         hasNext: page < totalPages,
-        hasPrev: page > 1
+        hasPrev: page > 1,
+        firstPage: 1,
+        lastPage: totalPages
       }
     },
     timestamp: new Date().toISOString()
@@ -39,8 +41,28 @@ const paginatedResponse = (res, items, total, page, limit, message = 'Success') 
   return res.status(200).json(response);
 };
 
+const createdResponse = (res, data = null, message = 'Resource created successfully') => {
+  return successResponse(res, data, message, 201);
+};
+
+const noContentResponse = (res) => {
+  return res.status(204).send();
+};
+
+const customResponse = (res, data, message, statusCode, success = true) => {
+  return res.status(statusCode).json({
+    success,
+    message,
+    data,
+    timestamp: new Date().toISOString()
+  });
+};
+
 module.exports = {
   successResponse,
   errorResponse,
-  paginatedResponse
+  paginatedResponse,
+  createdResponse,
+  noContentResponse,
+  customResponse
 };
