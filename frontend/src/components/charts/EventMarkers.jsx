@@ -8,6 +8,7 @@ export default function EventMarkers({ events = [] }) {
       {important.map((event) => (
         <div className="event-marker" key={event.version}>
           <strong>v{event.version}</strong><span>{event.eventType}</span>
+          <small>{new Date(event.timestamp).toLocaleString()}</small>
         </div>
       ))}
     </div>
