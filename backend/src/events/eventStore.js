@@ -2,6 +2,12 @@ const Event = require("./Event");
 const { generateHash } = require("../utils/crypto");
 
 const appendEvent = async (eventData) => {
+  const previousEvent = await Event.findOne({
+    aggregateId: eventData.aggregateId,
+  }).sort({ version: -1 });
+
+  const previousHash = previousEvent ? previousEvent.hash : null;
+
   const hashData = {
     aggregateId: eventData.aggregateId,
     aggregateType: eventData.aggregateType,
@@ -9,13 +15,14 @@ const appendEvent = async (eventData) => {
     payload: eventData.payload,
     version: eventData.version,
     timestamp: eventData.timestamp,
-    previousHash: eventData.previousHash,
+    previousHash,
   };
 
   const hash = generateHash(hashData);
 
   const event = new Event({
     ...eventData,
+    previousHash,
     hash,
   });
 
