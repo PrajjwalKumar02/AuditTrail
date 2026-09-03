@@ -2,6 +2,11 @@ const winston = require('winston');
 const path = require('path');
 const { NODE_ENV, LOG_FILE } = require('../config/env');
 
+const fs = require('fs');
+const logsDir = path.dirname(LOG_FILE);
+if (!fs.existsSync(logsDir)) {
+  fs.mkdirSync(logsDir, { recursive: true });
+}
 
 const logFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
@@ -20,38 +25,43 @@ const logFormat = winston.format.combine(
   })
 );
 
-
 const logger = winston.createLogger({
-  level: NODE_ENV === 'development' ? 'debug' : 'info',
+  level: process.env.LOG_LEVEL || 'info',
   format: logFormat,
   transports: [
-    
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
         winston.format.simple()
-      )
+      ),
+      level: NODE_ENV === 'production' ? 'info' : 'debug'
     }),
     
     new winston.transports.File({
       filename: LOG_FILE,
       level: 'error',
+      maxsize: 5242880, // 5MB
+      maxFiles: 5,
     }),
     
     new winston.transports.File({
-      filename: path.join('logs', 'combined.log'),
-    }),
+      filename: path.join(logsDir, 'combined.log'),
+      maxsize: 5242880, // 5MB
+      maxFiles: 5,
+    })
   ],
+  
+  exitOnError: false
 });
 
+logger.stream = {
+  write: (message) => {
+    logger.info(message.trim());
+  }
+};
 
-if (NODE_ENV === 'development') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.simple()
-    )
-  }));
-}
+process.on('unhandledRejection', (error) => {
+  logger.error('Unhandled Rejection:', error);
+});
 
 module.exports = logger;
