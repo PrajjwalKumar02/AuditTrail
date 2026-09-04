@@ -1,7 +1,6 @@
-// Dashboard page - Member 5
 import { useState } from "react";
 
-function DashboardPage({ onLogout }) {
+export default function DashboardPage({ onNavigate, onLogout }) {
   const [search, setSearch] = useState("");
 
   const events = [
@@ -11,7 +10,7 @@ function DashboardPage({ onLogout }) {
       location: "Mumbai Port",
       time: "14:32",
       status: "Verified",
-      level: "info",
+      statusClass: "verified",
     },
     {
       version: "v3",
@@ -19,7 +18,7 @@ function DashboardPage({ onLogout }) {
       location: "Arabian Sea",
       time: "11:20",
       status: "Warning",
-      level: "warning",
+      statusClass: "warning",
     },
     {
       version: "v2",
@@ -27,7 +26,7 @@ function DashboardPage({ onLogout }) {
       location: "Warehouse-A",
       time: "08:45",
       status: "Verified",
-      level: "info",
+      statusClass: "verified",
     },
     {
       version: "v1",
@@ -35,7 +34,7 @@ function DashboardPage({ onLogout }) {
       location: "Warehouse-A",
       time: "07:10",
       status: "Verified",
-      level: "info",
+      statusClass: "verified",
     },
   ];
 
@@ -43,39 +42,42 @@ function DashboardPage({ onLogout }) {
     {
       id: "CONT-001",
       shipment: "MSC-001",
-      status: "In Transit",
       location: "Mumbai Port",
+      status: "In Transit",
     },
     {
       id: "CONT-002",
       shipment: "MSC-002",
-      status: "Delivered",
       location: "Dubai Port",
+      status: "Delivered",
     },
     {
       id: "CONT-003",
       shipment: "MSC-003",
-      status: "In Transit",
       location: "Arabian Sea",
+      status: "In Transit",
     },
   ];
 
   const filteredContainers = containers.filter((container) =>
-    `${container.id} ${container.shipment} ${container.location}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
+    container.id.toLowerCase().includes(search.toLowerCase())
   );
+
+  const goTo = (page) => {
+    if (onNavigate) {
+      onNavigate(page);
+    }
+  };
 
   return (
     <div className="audit-app">
 
-      {/* SIDEBAR */}
+      {/* ================= SIDEBAR ================= */}
       <aside className="audit-sidebar">
 
+        {/* Brand */}
         <div className="audit-brand">
-          <div className="audit-brand-logo">
-            AT
-          </div>
+          <div className="audit-brand-logo">AT</div>
 
           <div>
             <h2>AuditTrail</h2>
@@ -83,56 +85,79 @@ function DashboardPage({ onLogout }) {
           </div>
         </div>
 
-
-        <div className="sidebar-label">
-          WORKSPACE
-        </div>
+        {/* Workspace */}
+        <div className="sidebar-label">WORKSPACE</div>
 
         <nav className="audit-nav">
 
-          <a className="nav-link active" href="#dashboard">
+          <button
+            className="nav-link active"
+            onClick={() => goTo("dashboard")}
+          >
             <span>⌂</span>
             Dashboard
-          </a>
+          </button>
 
-          <a className="nav-link" href="#containers">
+          <button
+            className="nav-link"
+            onClick={() => goTo("containers")}
+          >
             <span>▣</span>
             Containers
-          </a>
+          </button>
 
-          <a className="nav-link" href="#timeline">
+          <button
+            className="nav-link"
+            onClick={() => goTo("timeline")}
+          >
             <span>◷</span>
             Event Timeline
-          </a>
+          </button>
 
-          <a className="nav-link" href="#locations">
-            <span>⌖</span>
+          <button
+            className="nav-link"
+            onClick={() => goTo("locations")}
+          >
+            <span>⚑</span>
             Locations
-          </a>
+          </button>
 
-          <a className="nav-link" href="#analytics">
+          <button
+            className="nav-link"
+            onClick={() => goTo("analytics")}
+          >
             <span>▥</span>
             Analytics
-          </a>
-
-          <div className="sidebar-label second">
-            SECURITY
-          </div>
-
-          <a className="nav-link" href="#audit">
-            <span>♢</span>
-            Audit Integrity
-          </a>
-
-          <a className="nav-link" href="#alerts">
-            <span>!</span>
-            Alerts
-            <span className="alert-count">3</span>
-          </a>
+          </button>
 
         </nav>
 
+        {/* Security */}
+        <div className="sidebar-label">SECURITY</div>
 
+        <nav className="audit-nav">
+
+          <button
+            className="nav-link"
+            onClick={() => goTo("audit")}
+          >
+            <span>◇</span>
+            Audit Integrity
+          </button>
+
+          <button
+            className="nav-link"
+            onClick={() => goTo("alerts")}
+          >
+            <span>!</span>
+            Alerts
+
+            <span className="alert-count">3</span>
+          </button>
+
+        </nav>
+
+        {/* Sidebar Bottom */}
         <div className="sidebar-bottom">
 
           <div className="system-status">
@@ -143,7 +168,6 @@ function DashboardPage({ onLogout }) {
               <small>All services running</small>
             </div>
           </div>
-
 
           <div className="sidebar-user">
 
@@ -167,268 +191,284 @@ function DashboardPage({ onLogout }) {
           </div>
 
         </div>
-
       </aside>
 
-
-      {/* MAIN */}
+      {/* ================= MAIN ================= */}
       <main className="audit-main">
 
-        {/* TOPBAR */}
+        {/* Topbar */}
         <header className="audit-topbar">
 
           <div className="breadcrumb">
-            Workspace
+            AuditTrail
             <span>/</span>
-            <strong>Dashboard</strong>
+            Dashboard
           </div>
 
           <div className="topbar-right">
 
-            <div className="notification">
+            <button
+              className="notification"
+              onClick={() => goTo("alerts")}
+              title="View alerts"
+            >
               ♢
-              <span></span>
-            </div>
+              <span>3</span>
+            </button>
 
             <div className="top-user">
-              <div className="top-avatar">
-                A
-              </div>
+              <div className="top-avatar">A</div>
 
               <div>
                 <strong>Admin</strong>
-                <small>Administrator</small>
+                <span>Administrator</span>
               </div>
-
-              <span className="chevron">⌄</span>
             </div>
 
           </div>
 
         </header>
 
+        {/* ================= CONTENT ================= */}
+        <div className="audit-content">
 
-        {/* CONTENT */}
-        <section className="audit-content">
-
-          {/* HEADER */}
-          <div className="page-heading">
+          {/* Heading */}
+          <section className="page-heading">
 
             <div>
-              <div className="eyebrow">
-                OVERVIEW
-              </div>
+              <p className="eyebrow">
+                AUDITTRAIL / OVERVIEW
+              </p>
 
-              <h1>
-                Welcome back, Admin <span>👋</span>
-              </h1>
+              <h1>Forensic Dashboard</h1>
 
               <p>
-                Here's what's happening with your logistics and audit events.
+                Audit and monitor your logistics events
               </p>
             </div>
 
             <div className="integrity-pill">
-              <span></span>
-              Audit system verified
+              <span>✓</span>
+              Audit Integrity Verified
             </div>
 
-          </div>
+          </section>
 
-
-          {/* STATS */}
-          <div className="stats-grid">
+          {/* ================= STATS ================= */}
+          <section className="stats-grid">
 
             <div className="stat-card">
 
-              <div className="stat-top">
-                <div className="stat-icon blue">▣</div>
+              <div className="stat-card-top">
+                <div className="stat-icon blue-bg">
+                  ▣
+                </div>
 
                 <span className="stat-change">
                   +12%
                 </span>
               </div>
 
-              <span className="stat-label">
+              <p className="stat-label">
                 TOTAL CONTAINERS
-              </span>
-
-              <strong className="stat-number">
-                24
-              </strong>
-
-              <p>
-                Across all shipments
               </p>
+
+              <h2 className="stat-number">
+                24
+              </h2>
+
+              <span className="stat-description">
+                Across all shipments
+              </span>
 
             </div>
 
-
             <div className="stat-card">
 
-              <div className="stat-top">
-                <div className="stat-icon purple">⇢</div>
+              <div className="stat-card-top">
+                <div className="stat-icon purple-bg">
+                  ⇢
+                </div>
 
                 <span className="stat-change">
                   +8%
                 </span>
               </div>
 
-              <span className="stat-label">
+              <p className="stat-label">
                 IN TRANSIT
-              </span>
-
-              <strong className="stat-number">
-                18
-              </strong>
-
-              <p>
-                Currently moving
               </p>
+
+              <h2 className="stat-number">
+                18
+              </h2>
+
+              <span className="stat-description">
+                Currently moving
+              </span>
 
             </div>
 
-
             <div className="stat-card">
 
-              <div className="stat-top">
-                <div className="stat-icon cyan">⌖</div>
+              <div className="stat-card-top">
+                <div className="stat-icon cyan-bg">
+                  ↕
+                </div>
 
                 <span className="stat-change">
                   Live
                 </span>
               </div>
 
-              <span className="stat-label">
+              <p className="stat-label">
                 ACTIVE LOCATIONS
-              </span>
-
-              <strong className="stat-number">
-                12
-              </strong>
-
-              <p>
-                Ports & checkpoints
               </p>
+
+              <h2 className="stat-number">
+                12
+              </h2>
+
+              <span className="stat-description">
+                Ports & checkpoints
+              </span>
 
             </div>
 
-
             <div className="stat-card">
 
-              <div className="stat-top">
-                <div className="stat-icon orange">!</div>
+              <div className="stat-card-top">
+                <div className="stat-icon orange-bg">
+                  !
+                </div>
 
                 <span className="stat-warning">
                   Attention
                 </span>
               </div>
 
-              <span className="stat-label">
+              <p className="stat-label">
                 ACTIVE ALERTS
-              </span>
-
-              <strong className="stat-number">
-                3
-              </strong>
-
-              <p>
-                Require review
               </p>
 
+              <h2 className="stat-number">
+                3
+              </h2>
+
+              <span className="stat-description">
+                Require review
+              </span>
+
             </div>
 
-          </div>
+          </section>
 
+          {/* ================= QUICK ACTIONS ================= */}
+          <section>
 
-          {/* QUICK ACTIONS */}
-          <div className="section-title-row">
+            <div className="section-title-row">
 
-            <div>
-              <h2>Quick actions</h2>
-              <p>Access frequently used audit tools.</p>
+              <div>
+                <h2>Quick actions</h2>
+                <p>Access frequently used audit tools.</p>
+              </div>
+
             </div>
 
-          </div>
+            <div className="quick-actions">
 
+              <button
+                className="quick-action"
+                onClick={() => goTo("containers")}
+              >
+                <div className="quick-icon blue-bg">
+                  🔍
+                </div>
 
-          <div className="quick-actions">
+                <div>
+                  <strong>Track container</strong>
+                  <span>Find shipment details</span>
+                </div>
 
-            <button className="quick-action">
-              <div className="quick-icon blue-bg">
-                🔍
-              </div>
+                <span className="quick-arrow">
+                  →
+                </span>
+              </button>
 
-              <div>
-                <strong>Track container</strong>
-                <span>Find shipment details</span>
-              </div>
+              <button
+                className="quick-action"
+                onClick={() => goTo("timeline")}
+              >
+                <div className="quick-icon purple-bg">
+                  ◷
+                </div>
 
-              <b>→</b>
-            </button>
+                <div>
+                  <strong>View event timeline</strong>
+                  <span>Review complete history</span>
+                </div>
 
+                <span className="quick-arrow">
+                  →
+                </span>
+              </button>
 
-            <button className="quick-action">
-              <div className="quick-icon purple-bg">
-                ◷
-              </div>
+              <button
+                className="quick-action"
+                onClick={() => goTo("audit")}
+              >
+                <div className="quick-icon cyan-bg">
+                  ◇
+                </div>
 
-              <div>
-                <strong>View event timeline</strong>
-                <span>Review complete history</span>
-              </div>
+                <div>
+                  <strong>Audit integrity</strong>
+                  <span>Verify ledger records</span>
+                </div>
 
-              <b>→</b>
-            </button>
+                <span className="quick-arrow">
+                  →
+                </span>
+              </button>
 
+            </div>
 
-            <button className="quick-action">
-              <div className="quick-icon cyan-bg">
-                ♢
-              </div>
+          </section>
 
-              <div>
-                <strong>Audit integrity</strong>
-                <span>Verify ledger records</span>
-              </div>
-
-              <b>→</b>
-            </button>
-
-          </div>
-
-
-          {/* LOWER GRID */}
+          {/* ================= TWO COLUMNS ================= */}
           <div className="dashboard-columns">
 
-            {/* RECENT EVENTS */}
-            <section className="panel events-panel" id="timeline">
+            {/* Recent Events */}
+            <section className="panel">
 
               <div className="panel-header">
 
                 <div>
                   <h2>Recent events</h2>
-                  <p>Latest activity across your shipments</p>
+                  <p>
+                    Latest activity across your shipments
+                  </p>
                 </div>
 
-                <button className="view-all">
+                <button
+                  className="panel-link"
+                  onClick={() => goTo("timeline")}
+                >
                   View all →
                 </button>
 
               </div>
 
-
-              <div className="event-list">
+              <div className="events-list">
 
                 {events.map((event) => (
+
                   <div
                     className="event-row"
                     key={event.version}
                   >
 
-                    <div className={`event-marker ${event.level}`}>
-                      ●
-                    </div>
+                    <div className="event-marker"></div>
 
                     <div className="event-main">
 
@@ -457,7 +497,7 @@ function DashboardPage({ onLogout }) {
                       </span>
 
                       <span
-                        className={`event-status ${event.level}`}
+                        className={`event-status ${event.statusClass}`}
                       >
                         {event.status}
                       </span>
@@ -465,30 +505,35 @@ function DashboardPage({ onLogout }) {
                     </div>
 
                   </div>
+
                 ))}
 
               </div>
 
             </section>
 
-
-            {/* CONTAINERS */}
-            <section className="panel containers-panel" id="containers">
+            {/* Tracked Containers */}
+            <section className="panel">
 
               <div className="panel-header">
 
                 <div>
                   <h2>Tracked containers</h2>
-                  <p>Recently monitored shipments</p>
+                  <p>
+                    Recently monitored shipments
+                  </p>
                 </div>
 
-                <button className="add-button">
+                <button
+                  className="panel-link"
+                  onClick={() => goTo("containers")}
+                >
                   + Add
                 </button>
 
               </div>
 
-
+              {/* Search */}
               <div className="container-search">
 
                 <span>⌕</span>
@@ -504,43 +549,70 @@ function DashboardPage({ onLogout }) {
 
               </div>
 
-
               <div className="container-list">
 
-                {filteredContainers.map((container) => (
+                {filteredContainers.map(
+                  (container) => (
+
+                    <div
+                      className="container-row"
+                      key={container.id}
+                      onClick={() =>
+                        goTo("containers")
+                      }
+                    >
+
+                      <div className="container-box">
+                        📦
+                      </div>
+
+                      <div className="container-info">
+
+                        <strong>
+                          {container.id}
+                        </strong>
+
+                        <span>
+                          {container.shipment}
+                        </span>
+
+                      </div>
+
+                      <div className="container-location">
+
+                        <strong>
+                          {container.location}
+                        </strong>
+
+                        <span
+                          className={
+                            container.status ===
+                            "Delivered"
+                              ? "delivered"
+                              : ""
+                          }
+                        >
+                          {container.status}
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  )
+                )}
+
+                {filteredContainers.length === 0 && (
                   <div
-                    className="container-row"
-                    key={container.id}
+                    style={{
+                      padding: "30px",
+                      textAlign: "center",
+                      color: "#8b98ad",
+                    }}
                   >
-
-                    <div className="container-box">
-                      📦
-                    </div>
-
-                    <div className="container-info">
-
-                      <strong>
-                        {container.id}
-                      </strong>
-
-                      <span>
-                        {container.shipment}
-                      </span>
-
-                    </div>
-
-                    <div className="container-location">
-                      <span>
-                        {container.location}
-                      </span>
-
-                      <small>
-                        {container.status}
-                      </small>
-                    </div>
-
+                    No containers found
                   </div>
-                ))}
+                )}
 
               </div>
 
@@ -548,9 +620,8 @@ function DashboardPage({ onLogout }) {
 
           </div>
 
-
-          {/* FOOTER */}
-          <div className="dashboard-footer">
+          {/* ================= FOOTER ================= */}
+          <footer className="dashboard-footer">
 
             <span>
               AuditTrail © 2026
@@ -560,18 +631,15 @@ function DashboardPage({ onLogout }) {
               Last synchronized just now
             </span>
 
-            <span className="footer-secure">
-              🔐 Secure ledger
+            <span>
+              🔒 Secure ledger
             </span>
 
-          </div>
+          </footer>
 
-        </section>
-
+        </div>
       </main>
 
     </div>
   );
 }
-
-export default DashboardPage;
