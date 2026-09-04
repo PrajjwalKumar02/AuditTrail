@@ -1,17 +1,46 @@
+const {
+  getInitialContainerState,
+} = require("./initialState");
+
 function createInitialContainerState() {
+  return getInitialContainerState();
+}
+
+function applyEvent(state, event) {
+  if (!event || typeof event !== "object") {
+    throw new TypeError("Event must be an object");
+  }
+
+  const { eventType } = event;
+
+  if (!eventType || typeof eventType !== "string") {
+    throw new TypeError("Event type is required");
+  }
+
+  switch (eventType) {
+    case "CONTAINER_CREATED":
+      return applyContainerCreated(state, event);
+
+    default:
+      return state;
+  }
+}
+
+function applyContainerCreated(state, event) {
+  const payload = event.payload || {};
+
   return {
-    aggregateId: null,
+    ...state,
+    aggregateId: event.aggregateId,
     status: "CREATED",
-    location: null,
-    ship: null,
-    temperature: null,
-    temperatureAlert: false,
-    version: 0,
-    lastEventType: null,
-    lastEventAt: null,
+    location: payload.location ?? null,
+    version: event.version ?? state.version,
+    lastEventType: event.eventType,
+    lastEventAt: event.timestamp ?? null,
   };
 }
 
 module.exports = {
   createInitialContainerState,
+  applyEvent,
 };

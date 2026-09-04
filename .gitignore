@@ -1,5 +1,84 @@
+#  Node.js 
 node_modules/
-.env
-.env.*
-!.env.example
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
 
+#  Environment Variables 
+.env
+.env.local
+.env.production
+.env.test
+
+#  Logs 
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+#  Build Output 
+dist/
+build/
+out/
+.next/
+coverage/
+.nyc_output/
+
+#  IDE / Editor 
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+.project
+.classpath
+.settings/
+
+#  OS Files 
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+#  Docker 
+*.pid
+docker-compose.override.yml
+
+#  Testing 
+coverage/
+.nyc_output/
+.jest-cache/
+test-results/
+
+#  Temporary Files 
+tmp/
+temp/
+*.tmp
+*.temp
+
+#  Database 
+*.db
+*.sqlite
+*.sqlite3
+*.mongo
+
+#  Sensitive Files 
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+#  TypeScript 
+*.tsbuildinfo
+
+#  Production Deployment 
+.DS_Store
+.env.production.local
+.env.development.local
+.env.test.local
