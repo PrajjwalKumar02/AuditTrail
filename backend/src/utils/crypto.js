@@ -7,6 +7,12 @@ const generateHash = (data) => {
     .digest("hex");
 };
 
+const verifyHash = (data, expectedHash) => {
+  const actualHash = generateHash(data);
+  return actualHash === expectedHash;
+};
+
 module.exports = {
   generateHash,
+  verifyHash,
 };
