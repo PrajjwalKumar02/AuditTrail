@@ -7,6 +7,8 @@ export default function ChartFilters({ selectedEvent, onEventChange }) {
         <option value="CONTAINER_CREATED">Container Created</option>
         <option value="LOADED_ON_SHIP">Loaded on Ship</option>
         <option value="MOVED">Moved</option>
+        <option value="TEMPERATURE_SPIKE">Temperature Spike</option>
+        <option value="ARRIVED_AT_PORT">Arrived at Port</option>
       </select>
     </div>
   );
