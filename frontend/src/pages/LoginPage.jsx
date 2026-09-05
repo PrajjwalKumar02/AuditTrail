@@ -1,205 +1,311 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-function LoginPage({ onLogin }) {
+export default function LoginPage({ onLogin }) {
+  const [mode, setMode] = useState("login");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [name, setName] = useState("");
+  const [remember, setRemember] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
 
-    if (!email || !password) {
-      setError("Please enter your email and password.");
+    if (!email || !password || (mode === "signup" && !name)) {
+      setError("Please fill in all required fields.");
       return;
     }
 
-    if (
-      email === "admin@audittrail.com" &&
-      password === "admin123"
-    ) {
-      localStorage.setItem("audittrail_logged_in", "true");
-      onLogin();
-    } else {
-      setError("Invalid email or password.");
+    /*
+      Temporary frontend authentication.
+      Replace this with backend authentication when API is connected.
+    */
+
+    localStorage.setItem("audittrail_logged_in", "true");
+
+    if (remember) {
+      localStorage.setItem("audittrail_remember", "true");
     }
+
+    onLogin();
   };
 
   return (
-    <div className="login-page">
+    <div className="auth-page">
 
-      {/* LEFT BRAND PANEL */}
-      <div className="login-brand">
+      {/* BACKGROUND */}
+      <div className="auth-glow auth-glow-one"></div>
+      <div className="auth-glow auth-glow-two"></div>
+      <div className="auth-grid"></div>
 
-        <div className="brand-logo">
-          AT
-        </div>
+      {/* TOP BRAND */}
+      <header className="auth-topbar">
 
-        <h1>AuditTrail</h1>
-
-        <p className="brand-tagline">
-          Forensic Ledger & Logistics Intelligence
-        </p>
-
-        <div className="brand-visual">
-          <div className="visual-card">
-            <span className="visual-icon">📦</span>
-            <div>
-              <strong>CONT-001</strong>
-              <small>Shipment verified</small>
-            </div>
-            <span className="verified">✓</span>
+        <div className="auth-brand">
+          <div className="auth-brand-icon">
+            A
           </div>
 
-          <div className="visual-line"></div>
-
-          <div className="visual-card">
-            <span className="visual-icon">📍</span>
-            <div>
-              <strong>Mumbai Port</strong>
-              <small>Current location</small>
-            </div>
-            <span className="live">LIVE</span>
-          </div>
-
-          <div className="visual-line"></div>
-
-          <div className="visual-card">
-            <span className="visual-icon">🔐</span>
-            <div>
-              <strong>Audit Integrity</strong>
-              <small>Blockchain verified</small>
-            </div>
-            <span className="verified">✓</span>
+          <div>
+            <strong>AuditTrail</strong>
+            <span>Forensic Ledger</span>
           </div>
         </div>
 
-        <div className="brand-footer">
-          Secure • Traceable • Verifiable
+        <div className="auth-secure">
+          <span></span>
+          Secure Environment
         </div>
 
-      </div>
+      </header>
 
+      {/* MAIN */}
+      <main className="auth-main">
 
-      {/* RIGHT LOGIN PANEL */}
-      <div className="login-form-area">
+        {/* LEFT */}
+        <section className="auth-intro">
 
-        <div className="login-card">
-
-          <div className="mobile-logo">
-            AT
+          <div className="auth-eyebrow">
+            <span></span>
+            FORENSIC AUDIT PLATFORM
           </div>
 
-          <div className="login-heading">
-            <h2>Welcome back 👋</h2>
+          <h1>
+            Track every event.
+            <br />
+            <span>Trust every record.</span>
+          </h1>
+
+          <p>
+            Monitor container activity, trace shipment events,
+            and verify the integrity of your forensic ledger
+            from one secure dashboard.
+          </p>
+
+          <div className="auth-features">
+
+            <div className="auth-feature">
+              <div>✓</div>
+              <span>
+                Immutable audit records
+              </span>
+            </div>
+
+            <div className="auth-feature">
+              <div>⌖</div>
+              <span>
+                Real-time container tracking
+              </span>
+            </div>
+
+            <div className="auth-feature">
+              <div>◈</div>
+              <span>
+                Cryptographic integrity verification
+              </span>
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* LOGIN CARD */}
+        <section className="auth-card">
+
+          <div className="auth-card-header">
+
+            <div className="auth-card-icon">
+              {mode === "login" ? "↗" : "+"}
+            </div>
+
+            <h2>
+              {mode === "login"
+                ? "Welcome back"
+                : "Create account"}
+            </h2>
+
             <p>
-              Sign in to your AuditTrail dashboard
+              {mode === "login"
+                ? "Sign in to your AuditTrail workspace"
+                : "Create your secure AuditTrail account"}
             </p>
+
+          </div>
+
+          {/* SWITCH */}
+          <div className="auth-switch">
+
+            <button
+              className={mode === "login" ? "active" : ""}
+              onClick={() => {
+                setMode("login");
+                setError("");
+              }}
+            >
+              Sign In
+            </button>
+
+            <button
+              className={mode === "signup" ? "active" : ""}
+              onClick={() => {
+                setMode("signup");
+                setError("");
+              }}
+            >
+              Create Account
+            </button>
+
           </div>
 
           <form onSubmit={handleSubmit}>
 
-            <div className="input-group">
-              <label>Email address</label>
+            {mode === "signup" && (
+              <div className="auth-field">
 
-              <div className="input-wrapper">
-                <span>✉</span>
+                <label>Full Name</label>
+
+                <div className="auth-input-wrap">
+                  <span>◉</span>
+
+                  <input
+                    type="text"
+                    placeholder="Enter your name"
+                    value={name}
+                    onChange={(e) =>
+                      setName(e.target.value)
+                    }
+                  />
+                </div>
+
+              </div>
+            )}
+
+            <div className="auth-field">
+
+              <label>Email Address</label>
+
+              <div className="auth-input-wrap">
+                <span>@</span>
 
                 <input
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="you@example.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) =>
+                    setEmail(e.target.value)
+                  }
                 />
               </div>
+
             </div>
 
+            <div className="auth-field">
 
-            <div className="input-group">
-              <label>Password</label>
+              <div className="auth-label-row">
+                <label>Password</label>
 
-              <div className="input-wrapper">
-                <span>🔒</span>
+                {mode === "login" && (
+                  <button
+                    type="button"
+                    className="auth-forgot"
+                  >
+                    Forgot password?
+                  </button>
+                )}
+              </div>
+
+              <div className="auth-input-wrap">
+
+                <span>◆</span>
 
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
                   placeholder="Enter your password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) =>
+                    setPassword(e.target.value)
+                  }
                 />
 
                 <button
                   type="button"
-                  className="password-toggle"
+                  className="auth-eye"
                   onClick={() =>
                     setShowPassword(!showPassword)
                   }
                 >
-                  {showPassword ? "🙈" : "👁"}
+                  {showPassword ? "◉" : "◎"}
                 </button>
+
               </div>
+
             </div>
 
+            {mode === "login" && (
+              <label className="auth-remember">
+
+                <input
+                  type="checkbox"
+                  checked={remember}
+                  onChange={(e) =>
+                    setRemember(e.target.checked)
+                  }
+                />
+
+                <span>Remember me</span>
+
+              </label>
+            )}
 
             {error && (
-              <div className="login-error">
+              <div className="auth-error">
                 {error}
               </div>
             )}
 
-
-            <div className="login-options">
-              <label className="remember">
-                <input type="checkbox" />
-                <span>Remember me</span>
-              </label>
-
-              <button
-                type="button"
-                className="forgot-button"
-                onClick={() =>
-                  alert("Password recovery will be connected to backend.")
-                }
-              >
-                Forgot password?
-              </button>
-            </div>
-
-
             <button
               type="submit"
-              className="signin-button"
+              className="auth-submit"
             >
-              Sign in
+              {mode === "login"
+                ? "Sign In"
+                : "Create Account"}
+
               <span>→</span>
             </button>
 
           </form>
 
+          <div className="auth-security">
 
-          <div className="demo-login">
-            <div className="demo-title">
-              Demo account
-            </div>
+            <span>◈</span>
 
             <div>
-              <span>Email</span>
-              <strong>admin@audittrail.com</strong>
+              <strong>Protected workspace</strong>
+              <small>
+                Your audit data is secured with
+                integrity verification.
+              </small>
             </div>
 
-            <div>
-              <span>Password</span>
-              <strong>admin123</strong>
-            </div>
           </div>
 
-        </div>
+        </section>
 
-      </div>
+      </main>
+
+      <footer className="auth-footer">
+        <span>© 2026 AuditTrail</span>
+        <span>Secure Forensic Ledger Platform</span>
+      </footer>
 
     </div>
   );
 }
-
-export default LoginPage;
