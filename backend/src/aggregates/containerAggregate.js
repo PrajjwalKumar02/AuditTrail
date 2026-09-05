@@ -24,6 +24,9 @@ function applyEvent(state, event) {
     case "LOADED_ON_SHIP":
       return applyLoadedOnShip(state, event);
 
+    case "MOVED_TO_PORT":
+      return applyMovedToPort(state, event);
+
     default:
       return state;
   }
@@ -51,6 +54,19 @@ function applyLoadedOnShip(state, event) {
     aggregateId: event.aggregateId ?? state.aggregateId,
     status: "LOADED",
     ship: payload.ship ?? null,
+    version: event.version ?? state.version,
+    lastEventType: event.eventType,
+    lastEventAt: event.timestamp ?? null,
+  };
+}
+
+function applyMovedToPort(state, event) {
+  const payload = event.payload || {};
+
+  return {
+    ...state,
+    aggregateId: event.aggregateId ?? state.aggregateId,
+    location: payload.location ?? state.location,
     version: event.version ?? state.version,
     lastEventType: event.eventType,
     lastEventAt: event.timestamp ?? null,
