@@ -8,13 +8,15 @@ const appendEvent = async (eventData) => {
 
   const previousHash = previousEvent ? previousEvent.hash : null;
 
+  const timestamp = eventData.timestamp || new Date();
+
   const hashData = {
     aggregateId: eventData.aggregateId,
     aggregateType: eventData.aggregateType,
     eventType: eventData.eventType,
     payload: eventData.payload,
     version: eventData.version,
-    timestamp: eventData.timestamp,
+    timestamp,
     previousHash,
   };
 
@@ -22,6 +24,7 @@ const appendEvent = async (eventData) => {
 
   const event = new Event({
     ...eventData,
+    timestamp,
     previousHash,
     hash,
   });
@@ -47,8 +50,29 @@ const verifyEventIntegrity = (event) => {
   return verifyHash(hashData, event.hash);
 };
 
+const verifyEventChain = async (aggregateId) => {
+  const events = await getEventsByAggregate(aggregateId);
+
+  let previousHash = null;
+
+  for (const event of events) {
+    if (event.previousHash !== previousHash) {
+      return false;
+    }
+
+    if (!verifyEventIntegrity(event)) {
+      return false;
+    }
+
+    previousHash = event.hash;
+  }
+
+  return true;
+};
+
 module.exports = {
   appendEvent,
   getEventsByAggregate,
   verifyEventIntegrity,
+  verifyEventChain,
 };
