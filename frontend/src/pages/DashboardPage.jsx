@@ -1,499 +1,423 @@
-import React from "react";
-
 function DashboardPage({ onNavigate, onLogout }) {
-  const stats = [
-    {
-      icon: "◉",
-      title: "Total Containers",
-      value: "24",
-      change: "+12%",
-      changeType: "positive",
-      footer: "This month",
-    },
-    {
-      icon: "⇄",
-      title: "Active Shipments",
-      value: "18",
-      change: "+8%",
-      changeType: "positive",
-      footer: "This week",
-    },
-    {
-      icon: "⚠",
-      title: "Active Alerts",
-      value: "03",
-      change: "-4%",
-      changeType: "negative",
-      footer: "This week",
-    },
-  ];
-
-  const events = [
-    {
-      type: "ARRIVED_AT_PORT",
-      location: "Mumbai Port",
-      time: "14:32",
-      severity: "INFO",
-    },
-    {
-      type: "TEMPERATURE_SPIKE",
-      location: "Arabian Sea",
-      time: "11:20",
-      severity: "WARNING",
-    },
-    {
-      type: "LOADED_ON_SHIP",
-      location: "Warehouse-A",
-      time: "08:45",
-      severity: "INFO",
-    },
-    {
-      type: "CONTAINER_CREATED",
-      location: "Warehouse-A",
-      time: "07:10",
-      severity: "INFO",
-    },
-  ];
-
-  const menuItems = [
-    { id: "dashboard", icon: "▦", label: "Dashboard" },
-    { id: "containers", icon: "▣", label: "Containers" },
-    { id: "timeline", icon: "◷", label: "Event Timeline" },
-    { id: "locations", icon: "⌖", label: "Locations" },
-    { id: "analytics", icon: "▥", label: "Analytics" },
-    { id: "audit", icon: "✓", label: "Audit Integrity" },
-    { id: "alerts", icon: "⚠", label: "Alerts" },
-  ];
 
   return (
+
     <div className="audit-app">
 
       {/* SIDEBAR */}
+
       <aside className="audit-sidebar">
 
         <div className="audit-brand">
-          <div className="audit-brand-icon">A</div>
+
+          <div className="audit-brand-logo">
+            AT
+          </div>
+
           <div>
             <h2>AuditTrail</h2>
-            <span>Forensic Ledger</span>
-          </div>
-        </div>
-
-        <div className="audit-menu-label">MAIN</div>
-
-        <nav className="audit-nav">
-          {menuItems.map((item) => (
-            <button
-              key={item.id}
-              className={`audit-nav-item ${
-                item.id === "dashboard" ? "active" : ""
-              }`}
-              onClick={() => onNavigate(item.id)}
-            >
-              <span className="audit-nav-icon">{item.icon}</span>
-              <span>{item.label}</span>
-
-              {item.id === "alerts" && (
-                <span className="audit-alert-dot"></span>
-              )}
-            </button>
-          ))}
-        </nav>
-
-        <div className="audit-menu-label audit-other-label">
-          OTHER MENU
-        </div>
-
-        <nav className="audit-nav">
-          <button className="audit-nav-item">
-            <span className="audit-nav-icon">◉</span>
-            Account
-          </button>
-
-          <button className="audit-nav-item">
-            <span className="audit-nav-icon">⚙</span>
-            Settings
-          </button>
-
-          <button className="audit-nav-item">
-            <span className="audit-nav-icon">?</span>
-            Help
-          </button>
-        </nav>
-
-        <div className="audit-sidebar-bottom">
-          <div className="audit-user">
-            <div className="audit-avatar">A</div>
-            <div>
-              <strong>Admin</strong>
-              <span>Security Analyst</span>
-            </div>
+            <span>FORENSIC LEDGER</span>
           </div>
 
-          <button className="audit-logout" onClick={onLogout}>
-            Logout
-          </button>
         </div>
-      </aside>
 
-      {/* MAIN */}
-      <main className="audit-main">
 
-        {/* TOPBAR */}
-        <header className="audit-topbar">
-          <div className="audit-page-name">
+        <div className="sidebar-label">
+          WORKSPACE
+        </div>
+
+
+        <nav className="audit-nav">
+
+          <button
+            className="nav-link active"
+            onClick={() => onNavigate("dashboard")}
+          >
+            <span>◇</span>
             Dashboard
+          </button>
+
+
+          <button
+            className="nav-link"
+            onClick={() => onNavigate("containers")}
+          >
+            <span>▣</span>
+            Containers
+          </button>
+
+
+          <button
+            className="nav-link"
+            onClick={() => onNavigate("timeline")}
+          >
+            <span>◷</span>
+            Event Timeline
+          </button>
+
+
+          <button
+            className="nav-link"
+            onClick={() => onNavigate("locations")}
+          >
+            <span>⚑</span>
+            Locations
+          </button>
+
+
+          <button
+            className="nav-link"
+            onClick={() => onNavigate("analytics")}
+          >
+            <span>▥</span>
+            Analytics
+          </button>
+
+
+          <div className="sidebar-label security-label">
+            SECURITY
           </div>
 
-          <div className="audit-top-actions">
-            <button className="audit-icon-button">⌕</button>
-            <button className="audit-icon-button">♢</button>
 
-            <div className="audit-top-avatar">
+          <button
+            className="nav-link"
+            onClick={() => onNavigate("audit")}
+          >
+            <span>◇</span>
+            Audit Integrity
+          </button>
+
+
+          <button
+            className="nav-link"
+            onClick={() => onNavigate("alerts")}
+          >
+            <span>!</span>
+            Alerts
+          </button>
+
+        </nav>
+
+
+        <div className="sidebar-bottom">
+
+          <div className="system-status">
+
+            <span className="status-dot"></span>
+
+            <div>
+              <strong>
+                System Operational
+              </strong>
+
+              <small>
+                All services running
+              </small>
+            </div>
+
+          </div>
+
+
+          <div className="sidebar-user">
+
+            <div className="user-avatar">
               A
             </div>
+
+            <div className="user-info">
+
+              <strong>
+                Admin
+              </strong>
+
+              <span>
+                Administrator
+              </span>
+
+            </div>
+
+
+            <button
+              className="logout-button"
+              onClick={onLogout}
+            >
+              ↪
+            </button>
+
           </div>
-        </header>
 
-        {/* CONTENT */}
-        <section className="audit-content">
+        </div>
 
-          <div className="audit-heading-row">
+      </aside>
+
+
+      {/* MAIN */}
+
+      <main className="audit-main">
+
+        <div className="audit-content">
+
+          <div className="page-heading">
+
             <div>
-              <h1>Dashboard</h1>
-              <p>
-                Monitor container activity and verify your audit ledger.
+
+              <p className="eyebrow">
+                AUDITTRAIL
               </p>
+
+              <h1>
+                Dashboard
+              </h1>
+
+              <p>
+                Monitor your supply chain and audit activity.
+              </p>
+
             </div>
 
-            <div className="audit-live">
+
+            <div className="dashboard-live">
+
               <span></span>
-              System Live
+
+              LIVE SYSTEM
+
             </div>
+
           </div>
 
-          {/* OVERVIEW */}
-          <div className="audit-dashboard-grid">
-
-            <div className="audit-overview-card">
-
-              <div className="audit-card-top">
-                <div>
-                  <span className="audit-small-label">
-                    OVERVIEW
-                  </span>
-
-                  <h2>Audit Activity</h2>
-                </div>
-
-                <div className="audit-overview-icon">
-                  ✦
-                </div>
-              </div>
-
-              <div className="audit-overview-main">
-
-                <div className="audit-overview-number">
-                  1,284
-                </div>
-
-                <span className="audit-growth">
-                  ↑ 13.7%
-                </span>
-
-                <p>
-                  Verified events recorded this month
-                </p>
-              </div>
-
-              {/* RADAR */}
-              <div className="audit-radar">
-
-                <div className="radar-circle radar-one"></div>
-                <div className="radar-circle radar-two"></div>
-                <div className="radar-circle radar-three"></div>
-
-                <div className="radar-line radar-line-one"></div>
-                <div className="radar-line radar-line-two"></div>
-                <div className="radar-line radar-line-three"></div>
-                <div className="radar-line radar-line-four"></div>
-
-                <div className="radar-shape">
-                  <span></span>
-                </div>
-
-                <div className="radar-label radar-label-top">
-                  INTEGRITY
-                </div>
-
-                <div className="radar-label radar-label-right">
-                  EVENTS
-                </div>
-
-                <div className="radar-label radar-label-bottom">
-                  SECURITY
-                </div>
-
-                <div className="radar-label radar-label-left">
-                  TRACKING
-                </div>
-
-              </div>
-
-              <div className="audit-location-list">
-
-                <div>
-                  <span>⌖ Mumbai Port</span>
-                  <strong>420</strong>
-                </div>
-
-                <div>
-                  <span>⌖ Arabian Sea</span>
-                  <strong>318</strong>
-                </div>
-
-                <div>
-                  <span>⌖ Dubai Port</span>
-                  <strong>286</strong>
-                </div>
-
-                <div>
-                  <span>⌖ Singapore Port</span>
-                  <strong>174</strong>
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* EVENT ACTIVITY */}
-            <div className="audit-activity-card">
-
-              <div className="audit-card-heading">
-                <div>
-                  <span className="audit-small-label">
-                    THIS MONTH
-                  </span>
-                  <h3>Event Activity</h3>
-                </div>
-
-                <button className="audit-more">
-                  ⋮
-                </button>
-              </div>
-
-              <div className="audit-chart">
-
-                <div className="chart-y-labels">
-                  <span>500</span>
-                  <span>400</span>
-                  <span>300</span>
-                  <span>200</span>
-                  <span>100</span>
-                  <span>0</span>
-                </div>
-
-                <div className="chart-area">
-
-                  <div className="chart-grid-line"></div>
-                  <div className="chart-grid-line"></div>
-                  <div className="chart-grid-line"></div>
-                  <div className="chart-grid-line"></div>
-                  <div className="chart-grid-line"></div>
-
-                  <div className="chart-bars">
-
-                    <div className="chart-column">
-                      <div
-                        className="chart-bar"
-                        style={{ height: "45%" }}
-                      ></div>
-                      <span>Jan</span>
-                    </div>
-
-                    <div className="chart-column">
-                      <div
-                        className="chart-bar"
-                        style={{ height: "62%" }}
-                      ></div>
-                      <span>Feb</span>
-                    </div>
-
-                    <div className="chart-column">
-                      <div
-                        className="chart-bar chart-current"
-                        style={{ height: "82%" }}
-                      ></div>
-                      <span>Mar</span>
-                    </div>
-
-                    <div className="chart-column">
-                      <div
-                        className="chart-bar"
-                        style={{ height: "70%" }}
-                      ></div>
-                      <span>Apr</span>
-                    </div>
-
-                  </div>
-                </div>
-
-              </div>
-
-              <div className="audit-chart-footer">
-                <span>Verified Events</span>
-                <strong>+1,235</strong>
-              </div>
-
-            </div>
-          </div>
 
           {/* STAT CARDS */}
-          <div className="audit-stats-grid">
 
-            {stats.map((stat) => (
-              <div className="audit-stat-card" key={stat.title}>
+          <div className="stats-grid">
 
-                <div className="audit-stat-header">
-                  <div className="audit-stat-icon">
-                    {stat.icon}
-                  </div>
+            <div className="stat-card">
 
-                  <span>{stat.title}</span>
-                </div>
-
-                <div className="audit-stat-value">
-                  {stat.value}
-                </div>
-
-                <div className="audit-stat-footer">
-                  <span
-                    className={
-                      stat.changeType === "positive"
-                        ? "audit-positive"
-                        : "audit-negative"
-                    }
-                  >
-                    {stat.change}
-                  </span>
-
-                  <span>{stat.footer}</span>
-                </div>
-
-                <div className="mini-bars">
-                  <i style={{ height: "35%" }}></i>
-                  <i style={{ height: "55%" }}></i>
-                  <i style={{ height: "42%" }}></i>
-                  <i style={{ height: "75%" }}></i>
-                  <i style={{ height: "60%" }}></i>
-                  <i style={{ height: "88%" }}></i>
-                </div>
-
+              <div className="stat-top">
+                <span>ACTIVE CONTAINERS</span>
+                <b>▣</b>
               </div>
-            ))}
+
+              <strong>1,284</strong>
+
+              <small>
+                ↑ 12.4% from last month
+              </small>
+
+            </div>
+
+
+            <div className="stat-card">
+
+              <div className="stat-top">
+                <span>TOTAL EVENTS</span>
+                <b>◷</b>
+              </div>
+
+              <strong>48,921</strong>
+
+              <small>
+                ↑ 8.7% this week
+              </small>
+
+            </div>
+
+
+            <div className="stat-card">
+
+              <div className="stat-top">
+                <span>LOCATIONS</span>
+                <b>⚑</b>
+              </div>
+
+              <strong>37</strong>
+
+              <small>
+                Across 12 countries
+              </small>
+
+            </div>
+
+
+            <div className="stat-card">
+
+              <div className="stat-top">
+                <span>ALERTS</span>
+                <b>!</b>
+              </div>
+
+              <strong>06</strong>
+
+              <small>
+                Requires attention
+              </small>
+
+            </div>
 
           </div>
 
-          {/* BOTTOM SECTION */}
-          <div className="audit-bottom-grid">
 
-            {/* RECENT EVENTS */}
-            <div className="audit-panel">
+          {/* CONTENT GRID */}
 
-              <div className="audit-panel-header">
+          <div className="dashboard-grid">
+
+            <div className="panel">
+
+              <div className="panel-header">
+
                 <div>
-                  <span className="audit-small-label">
-                    RECENT ACTIVITY
-                  </span>
 
-                  <h3>Latest Events</h3>
+                  <h2>
+                    Recent Activity
+                  </h2>
+
+                  <p>
+                    Latest events recorded in the ledger.
+                  </p>
+
                 </div>
 
                 <button
-                  className="audit-view-button"
+                  className="panel-action"
                   onClick={() => onNavigate("timeline")}
                 >
-                  View all
+                  View all →
                 </button>
+
               </div>
 
-              <div className="audit-event-list">
 
-                {events.map((event, index) => (
-                  <div className="audit-event" key={index}>
+              <div className="activity-list">
 
-                    <div className="audit-event-dot"></div>
+                <div className="activity-item">
 
-                    <div className="audit-event-info">
-                      <strong>{event.type}</strong>
-
-                      <span>
-                        ⌖ {event.location}
-                      </span>
-                    </div>
-
-                    <div className="audit-event-right">
-                      <span>{event.time}</span>
-
-                      <small
-                        className={
-                          event.severity === "WARNING"
-                            ? "warning"
-                            : ""
-                        }
-                      >
-                        {event.severity}
-                      </small>
-                    </div>
-
+                  <div className="activity-icon">
+                    ✓
                   </div>
-                ))}
+
+                  <div>
+                    <strong>
+                      Container ATL-4821 arrived
+                    </strong>
+
+                    <span>
+                      Port of Singapore · 4 min ago
+                    </span>
+                  </div>
+
+                  <small>
+                    VERIFIED
+                  </small>
+
+                </div>
+
+
+                <div className="activity-item">
+
+                  <div className="activity-icon">
+                    ↗
+                  </div>
+
+                  <div>
+                    <strong>
+                      Container MSC-2917 moved
+                    </strong>
+
+                    <span>
+                      Mumbai Warehouse · 18 min ago
+                    </span>
+                  </div>
+
+                  <small>
+                    RECORDED
+                  </small>
+
+                </div>
+
+
+                <div className="activity-item">
+
+                  <div className="activity-icon warning">
+                    !
+                  </div>
+
+                  <div>
+                    <strong>
+                      Temperature spike detected
+                    </strong>
+
+                    <span>
+                      Container CMA-7732 · 32 min ago
+                    </span>
+                  </div>
+
+                  <small className="warning-text">
+                    WARNING
+                  </small>
+
+                </div>
 
               </div>
 
             </div>
 
-            {/* INTEGRITY */}
-            <div className="audit-panel integrity-panel">
 
-              <div className="audit-panel-header">
+            <div className="panel">
+
+              <div className="panel-header">
+
                 <div>
-                  <span className="audit-small-label">
-                    SECURITY
+
+                  <h2>
+                    System Integrity
+                  </h2>
+
+                  <p>
+                    Current ledger verification status.
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <div className="integrity-content">
+
+                <div className="integrity-circle">
+                  <span>✓</span>
+                </div>
+
+                <h3>
+                  Ledger Verified
+                </h3>
+
+                <p>
+                  All recent events have passed
+                  integrity verification.
+                </p>
+
+                <div className="integrity-row">
+
+                  <span>
+                    Last verification
                   </span>
 
-                  <h3>Audit Integrity</h3>
+                  <strong>
+                    2 minutes ago
+                  </strong>
+
                 </div>
 
-                <div className="integrity-check">
-                  ✓
-                </div>
-              </div>
+                <div className="integrity-row">
 
-              <div className="integrity-score">
-                <strong>100%</strong>
-                <span>Verified</span>
-              </div>
+                  <span>
+                    Events checked
+                  </span>
 
-              <div className="integrity-progress">
-                <div></div>
-              </div>
+                  <strong>
+                    48,921
+                  </strong>
 
-              <div className="integrity-items">
-
-                <div>
-                  <span>Hash Verification</span>
-                  <b>✓</b>
-                </div>
-
-                <div>
-                  <span>Event Chain</span>
-                  <b>✓</b>
-                </div>
-
-                <div>
-                  <span>Ledger Consistency</span>
-                  <b>✓</b>
                 </div>
 
               </div>
@@ -502,8 +426,93 @@ function DashboardPage({ onNavigate, onLogout }) {
 
           </div>
 
-        </section>
+
+          {/* QUICK ACTIONS */}
+
+          <div className="panel quick-panel">
+
+            <div className="panel-header">
+
+              <div>
+
+                <h2>
+                  Quick Access
+                </h2>
+
+                <p>
+                  Navigate to frequently used modules.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div className="quick-actions">
+
+              <button
+                onClick={() => onNavigate("containers")}
+              >
+                <span>▣</span>
+                <div>
+                  <strong>Containers</strong>
+                  <small>
+                    Track shipments
+                  </small>
+                </div>
+                →
+              </button>
+
+
+              <button
+                onClick={() => onNavigate("timeline")}
+              >
+                <span>◷</span>
+                <div>
+                  <strong>Event Timeline</strong>
+                  <small>
+                    View event history
+                  </small>
+                </div>
+                →
+              </button>
+
+
+              <button
+                onClick={() => onNavigate("analytics")}
+              >
+                <span>▥</span>
+                <div>
+                  <strong>Analytics</strong>
+                  <small>
+                    View performance
+                  </small>
+                </div>
+                →
+              </button>
+
+
+              <button
+                onClick={() => onNavigate("alerts")}
+              >
+                <span>!</span>
+                <div>
+                  <strong>Alerts</strong>
+                  <small>
+                    Review warnings
+                  </small>
+                </div>
+                →
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </main>
+
     </div>
   );
 }

@@ -3,74 +3,73 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import ContainersPage from "./pages/ContainersPage";
 
-function SimplePage({ title, description, onNavigate, activePage }) {
-  const pageContent = {
+function ModulePage({ title, description, type, onNavigate, onLogout }) {
+  const data = {
     timeline: {
       icon: "◷",
-      heading: "Recent Event Timeline",
+      title: "Event Timeline",
+      subtitle: "Chronological history of all container events",
       items: [
-        ["v4", "ARRIVED_AT_PORT", "Mumbai Port", "14:32", "Verified"],
-        ["v3", "TEMPERATURE_SPIKE", "Arabian Sea", "11:20", "Warning"],
-        ["v2", "LOADED_ON_SHIP", "Warehouse-A", "08:45", "Verified"],
-        ["v1", "CONTAINER_CREATED", "Warehouse-A", "07:10", "Verified"],
+        ["Container CTN-48291", "Gate In", "2 min ago"],
+        ["Container CTN-19472", "Inspection Completed", "18 min ago"],
+        ["Container CTN-73510", "Loaded on Vessel", "42 min ago"],
+        ["Container CTN-38194", "Gate Out", "1 hr ago"],
       ],
     },
-
     locations: {
       icon: "⚑",
-      heading: "Active Locations",
+      title: "Locations",
+      subtitle: "Monitor active shipment and container locations",
       items: [
-        ["Mumbai Port", "India", "8 Containers", "Active"],
-        ["Dubai Port", "UAE", "5 Containers", "Active"],
-        ["Arabian Sea", "Shipping Route", "7 Containers", "Tracking"],
-        ["Warehouse-A", "Mumbai", "4 Containers", "Active"],
+        ["Mumbai Port", "128 containers", "Operational"],
+        ["JNPT Terminal", "94 containers", "Operational"],
+        ["Dubai Port", "76 containers", "Operational"],
+        ["Singapore Port", "52 containers", "Operational"],
       ],
     },
-
     analytics: {
       icon: "▥",
-      heading: "Shipment Analytics",
+      title: "Analytics",
+      subtitle: "Monitor shipment and audit performance",
       items: [
-        ["Total Shipments", "24", "+12%"],
-        ["In Transit", "18", "+8%"],
-        ["Delivered", "6", "+15%"],
-        ["Average Temperature", "8.2°C", "Normal"],
+        ["Total Containers", "1,284", "+12.4%"],
+        ["Completed Audits", "968", "+8.7%"],
+        ["Verified Events", "5,421", "+16.2%"],
+        ["Integrity Score", "99.8%", "+0.4%"],
       ],
     },
-
     audit: {
-      icon: "◇",
-      heading: "Ledger Integrity",
+      icon: "✓",
+      title: "Audit Integrity",
+      subtitle: "Verify the integrity of your event-sourced ledger",
       items: [
-        ["Ledger Status", "Verified", "All records valid"],
-        ["Hash Verification", "Passed", "100% verified"],
-        ["Event Consistency", "Passed", "No conflicts detected"],
-        ["Last Audit", "2 minutes ago", "System verified"],
+        ["Ledger Status", "Verified", "Healthy"],
+        ["Records Checked", "12,842", "100%"],
+        ["Hash Verification", "Passed", "Secure"],
+        ["Tampered Records", "0", "No Issues"],
       ],
     },
-
     alerts: {
       icon: "!",
-      heading: "Active Alerts",
+      title: "Alerts",
+      subtitle: "Review active warnings and system notifications",
       items: [
-        ["TEMPERATURE_SPIKE", "CONT-001", "Arabian Sea", "Warning"],
-        ["DELAY_DETECTED", "CONT-007", "Dubai Port", "Attention"],
-        ["ROUTE_CHANGE", "CONT-012", "Mumbai Port", "Info"],
+        ["Container CTN-48291", "Inspection required", "Medium"],
+        ["Mumbai Port", "Delay detected", "Low"],
+        ["Container CTN-73510", "Document verification pending", "Medium"],
+        ["System", "All services operational", "Normal"],
       ],
     },
   };
 
-  const content = pageContent[activePage];
+  const current = data[type];
 
   return (
     <div className="audit-app">
-
       {/* SIDEBAR */}
       <aside className="audit-sidebar">
-
         <div className="audit-brand">
           <div className="audit-brand-logo">AT</div>
-
           <div>
             <h2>AuditTrail</h2>
             <span>FORENSIC LEDGER</span>
@@ -80,91 +79,61 @@ function SimplePage({ title, description, onNavigate, activePage }) {
         <div className="sidebar-label">WORKSPACE</div>
 
         <nav className="audit-nav">
-
           <button
-            className={`nav-link ${
-              activePage === "dashboard" ? "active" : ""
-            }`}
+            className={`nav-link ${type === "dashboard" ? "active" : ""}`}
             onClick={() => onNavigate("dashboard")}
           >
-            <span>⌂</span>
-            Dashboard
+            <span>◇</span> Dashboard
           </button>
 
           <button
-            className={`nav-link ${
-              activePage === "containers" ? "active" : ""
-            }`}
+            className={`nav-link ${type === "containers" ? "active" : ""}`}
             onClick={() => onNavigate("containers")}
           >
-            <span>▣</span>
-            Containers
+            <span>▣</span> Containers
           </button>
 
           <button
-            className={`nav-link ${
-              activePage === "timeline" ? "active" : ""
-            }`}
+            className={`nav-link ${type === "timeline" ? "active" : ""}`}
             onClick={() => onNavigate("timeline")}
           >
-            <span>◷</span>
-            Event Timeline
+            <span>◷</span> Event Timeline
           </button>
 
           <button
-            className={`nav-link ${
-              activePage === "locations" ? "active" : ""
-            }`}
+            className={`nav-link ${type === "locations" ? "active" : ""}`}
             onClick={() => onNavigate("locations")}
           >
-            <span>⚑</span>
-            Locations
+            <span>⚑</span> Locations
           </button>
 
           <button
-            className={`nav-link ${
-              activePage === "analytics" ? "active" : ""
-            }`}
+            className={`nav-link ${type === "analytics" ? "active" : ""}`}
             onClick={() => onNavigate("analytics")}
           >
-            <span>▥</span>
-            Analytics
+            <span>▥</span> Analytics
           </button>
 
-        </nav>
-
-        <div className="sidebar-label">SECURITY</div>
-
-        <nav className="audit-nav">
+          <div className="sidebar-label security-label">SECURITY</div>
 
           <button
-            className={`nav-link ${
-              activePage === "audit" ? "active" : ""
-            }`}
+            className={`nav-link ${type === "audit" ? "active" : ""}`}
             onClick={() => onNavigate("audit")}
           >
-            <span>◇</span>
-            Audit Integrity
+            <span>◇</span> Audit Integrity
           </button>
 
           <button
-            className={`nav-link ${
-              activePage === "alerts" ? "active" : ""
-            }`}
+            className={`nav-link ${type === "alerts" ? "active" : ""}`}
             onClick={() => onNavigate("alerts")}
           >
-            <span>!</span>
-            Alerts
-            <span className="alert-count">3</span>
+            <span>!</span> Alerts
           </button>
-
         </nav>
 
         <div className="sidebar-bottom">
-
           <div className="system-status">
             <span className="status-dot"></span>
-
             <div>
               <strong>System Operational</strong>
               <small>All services running</small>
@@ -172,7 +141,6 @@ function SimplePage({ title, description, onNavigate, activePage }) {
           </div>
 
           <div className="sidebar-user">
-
             <div className="user-avatar">A</div>
 
             <div className="user-info">
@@ -182,536 +150,162 @@ function SimplePage({ title, description, onNavigate, activePage }) {
 
             <button
               className="logout-button"
-              onClick={() => {
-                localStorage.removeItem("audittrail_logged_in");
-                window.location.reload();
-              }}
+              onClick={onLogout}
+              title="Logout"
             >
               ↪
             </button>
-
           </div>
-
         </div>
-
       </aside>
 
-      {/* MAIN CONTENT */}
+      {/* MAIN */}
       <main className="audit-main">
-
-        {/* TOP BAR */}
-        <header className="audit-topbar">
-
-          <div className="breadcrumb">
-            AuditTrail
-            <span>/</span>
-            {title}
-          </div>
-
-          <div className="topbar-right">
-
-            <button
-              className="notification"
-              onClick={() => onNavigate("alerts")}
-            >
-              ♢
-              <span>3</span>
-            </button>
-
-            <div className="top-user">
-
-              <div className="top-avatar">A</div>
-
-              <div>
-                <strong>Admin</strong>
-                <span>Administrator</span>
-              </div>
-
-            </div>
-
-          </div>
-
-        </header>
-
-        {/* PAGE */}
         <div className="audit-content">
 
-          {/* HEADING */}
           <div className="page-heading">
-
             <div>
-
-              <p className="eyebrow">
-                AUDITTRAIL / {title.toUpperCase()}
-              </p>
-
-              <h1>{title}</h1>
-
-              <p>{description}</p>
-
+              <p className="eyebrow">AUDITTRAIL</p>
+              <h1>{current.title}</h1>
+              <p>{current.subtitle}</p>
             </div>
 
-            <div className="integrity-pill">
-              <span>✓</span>
-              System Operational
+            <div className="dashboard-live">
+              <span></span>
+              LIVE
             </div>
-
-          </div>
-
-          {/* STAT CARDS */}
-          <div className="stats-grid">
-
-            <div className="stat-card">
-
-              <div className="stat-card-top">
-                <div className="stat-icon blue-bg">
-                  {content?.icon || "✓"}
-                </div>
-              </div>
-
-              <p className="stat-label">STATUS</p>
-
-              <h2 className="stat-number">Active</h2>
-
-              <span className="stat-description">
-                System operating normally
-              </span>
-
-            </div>
-
-            <div className="stat-card">
-
-              <div className="stat-card-top">
-                <div className="stat-icon purple-bg">
-                  ▣
-                </div>
-              </div>
-
-              <p className="stat-label">RECORDS</p>
-
-              <h2 className="stat-number">
-                {activePage === "alerts" ? "3" : "24"}
-              </h2>
-
-              <span className="stat-description">
-                Currently tracked
-              </span>
-
-            </div>
-
-            <div className="stat-card">
-
-              <div className="stat-card-top">
-                <div className="stat-icon cyan-bg">
-                  ✓
-                </div>
-              </div>
-
-              <p className="stat-label">VERIFIED</p>
-
-              <h2 className="stat-number">100%</h2>
-
-              <span className="stat-description">
-                Data integrity verified
-              </span>
-
-            </div>
-
-            <div className="stat-card">
-
-              <div className="stat-card-top">
-                <div className="stat-icon orange-bg">
-                  !
-                </div>
-              </div>
-
-              <p className="stat-label">ATTENTION</p>
-
-              <h2 className="stat-number">
-                {activePage === "alerts" ? "3" : "0"}
-              </h2>
-
-              <span className="stat-description">
-                Items requiring review
-              </span>
-
-            </div>
-
           </div>
 
           {/* MAIN PANEL */}
-          <section className="panel">
+          <div className="panel module-panel">
 
             <div className="panel-header">
-
               <div>
-                <h2>{content?.heading}</h2>
-                <p>{description}</p>
+                <h2>{current.title}</h2>
+                <p>{current.subtitle}</p>
+              </div>
+
+              <div className="panel-status">
+                <span></span>
+                ACTIVE
+              </div>
+            </div>
+
+            <div className="module-content">
+
+              <div className="module-icon">
+                {current.icon}
+              </div>
+
+              <h2>{current.title}</h2>
+              <p>{current.subtitle}</p>
+
+              <div className="module-list">
+                {current.items.map((item, index) => (
+                  <div className="module-row" key={index}>
+
+                    <div className="module-row-icon">
+                      {current.icon}
+                    </div>
+
+                    <div className="module-row-info">
+                      <strong>{item[0]}</strong>
+                      <span>{item[1]}</span>
+                    </div>
+
+                    <div className="module-row-status">
+                      {item[2]}
+                    </div>
+
+                  </div>
+                ))}
               </div>
 
             </div>
-
-            {/* EVENT TIMELINE */}
-            {activePage === "timeline" && (
-
-              <div className="events-list">
-
-                {content.items.map((item) => (
-
-                  <div className="event-row" key={item[0]}>
-
-                    <div className="event-marker"></div>
-
-                    <div className="event-main">
-
-                      <div className="event-title-row">
-
-                        <strong>{item[1]}</strong>
-
-                        <span className="event-version">
-                          {item[0]}
-                        </span>
-
-                      </div>
-
-                      <div className="event-location">
-                        📍 {item[2]}
-                      </div>
-
-                    </div>
-
-                    <div className="event-right">
-
-                      <span className="event-time">
-                        {item[3]}
-                      </span>
-
-                      <span
-                        className={
-                          item[4] === "Warning"
-                            ? "event-status warning"
-                            : "event-status verified"
-                        }
-                      >
-                        {item[4]}
-                      </span>
-
-                    </div>
-
-                  </div>
-
-                ))}
-
-              </div>
-
-            )}
-
-            {/* LOCATIONS */}
-            {activePage === "locations" && (
-
-              <div className="container-list">
-
-                {content.items.map((item) => (
-
-                  <div
-                    className="container-row"
-                    key={item[0]}
-                  >
-
-                    <div className="container-box">
-                      📍
-                    </div>
-
-                    <div className="container-info">
-
-                      <strong>{item[0]}</strong>
-
-                      <span>{item[1]}</span>
-
-                    </div>
-
-                    <div className="container-location">
-
-                      <strong>{item[2]}</strong>
-
-                      <span>Containers</span>
-
-                    </div>
-
-                    <span className="event-status verified">
-                      {item[3]}
-                    </span>
-
-                  </div>
-
-                ))}
-
-              </div>
-
-            )}
-
-            {/* ANALYTICS */}
-            {activePage === "analytics" && (
-
-              <div className="container-list">
-
-                {content.items.map((item) => (
-
-                  <div
-                    className="container-row"
-                    key={item[0]}
-                  >
-
-                    <div className="container-box">
-                      ▥
-                    </div>
-
-                    <div className="container-info">
-
-                      <strong>{item[0]}</strong>
-
-                      <span>Current metric</span>
-
-                    </div>
-
-                    <div className="container-location">
-
-                      <strong>{item[1]}</strong>
-
-                    </div>
-
-                    <span className="event-status verified">
-                      {item[2]}
-                    </span>
-
-                  </div>
-
-                ))}
-
-              </div>
-
-            )}
-
-            {/* AUDIT INTEGRITY */}
-            {activePage === "audit" && (
-
-              <div className="container-list">
-
-                {content.items.map((item) => (
-
-                  <div
-                    className="container-row"
-                    key={item[0]}
-                  >
-
-                    <div className="container-box">
-                      ✓
-                    </div>
-
-                    <div className="container-info">
-
-                      <strong>{item[0]}</strong>
-
-                      <span>
-                        Security verification
-                      </span>
-
-                    </div>
-
-                    <div className="container-location">
-
-                      <strong>{item[1]}</strong>
-
-                      <span>{item[2]}</span>
-
-                    </div>
-
-                    <span className="event-status verified">
-                      PASSED
-                    </span>
-
-                  </div>
-
-                ))}
-
-              </div>
-
-            )}
-
-            {/* ALERTS */}
-            {activePage === "alerts" && (
-
-              <div className="container-list">
-
-                {content.items.map((item) => (
-
-                  <div
-                    className="container-row"
-                    key={item[0]}
-                  >
-
-                    <div className="container-box">
-                      !
-                    </div>
-
-                    <div className="container-info">
-
-                      <strong>{item[0]}</strong>
-
-                      <span>{item[1]}</span>
-
-                    </div>
-
-                    <div className="container-location">
-
-                      <strong>{item[2]}</strong>
-
-                    </div>
-
-                    <span
-                      className={
-                        item[3] === "Warning"
-                          ? "event-status warning"
-                          : "event-status verified"
-                      }
-                    >
-                      {item[3]}
-                    </span>
-
-                  </div>
-
-                ))}
-
-              </div>
-
-            )}
-
-          </section>
-
-          {/* FOOTER */}
-          <footer className="dashboard-footer">
-
-            <span>AuditTrail © 2026</span>
-
-            <span>
-              Last synchronized just now
-            </span>
-
-            <span>
-              🔒 Secure ledger
-            </span>
-
-          </footer>
+          </div>
 
         </div>
-
       </main>
-
     </div>
   );
 }
 
 
-// =============================
-// MAIN APP
-// =============================
-
 function App() {
-
   const [loggedIn, setLoggedIn] = useState(
-    localStorage.getItem("audittrail_logged_in") === "true"
+    localStorage.getItem("audittrail_auth") === "true"
   );
 
   const [page, setPage] = useState("dashboard");
 
+  const handleLogin = () => {
+    localStorage.setItem("audittrail_auth", "true");
+    setLoggedIn(true);
+    setPage("dashboard");
+  };
 
-  // LOGIN
+  const handleLogout = () => {
+    localStorage.removeItem("audittrail_auth");
+    setLoggedIn(false);
+    setPage("dashboard");
+  };
+
   if (!loggedIn) {
-
-    return (
-      <LoginPage
-        onLogin={() => setLoggedIn(true)}
-      />
-    );
-
+    return <LoginPage onLogin={handleLogin} />;
   }
 
-
-  // DASHBOARD
   if (page === "dashboard") {
-
     return (
       <DashboardPage
         onNavigate={setPage}
-        onLogout={() => {
-
-          localStorage.removeItem(
-            "audittrail_logged_in"
-          );
-
-          setLoggedIn(false);
-
-        }}
+        onLogout={handleLogout}
       />
     );
-
   }
 
-
-  // CONTAINERS
   if (page === "containers") {
-
     return (
       <ContainersPage
         onNavigate={setPage}
+        onLogout={handleLogout}
       />
     );
-
   }
 
-
-  // OTHER PAGES
-  const pages = {
-
-    timeline: [
-      "Event Timeline",
-      "View the complete chronological history of events.",
-    ],
-
-    locations: [
-      "Locations",
-      "Monitor ports, warehouses and shipment locations.",
-    ],
-
-    analytics: [
-      "Analytics",
-      "View shipment and audit performance analytics.",
-    ],
-
-    audit: [
-      "Audit Integrity",
-      "Verify the integrity of your event-sourced ledger.",
-    ],
-
-    alerts: [
-      "Alerts",
-      "Review active warnings and system alerts.",
-    ],
-
+  const pageData = {
+    timeline: {
+      title: "Event Timeline",
+      description: "View the complete chronological history of events.",
+    },
+    locations: {
+      title: "Locations",
+      description: "Monitor ports, warehouses and shipment locations.",
+    },
+    analytics: {
+      title: "Analytics",
+      description: "View shipment and audit performance analytics.",
+    },
+    audit: {
+      title: "Audit Integrity",
+      description: "Verify the integrity of your event-sourced ledger.",
+    },
+    alerts: {
+      title: "Alerts",
+      description: "Review active warnings and system alerts.",
+    },
   };
 
+  const current = pageData[page];
 
   return (
-
-    <SimplePage
-      title={pages[page][0]}
-      description={pages[page][1]}
-      activePage={page}
+    <ModulePage
+      title={current.title}
+      description={current.description}
+      type={page}
       onNavigate={setPage}
+      onLogout={handleLogout}
     />
-
   );
-
 }
 
 export default App;
