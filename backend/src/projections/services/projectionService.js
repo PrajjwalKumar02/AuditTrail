@@ -2,16 +2,44 @@ const ContainerReadModel = require('../models/ContainerReadModel');
 const InventoryReadModel = require('../models/InventoryReadModel');
 
 /**
- * Projection Service (Member 4 - Day 5: Commits #5 & #6)
+ * Projection Service
  * 
- * Responsible for applying incoming domain events to update the Read Models (MongoDB).
+ * Applies domain events to update read model states.
  */
 class ProjectionService {
   /**
-   * Project a location update event into the Container Read Model
-   * Handles events like CONTAINER_CREATED, CONTAINER_MOVED, ARRIVED_AT_PORT
+   * Main Projection Dispatcher
+   * Routes events to specific projection handlers.
    * 
-   * @param {Object} event Raw domain event from Event Store
+   * @param {Object} event Raw domain event
+   */
+  async projectEvent(event) {
+    if (!event || !event.eventType) {
+      throw new Error('Invalid event payload provided to projection engine');
+    }
+
+    switch (event.eventType) {
+      case 'CONTAINER_CREATED':
+      case 'CONTAINER_MOVED':
+      case 'ARRIVED_AT_PORT':
+        return await this.projectLocation(event);
+
+      case 'STATUS_UPDATED':
+      case 'LOADED_ON_SHIP':
+      case 'DELIVERED':
+        return await this.projectStatus(event);
+
+      case 'TEMPERATURE_READING':
+      case 'TEMPERATURE_SPIKE':
+        return await this.projectTemperature(event);
+
+      default:
+        return await this.projectMetadata(event);
+    }
+  }
+
+  /**
+   * Project location updates
    */
   async projectLocation(event) {
     const { aggregateId, eventType, payload, version, timestamp, _id } = event;
@@ -22,7 +50,7 @@ class ProjectionService {
 
     const location = payload.location || payload.currentLocation || payload.destination || 'In Transit';
 
-    const updatedContainer = await ContainerReadModel.findOneAndUpdate(
+    return await ContainerReadModel.findOneAndUpdate(
       { containerId: aggregateId, version: { $lt: version } },
       {
         $set: {
@@ -36,14 +64,10 @@ class ProjectionService {
       },
       { upsert: true, new: true }
     );
-
-    return updatedContainer;
   }
 
   /**
-   * Project status update into Container Read Model (Commit #5)
-   * 
-   * @param {Object} event Raw domain event
+   * Project status updates
    */
   async projectStatus(event) {
     const { aggregateId, eventType, payload, version, timestamp, _id } = event;
@@ -54,7 +78,7 @@ class ProjectionService {
 
     const status = payload.status || (eventType === 'DELIVERED' ? 'DELIVERED' : 'IN_TRANSIT');
 
-    const updatedContainer = await ContainerReadModel.findOneAndUpdate(
+    return await ContainerReadModel.findOneAndUpdate(
       { containerId: aggregateId, version: { $lt: version } },
       {
         $set: {
@@ -68,15 +92,10 @@ class ProjectionService {
       },
       { upsert: true, new: true }
     );
-
-    return updatedContainer;
   }
 
   /**
-   * Project temperature readings and sensor spikes into Container Read Model (Commit #6)
-   * Automatically triggers temperature alerts if values exceed safety limits.
-   * 
-   * @param {Object} event Raw domain event
+   * Project temperature readings and alerts
    */
   async projectTemperature(event) {
     const { aggregateId, eventType, payload, version, timestamp, _id } = event;
@@ -102,13 +121,33 @@ class ProjectionService {
       updateFields.status = 'ALERT_SPIKE';
     }
 
-    const updatedContainer = await ContainerReadModel.findOneAndUpdate(
+    return await ContainerReadModel.findOneAndUpdate(
       { containerId: aggregateId, version: { $lt: version } },
       { $set: updateFields },
       { upsert: true, new: true }
     );
+  }
 
-    return updatedContainer;
+  /**
+   * Project metadata and version tracking
+   */
+  async projectMetadata(event) {
+    const { aggregateId, eventType, version, timestamp, _id } = event;
+
+    if (!aggregateId) return null;
+
+    return await ContainerReadModel.findOneAndUpdate(
+      { containerId: aggregateId, version: { $lt: version } },
+      {
+        $set: {
+          lastEventId: _id || null,
+          lastEventType: eventType,
+          lastEventTimestamp: timestamp || new Date(),
+          version: version,
+        },
+      },
+      { new: true }
+    );
   }
 }
 
