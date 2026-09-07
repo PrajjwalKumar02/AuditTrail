@@ -1,7 +1,5 @@
 /**
- * Projections Module Entry Point (Member 4)
- * 
- * Handles Read Models, Projection Services, Workers, DLQ, and WebSockets.
+ * Projections Module Entry Point
  */
 
 const ContainerReadModel = require('./models/ContainerReadModel');
