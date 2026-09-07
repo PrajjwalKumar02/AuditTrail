@@ -1,6 +1,8 @@
+import React, { useState } from "react";
+
 function ContainersPage({ onNavigate, onLogout }) {
 
-  const containers = [
+  const [containers, setContainers] = useState([
     {
       id: "ATL-4821",
       status: "In Transit",
@@ -29,14 +31,75 @@ function ContainersPage({ onNavigate, onLogout }) {
       temperature: "3.9°C",
       updated: "1 hr ago"
     }
-  ];
+  ]);
 
+  // Search
+  const [search, setSearch] = useState("");
+
+  // Add Container Modal
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  // New Container Form
+  const [newContainer, setNewContainer] = useState({
+    id: "",
+    status: "In Transit",
+    location: "",
+    temperature: ""
+  });
+
+  // Filter containers
+  const filteredContainers = containers.filter((container) =>
+    container.id.toLowerCase().includes(search.toLowerCase()) ||
+    container.status.toLowerCase().includes(search.toLowerCase()) ||
+    container.location.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // Add new container
+  const handleAddContainer = () => {
+
+    if (
+      !newContainer.id.trim() ||
+      !newContainer.location.trim() ||
+      !newContainer.temperature.trim()
+    ) {
+      alert("Please fill all container details.");
+      return;
+    }
+
+    const alreadyExists = containers.some(
+      (container) =>
+        container.id.toLowerCase() === newContainer.id.toLowerCase()
+    );
+
+    if (alreadyExists) {
+      alert("Container ID already exists.");
+      return;
+    }
+
+    const containerToAdd = {
+      id: newContainer.id.toUpperCase(),
+      status: newContainer.status,
+      location: newContainer.location,
+      temperature: newContainer.temperature,
+      updated: "Just now"
+    };
+
+    setContainers([containerToAdd, ...containers]);
+
+    setNewContainer({
+      id: "",
+      status: "In Transit",
+      location: "",
+      temperature: ""
+    });
+
+    setShowAddModal(false);
+  };
 
   return (
-
     <div className="audit-app">
 
-      {/* SIDEBAR */}
+      {/* ================= SIDEBAR ================= */}
 
       <aside className="audit-sidebar">
 
@@ -53,11 +116,9 @@ function ContainersPage({ onNavigate, onLogout }) {
 
         </div>
 
-
         <div className="sidebar-label">
           WORKSPACE
         </div>
-
 
         <nav className="audit-nav">
 
@@ -69,12 +130,10 @@ function ContainersPage({ onNavigate, onLogout }) {
             Dashboard
           </button>
 
-
           <button className="nav-link active">
             <span>▣</span>
             Containers
           </button>
-
 
           <button
             className="nav-link"
@@ -84,7 +143,6 @@ function ContainersPage({ onNavigate, onLogout }) {
             Event Timeline
           </button>
 
-
           <button
             className="nav-link"
             onClick={() => onNavigate("locations")}
@@ -92,7 +150,6 @@ function ContainersPage({ onNavigate, onLogout }) {
             <span>⚑</span>
             Locations
           </button>
-
 
           <button
             className="nav-link"
@@ -102,11 +159,9 @@ function ContainersPage({ onNavigate, onLogout }) {
             Analytics
           </button>
 
-
           <div className="sidebar-label security-label">
             SECURITY
           </div>
-
 
           <button
             className="nav-link"
@@ -115,7 +170,6 @@ function ContainersPage({ onNavigate, onLogout }) {
             <span>◇</span>
             Audit Integrity
           </button>
-
 
           <button
             className="nav-link"
@@ -126,7 +180,6 @@ function ContainersPage({ onNavigate, onLogout }) {
           </button>
 
         </nav>
-
 
         <div className="sidebar-bottom">
 
@@ -145,7 +198,6 @@ function ContainersPage({ onNavigate, onLogout }) {
             </div>
 
           </div>
-
 
           <div className="sidebar-user">
 
@@ -172,11 +224,13 @@ function ContainersPage({ onNavigate, onLogout }) {
       </aside>
 
 
-      {/* MAIN */}
+      {/* ================= MAIN ================= */}
 
       <main className="audit-main">
 
         <div className="audit-content">
+
+          {/* PAGE HEADING */}
 
           <div className="page-heading">
 
@@ -199,6 +253,8 @@ function ContainersPage({ onNavigate, onLogout }) {
           </div>
 
 
+          {/* ================= CONTAINER REGISTRY ================= */}
+
           <div className="panel">
 
             <div className="panel-header">
@@ -215,23 +271,36 @@ function ContainersPage({ onNavigate, onLogout }) {
 
               </div>
 
-              <button className="primary-action">
+
+              {/* ADD CONTAINER BUTTON */}
+
+              <button
+                className="primary-action"
+                onClick={() => setShowAddModal(true)}
+              >
                 + Add Container
               </button>
 
             </div>
 
 
+            {/* ================= SEARCH ================= */}
+
             <div className="container-search">
 
               <span>⌕</span>
 
               <input
+                type="text"
                 placeholder="Search container ID, location or status..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
 
             </div>
 
+
+            {/* ================= TABLE ================= */}
 
             <div className="container-table">
 
@@ -246,49 +315,62 @@ function ContainersPage({ onNavigate, onLogout }) {
               </div>
 
 
-              {containers.map((container) => (
+              {filteredContainers.length > 0 ? (
 
-                <div
-                  className="container-row"
-                  key={container.id}
-                >
+                filteredContainers.map((container) => (
 
-                  <strong>
-                    {container.id}
-                  </strong>
-
-
-                  <span
-                    className={`container-status ${
-                      container.status === "Alert"
-                        ? "alert-status"
-                        : container.status === "Delivered"
-                        ? "delivered-status"
-                        : ""
-                    }`}
+                  <div
+                    className="container-row"
+                    key={container.id}
                   >
-                    <i></i>
-                    {container.status}
-                  </span>
+
+                    <strong>
+                      {container.id}
+                    </strong>
 
 
-                  <span>
-                    {container.location}
-                  </span>
+                    <span
+                      className={`container-status ${
+                        container.status === "Alert"
+                          ? "alert-status"
+                          : container.status === "Delivered"
+                          ? "delivered-status"
+                          : ""
+                      }`}
+                    >
+
+                      <i></i>
+
+                      {container.status}
+
+                    </span>
 
 
-                  <span>
-                    {container.temperature}
-                  </span>
+                    <span>
+                      {container.location}
+                    </span>
 
 
-                  <span>
-                    {container.updated}
-                  </span>
+                    <span>
+                      {container.temperature}
+                    </span>
 
+
+                    <span>
+                      {container.updated}
+                    </span>
+
+                  </div>
+
+                ))
+
+              ) : (
+
+                <div className="empty-container">
+                  No containers found.
                 </div>
 
-              ))}
+              )}
 
             </div>
 
@@ -297,6 +379,207 @@ function ContainersPage({ onNavigate, onLogout }) {
         </div>
 
       </main>
+
+
+      {/* =====================================================
+          ADD CONTAINER MODAL
+          ===================================================== */}
+
+      {showAddModal && (
+
+        <div
+          className="add-container-overlay"
+          onClick={(e) => {
+
+            if (e.target === e.currentTarget) {
+              setShowAddModal(false);
+            }
+
+          }}
+        >
+
+          <div className="add-container-modal">
+
+
+            {/* MODAL HEADER */}
+
+            <div className="add-modal-header">
+
+              <div>
+
+                <p className="modal-eyebrow">
+                  AUDITTRAIL
+                </p>
+
+                <h2>
+                  Add Container
+                </h2>
+
+                <p>
+                  Register a new shipment container.
+                </p>
+
+              </div>
+
+
+              <button
+                className="modal-close"
+                onClick={() => setShowAddModal(false)}
+              >
+                ×
+              </button>
+
+            </div>
+
+
+            {/* FORM */}
+
+            <div className="add-container-form">
+
+
+              {/* CONTAINER ID */}
+
+              <div className="form-field">
+
+                <label>
+                  CONTAINER ID
+                </label>
+
+                <input
+                  type="text"
+                  placeholder="e.g. ATL-5821"
+                  value={newContainer.id}
+                  onChange={(e) =>
+                    setNewContainer({
+                      ...newContainer,
+                      id: e.target.value
+                    })
+                  }
+                />
+
+              </div>
+
+
+              {/* LOCATION */}
+
+              <div className="form-field">
+
+                <label>
+                  LOCATION
+                </label>
+
+                <input
+                  type="text"
+                  placeholder="e.g. Mumbai"
+                  value={newContainer.location}
+                  onChange={(e) =>
+                    setNewContainer({
+                      ...newContainer,
+                      location: e.target.value
+                    })
+                  }
+                />
+
+              </div>
+
+
+              {/* TWO COLUMNS */}
+
+              <div className="form-row">
+
+
+                {/* STATUS */}
+
+                <div className="form-field">
+
+                  <label>
+                    STATUS
+                  </label>
+
+                  <select
+                    value={newContainer.status}
+                    onChange={(e) =>
+                      setNewContainer({
+                        ...newContainer,
+                        status: e.target.value
+                      })
+                    }
+                  >
+
+                    <option>
+                      In Transit
+                    </option>
+
+                    <option>
+                      At Warehouse
+                    </option>
+
+                    <option>
+                      Delivered
+                    </option>
+
+                    <option>
+                      Alert
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+                {/* TEMPERATURE */}
+
+                <div className="form-field">
+
+                  <label>
+                    TEMPERATURE
+                  </label>
+
+                  <input
+                    type="text"
+                    placeholder="e.g. 5.2°C"
+                    value={newContainer.temperature}
+                    onChange={(e) =>
+                      setNewContainer({
+                        ...newContainer,
+                        temperature: e.target.value
+                      })
+                    }
+                  />
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            {/* MODAL BUTTONS */}
+
+            <div className="modal-actions">
+
+              <button
+                className="modal-cancel"
+                onClick={() => setShowAddModal(false)}
+              >
+                Cancel
+              </button>
+
+
+              <button
+                className="modal-add"
+                onClick={handleAddContainer}
+              >
+                Add Container
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
 
     </div>
   );
