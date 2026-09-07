@@ -18,6 +18,7 @@ export default function StateComparison({ before, after }) {
       <StateValue label="Temperature" before={`${before.temperature}°C`} after={`${after.temperature}°C`} />
       <StateValue label="Location" before={before.location} after={after.location} />
       <StateValue label="Status" before={before.status} after={after.status} />
+      <StateValue label="Event" before={before.eventType} after={after.eventType} />
       <StateValue label="Version" before={`v${before.version}`} after={`v${after.version}`} />
     </div>
   );
