@@ -130,12 +130,14 @@ class ProjectionService {
 
   /**
    * Project metadata and version tracking
+   * Adds last event details (Item #8)
    */
   async projectMetadata(event) {
     const { aggregateId, eventType, version, timestamp, _id } = event;
 
     if (!aggregateId) return null;
 
+    // Track the last event that modified this read model
     return await ContainerReadModel.findOneAndUpdate(
       { containerId: aggregateId, version: { $lt: version } },
       {
