@@ -27,6 +27,9 @@ function applyEvent(state, event) {
     case "MOVED_TO_PORT":
       return applyMovedToPort(state, event);
 
+    case "TEMPERATURE_SPIKE":
+      return applyTemperatureSpike(state, event);
+
     default:
       return state;
   }
@@ -67,6 +70,20 @@ function applyMovedToPort(state, event) {
     ...state,
     aggregateId: event.aggregateId ?? state.aggregateId,
     location: payload.location ?? state.location,
+    version: event.version ?? state.version,
+    lastEventType: event.eventType,
+    lastEventAt: event.timestamp ?? null,
+  };
+}
+
+function applyTemperatureSpike(state, event) {
+  const payload = event.payload || {};
+
+  return {
+    ...state,
+    aggregateId: event.aggregateId ?? state.aggregateId,
+    temperature: payload.temperature ?? state.temperature,
+    temperatureAlert: true,
     version: event.version ?? state.version,
     lastEventType: event.eventType,
     lastEventAt: event.timestamp ?? null,
