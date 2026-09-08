@@ -54,8 +54,13 @@ const verifyEventChain = async (aggregateId) => {
   const events = await getEventsByAggregate(aggregateId);
 
   let previousHash = null;
+  let expectedVersion = 1;
 
   for (const event of events) {
+    if (event.version !== expectedVersion) {
+      return false;
+    }
+
     if (event.previousHash !== previousHash) {
       return false;
     }
@@ -65,6 +70,7 @@ const verifyEventChain = async (aggregateId) => {
     }
 
     previousHash = event.hash;
+    expectedVersion += 1;
   }
 
   return true;

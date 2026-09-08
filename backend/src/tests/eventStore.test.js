@@ -8,6 +8,7 @@ jest.mock("../events/Event", () => {
 });
 
 const Event = require("../events/Event");
+
 const {
   appendEvent,
   getEventsByAggregate,
@@ -29,7 +30,7 @@ describe("Event Store", () => {
       eventType: "ContainerCreated",
       payload: { status: "created" },
       version: 1,
-      timestamp: new Date("2026-09-07T10:00:00.000Z"),
+      timestamp: new Date("2026-09-08T10:00:00.000Z"),
     };
 
     Event.findOne.mockReturnValue({
@@ -52,14 +53,21 @@ describe("Event Store", () => {
     expect(Event.findOne).toHaveBeenCalledWith({
       aggregateId: "container-001",
     });
+
     expect(result.hash).toBe("generated-hash");
     expect(result.previousHash).toBeNull();
   });
 
   test("should retrieve events in version order", async () => {
     const events = [
-      { aggregateId: "container-001", version: 1 },
-      { aggregateId: "container-001", version: 2 },
+      {
+        aggregateId: "container-001",
+        version: 1,
+      },
+      {
+        aggregateId: "container-001",
+        version: 2,
+      },
     ];
 
     const sortMock = jest.fn().mockResolvedValue(events);
@@ -73,7 +81,11 @@ describe("Event Store", () => {
     expect(Event.find).toHaveBeenCalledWith({
       aggregateId: "container-001",
     });
-    expect(sortMock).toHaveBeenCalledWith({ version: 1 });
+
+    expect(sortMock).toHaveBeenCalledWith({
+      version: 1,
+    });
+
     expect(result).toEqual(events);
   });
 
@@ -82,9 +94,11 @@ describe("Event Store", () => {
       aggregateId: "container-001",
       aggregateType: "Container",
       eventType: "ContainerCreated",
-      payload: { status: "created" },
+      payload: {
+        status: "created",
+      },
       version: 1,
-      timestamp: new Date("2026-09-07T10:00:00.000Z"),
+      timestamp: new Date("2026-09-08T10:00:00.000Z"),
       previousHash: null,
     };
 
@@ -108,9 +122,11 @@ describe("Event Store", () => {
       aggregateId: "container-001",
       aggregateType: "Container",
       eventType: "ContainerCreated",
-      payload: { status: "created" },
+      payload: {
+        status: "created",
+      },
       version: 1,
-      timestamp: new Date("2026-09-07T10:00:00.000Z"),
+      timestamp: new Date("2026-09-08T10:00:00.000Z"),
       previousHash: null,
     };
 
@@ -136,9 +152,11 @@ describe("Event Store", () => {
       aggregateId: "container-001",
       aggregateType: "Container",
       eventType: "ContainerCreated",
-      payload: { status: "created" },
+      payload: {
+        status: "created",
+      },
       version: 1,
-      timestamp: new Date("2026-09-07T10:00:00.000Z"),
+      timestamp: new Date("2026-09-08T10:00:00.000Z"),
       previousHash: null,
     };
 
@@ -158,9 +176,11 @@ describe("Event Store", () => {
       aggregateId: "container-001",
       aggregateType: "Container",
       eventType: "ContainerUpdated",
-      payload: { status: "updated" },
+      payload: {
+        status: "updated",
+      },
       version: 2,
-      timestamp: new Date("2026-09-07T10:01:00.000Z"),
+      timestamp: new Date("2026-09-08T10:01:00.000Z"),
       previousHash: firstEvent.hash,
     };
 
@@ -177,7 +197,10 @@ describe("Event Store", () => {
     secondEvent.hash = generateHash(secondHashData);
 
     Event.find.mockReturnValue({
-      sort: jest.fn().mockResolvedValue([firstEvent, secondEvent]),
+      sort: jest.fn().mockResolvedValue([
+        firstEvent,
+        secondEvent,
+      ]),
     });
 
     const result = await verifyEventChain("container-001");
@@ -190,9 +213,11 @@ describe("Event Store", () => {
       aggregateId: "container-001",
       aggregateType: "Container",
       eventType: "ContainerCreated",
-      payload: { status: "created" },
+      payload: {
+        status: "created",
+      },
       version: 1,
-      timestamp: new Date("2026-09-07T10:00:00.000Z"),
+      timestamp: new Date("2026-09-08T10:00:00.000Z"),
       previousHash: null,
     };
 
@@ -212,15 +237,81 @@ describe("Event Store", () => {
       aggregateId: "container-001",
       aggregateType: "Container",
       eventType: "ContainerUpdated",
-      payload: { status: "updated" },
+      payload: {
+        status: "updated",
+      },
       version: 2,
-      timestamp: new Date("2026-09-07T10:01:00.000Z"),
+      timestamp: new Date("2026-09-08T10:01:00.000Z"),
       previousHash: "incorrect-previous-hash",
       hash: "some-hash",
     };
 
     Event.find.mockReturnValue({
-      sort: jest.fn().mockResolvedValue([firstEvent, secondEvent]),
+      sort: jest.fn().mockResolvedValue([
+        firstEvent,
+        secondEvent,
+      ]),
+    });
+
+    const result = await verifyEventChain("container-001");
+
+    expect(result).toBe(false);
+  });
+
+  test("should reject an event chain with a version gap", async () => {
+    const firstEvent = {
+      aggregateId: "container-001",
+      aggregateType: "Container",
+      eventType: "ContainerCreated",
+      payload: {
+        status: "created",
+      },
+      version: 1,
+      timestamp: new Date("2026-09-08T10:00:00.000Z"),
+      previousHash: null,
+    };
+
+    const firstHashData = {
+      aggregateId: firstEvent.aggregateId,
+      aggregateType: firstEvent.aggregateType,
+      eventType: firstEvent.eventType,
+      payload: firstEvent.payload,
+      version: firstEvent.version,
+      timestamp: firstEvent.timestamp,
+      previousHash: firstEvent.previousHash,
+    };
+
+    firstEvent.hash = generateHash(firstHashData);
+
+    const thirdEvent = {
+      aggregateId: "container-001",
+      aggregateType: "Container",
+      eventType: "ContainerMoved",
+      payload: {
+        location: "Warehouse-B",
+      },
+      version: 3,
+      timestamp: new Date("2026-09-08T10:02:00.000Z"),
+      previousHash: firstEvent.hash,
+    };
+
+    const thirdHashData = {
+      aggregateId: thirdEvent.aggregateId,
+      aggregateType: thirdEvent.aggregateType,
+      eventType: thirdEvent.eventType,
+      payload: thirdEvent.payload,
+      version: thirdEvent.version,
+      timestamp: thirdEvent.timestamp,
+      previousHash: thirdEvent.previousHash,
+    };
+
+    thirdEvent.hash = generateHash(thirdHashData);
+
+    Event.find.mockReturnValue({
+      sort: jest.fn().mockResolvedValue([
+        firstEvent,
+        thirdEvent,
+      ]),
     });
 
     const result = await verifyEventChain("container-001");
