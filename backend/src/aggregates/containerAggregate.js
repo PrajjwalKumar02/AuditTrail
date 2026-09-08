@@ -30,6 +30,9 @@ function applyEvent(state, event) {
     case "TEMPERATURE_SPIKE":
       return applyTemperatureSpike(state, event);
 
+    case "ARRIVED_AT_PORT":
+      return applyArrivedAtPort(state, event);
+
     default:
       return state;
   }
@@ -84,6 +87,20 @@ function applyTemperatureSpike(state, event) {
     aggregateId: event.aggregateId ?? state.aggregateId,
     temperature: payload.temperature ?? state.temperature,
     temperatureAlert: true,
+    version: event.version ?? state.version,
+    lastEventType: event.eventType,
+    lastEventAt: event.timestamp ?? null,
+  };
+}
+
+function applyArrivedAtPort(state, event) {
+  const payload = event.payload || {};
+
+  return {
+    ...state,
+    aggregateId: event.aggregateId ?? state.aggregateId,
+    status: "ARRIVED",
+    location: payload.location ?? state.location,
     version: event.version ?? state.version,
     lastEventType: event.eventType,
     lastEventAt: event.timestamp ?? null,
