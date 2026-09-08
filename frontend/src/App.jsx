@@ -2,6 +2,7 @@ import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import ContainersPage from "./pages/ContainersPage";
+import EventTimeline from "./pages/EventTimeline";
 
 function ModulePage({ title, description, type, onNavigate, onLogout }) {
   const data = {
@@ -271,7 +272,17 @@ function App() {
       />
     );
   }
-
+if (page === "timeline") {
+  return (
+    <EventTimeline
+      onNavigate={setPage}
+      onLogout={() => {
+        localStorage.removeItem("audittrail_logged_in");
+        setLoggedIn(false);
+      }}
+    />
+  );
+}
   const pageData = {
     timeline: {
       title: "Event Timeline",
