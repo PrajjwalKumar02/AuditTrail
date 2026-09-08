@@ -151,6 +151,33 @@ class ProjectionService {
       { new: true }
     );
   }
+
+  /**
+   * Reset projections state (Item #10)
+   * Clears read model collections for clean event store replay.
+   */
+  async resetProjections() {
+    await ContainerReadModel.deleteMany({});
+    await InventoryReadModel.deleteMany({});
+    return { success: true, message: 'All read model projections reset successfully' };
+  }
+
+  /**
+   * Fetch projection health metrics (Item #10)
+   */
+  async getProjectionMetrics() {
+    const totalContainers = await ContainerReadModel.countDocuments();
+    const totalAlerts = await ContainerReadModel.countDocuments({ temperatureAlert: true });
+    const totalInventory = await InventoryReadModel.countDocuments();
+
+    return {
+      totalContainers,
+      totalAlerts,
+      totalInventory,
+      status: 'healthy',
+      timestamp: new Date(),
+    };
+  }
 }
 
 module.exports = new ProjectionService();
