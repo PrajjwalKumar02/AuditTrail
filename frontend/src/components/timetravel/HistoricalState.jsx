@@ -3,6 +3,7 @@ export default function HistoricalState({ state }) {
   const fields = [
     ["Version", `v${state.version}`], ["Timestamp", new Date(state.timestamp).toLocaleString()],
     ["Location", state.location], ["Status", state.status],
+    ["Temperature", `${state.temperature}°C`], ["Event", state.eventType],
   ];
   return (
     <div className="historical-state">
