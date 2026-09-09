@@ -2839,3 +2839,351 @@ button {
     flex: 1;
   }
 }
+/* =====================================================
+   AUDIT INTEGRITY - WORKING UI
+===================================================== */
+
+.integrity-working-panel {
+  overflow: hidden;
+}
+
+/* CENTER AREA */
+
+.integrity-working-content {
+  text-align: center;
+  padding: 48px 25px 42px;
+}
+
+.integrity-icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 22px;
+
+  font-size: 38px;
+  font-weight: 400;
+
+  color: #a78bfa;
+
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.32);
+
+  box-shadow:
+    0 0 30px rgba(139, 92, 246, 0.12);
+}
+
+.integrity-icon.checking {
+  animation: integrity-spin 1s linear infinite;
+}
+
+@keyframes integrity-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.integrity-working-content h2 {
+  margin: 0;
+
+  font-size: 23px;
+  font-weight: 600;
+
+  color: #f4f1fa;
+}
+
+.integrity-working-content > p {
+  margin: 9px 0 0;
+
+  color: #85808f;
+  font-size: 12px;
+}
+
+/* SUCCESS MESSAGE */
+
+.integrity-success {
+  display: inline-block;
+
+  margin-top: 18px;
+  padding: 8px 14px;
+
+  border-radius: 7px;
+
+  color: #72d99b;
+
+  background: rgba(101, 201, 139, 0.07);
+
+  border: 1px solid rgba(101, 201, 139, 0.14);
+
+  font-size: 10px;
+}
+
+/* VERIFY BUTTON */
+
+.integrity-verify-button {
+  display: block;
+
+  margin: 22px auto 0;
+
+  padding: 11px 22px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #8b5cf6;
+
+  color: white;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.integrity-verify-button:hover {
+  background: #9b6cff;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 25px rgba(139, 92, 246, 0.2);
+}
+
+.integrity-verify-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* PROGRESS */
+
+.integrity-progress {
+  width: min(420px, 90%);
+
+  height: 5px;
+
+  margin: 22px auto 7px;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.integrity-progress div {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: #8b5cf6;
+
+  transition: width 0.15s linear;
+
+  box-shadow:
+    0 0 12px rgba(139, 92, 246, 0.4);
+}
+
+.integrity-progress-text {
+  color: #77727f;
+
+  font-size: 9px;
+}
+
+
+/* =====================================================
+   METRICS
+===================================================== */
+
+.integrity-metrics-row {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.integrity-metrics-row > div {
+  padding: 21px;
+
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.integrity-metrics-row > div:last-child {
+  border-right: none;
+}
+
+.integrity-metrics-row span {
+  display: block;
+
+  color: #6f6a78;
+
+  font-size: 8px;
+
+  letter-spacing: 0.7px;
+}
+
+.integrity-metrics-row strong {
+  display: block;
+
+  margin-top: 7px;
+
+  color: #eeeaf4;
+
+  font-size: 22px;
+
+  font-weight: 600;
+}
+
+.integrity-metrics-row small {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #77717f;
+
+  font-size: 9px;
+}
+
+.safe-integrity {
+  color: #70d99a !important;
+}
+
+
+/* =====================================================
+   VERIFICATION CHECKS
+===================================================== */
+
+.integrity-checks-panel {
+  margin-top: 14px;
+
+  overflow: hidden;
+}
+
+.integrity-check-row {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 16px 20px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+  transition: background 0.2s ease;
+}
+
+.integrity-check-row:hover {
+  background: rgba(139, 92, 246, 0.035);
+}
+
+.integrity-check-icon {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  color: #70d99a;
+
+  background: rgba(101, 201, 139, 0.08);
+
+  border: 1px solid rgba(101, 201, 139, 0.12);
+
+  font-size: 12px;
+}
+
+.integrity-check-row > div:nth-child(2) {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.integrity-check-row strong {
+  display: block;
+
+  color: #e9e5ee;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.integrity-check-row span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #716c7a;
+
+  font-size: 9px;
+}
+
+.integrity-check-row b {
+  color: #70d99a;
+
+  font-size: 9px;
+
+  font-weight: 600;
+}
+
+.integrity-check-row small {
+  width: 65px;
+
+  color: #686370;
+
+  font-size: 9px;
+
+  text-align: right;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 850px) {
+
+  .integrity-metrics-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .integrity-metrics-row > div:nth-child(2) {
+    border-right: none;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .integrity-check-row small {
+    display: none;
+  }
+
+  .integrity-check-row b {
+    display: none;
+  }
+
+  .integrity-working-content {
+    padding: 35px 15px;
+  }
+
+}
