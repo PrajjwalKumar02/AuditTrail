@@ -318,4 +318,15 @@ describe("Event Store", () => {
 
     expect(result).toBe(false);
   });
+
+  test("should verify an empty event chain", async () => {
+    Event.find.mockReturnValue({
+      sort: jest.fn().mockResolvedValue([]),
+    });
+
+    const result = await verifyEventChain("container-001");
+
+    expect(result).toBe(true);
+  });
 });
+
