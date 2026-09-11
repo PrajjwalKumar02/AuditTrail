@@ -1,5 +1,6 @@
 const ContainerReadModel = require('../models/ContainerReadModel');
 const InventoryReadModel = require('../models/InventoryReadModel');
+const containerProjectionHandler = require('../handlers/containerProjectionHandler');
 
 /**
  * Projection Service
@@ -20,6 +21,8 @@ class ProjectionService {
 
     switch (event.eventType) {
       case 'CONTAINER_CREATED':
+        return await containerProjectionHandler.handleContainerCreated(event);
+
       case 'CONTAINER_MOVED':
       case 'ARRIVED_AT_PORT':
         return await this.projectLocation(event);
@@ -130,14 +133,12 @@ class ProjectionService {
 
   /**
    * Project metadata and version tracking
-   * Adds last event details (Item #8)
    */
   async projectMetadata(event) {
     const { aggregateId, eventType, version, timestamp, _id } = event;
 
     if (!aggregateId) return null;
 
-    // Track the last event that modified this read model
     return await ContainerReadModel.findOneAndUpdate(
       { containerId: aggregateId, version: { $lt: version } },
       {
@@ -153,8 +154,7 @@ class ProjectionService {
   }
 
   /**
-   * Reset projections state (Item #10)
-   * Clears read model collections for clean event store replay.
+   * Reset projections state
    */
   async resetProjections() {
     await ContainerReadModel.deleteMany({});
@@ -163,7 +163,7 @@ class ProjectionService {
   }
 
   /**
-   * Fetch projection health metrics (Item #10)
+   * Fetch projection health metrics
    */
   async getProjectionMetrics() {
     const totalContainers = await ContainerReadModel.countDocuments();

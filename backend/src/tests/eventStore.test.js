@@ -58,6 +58,60 @@ describe("Event Store", () => {
     expect(result.previousHash).toBeNull();
   });
 
+  test("should link a new event to the previous event hash", async () => {
+    const previousEvent = {
+      aggregateId: "container-001",
+      version: 1,
+      hash: "previous-event-hash",
+    };
+
+    Event.findOne.mockReturnValue({
+      sort: jest.fn().mockResolvedValue(previousEvent),
+    });
+
+    const savedEvent = {
+      aggregateId: "container-001",
+      aggregateType: "Container",
+      eventType: "ContainerUpdated",
+      payload: {
+        status: "updated",
+      },
+      version: 2,
+      previousHash: "previous-event-hash",
+      hash: "new-event-hash",
+    };
+
+    Event.mockImplementation((data) => ({
+      ...data,
+      save: jest.fn().mockResolvedValue(savedEvent),
+    }));
+
+    const eventData = {
+      aggregateId: "container-001",
+      aggregateType: "Container",
+      eventType: "ContainerUpdated",
+      payload: {
+        status: "updated",
+      },
+      version: 2,
+      timestamp: new Date("2026-09-08T10:01:00.000Z"),
+    };
+
+    const result = await appendEvent(eventData);
+
+    expect(Event.findOne).toHaveBeenCalledWith({
+      aggregateId: "container-001",
+    });
+
+    expect(Event).toHaveBeenCalledWith(
+      expect.objectContaining({
+        previousHash: "previous-event-hash",
+      })
+    );
+
+    expect(result.previousHash).toBe("previous-event-hash");
+  });
+
   test("should retrieve events in version order", async () => {
     const events = [
       {
@@ -189,7 +243,7 @@ describe("Event Store", () => {
       aggregateType: secondEvent.aggregateType,
       eventType: secondEvent.eventType,
       payload: secondEvent.payload,
-      version: secondEvent.version,
+      version: 2,
       timestamp: secondEvent.timestamp,
       previousHash: secondEvent.previousHash,
     };
@@ -300,7 +354,7 @@ describe("Event Store", () => {
       aggregateType: thirdEvent.aggregateType,
       eventType: thirdEvent.eventType,
       payload: thirdEvent.payload,
-      version: thirdEvent.version,
+      version: 3,
       timestamp: thirdEvent.timestamp,
       previousHash: thirdEvent.previousHash,
     };
@@ -329,4 +383,3 @@ describe("Event Store", () => {
     expect(result).toBe(true);
   });
 });
-

@@ -34,7 +34,7 @@ function applyEvent(state, event) {
       return applyArrivedAtPort(state, event);
 
     default:
-      return state;
+  throw new Error(`Unknown event type: ${eventType}`);
   }
 }
 
