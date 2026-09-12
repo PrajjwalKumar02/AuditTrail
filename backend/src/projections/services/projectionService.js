@@ -2,6 +2,7 @@ const ContainerReadModel = require('../models/ContainerReadModel');
 const InventoryReadModel = require('../models/InventoryReadModel');
 const containerProjectionHandler = require('../handlers/containerProjectionHandler');
 const locationProjectionHandler = require('../handlers/locationProjectionHandler');
+const statusProjectionHandler = require('../handlers/statusProjectionHandler');
 
 /**
  * Projection Service
@@ -32,7 +33,7 @@ class ProjectionService {
       case 'STATUS_UPDATED':
       case 'LOADED_ON_SHIP':
       case 'DELIVERED':
-        return await this.projectStatus(event);
+        return await statusProjectionHandler.handleStatusUpdated(event);
 
       case 'TEMPERATURE_READING':
       case 'TEMPERATURE_SPIKE':
@@ -54,28 +55,7 @@ class ProjectionService {
    * Project status updates
    */
   async projectStatus(event) {
-    const { aggregateId, eventType, payload, version, timestamp, _id } = event;
-
-    if (!aggregateId) {
-      throw new Error('Event missing aggregateId');
-    }
-
-    const status = payload.status || (eventType === 'DELIVERED' ? 'DELIVERED' : 'IN_TRANSIT');
-
-    return await ContainerReadModel.findOneAndUpdate(
-      { containerId: aggregateId, version: { $lt: version } },
-      {
-        $set: {
-          containerId: aggregateId,
-          status: status,
-          lastEventId: _id || null,
-          lastEventType: eventType,
-          lastEventTimestamp: timestamp || new Date(),
-          version: version,
-        },
-      },
-      { upsert: true, new: true }
-    );
+    return await statusProjectionHandler.handleStatusUpdated(event);
   }
 
   /**

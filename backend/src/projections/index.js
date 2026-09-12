@@ -8,6 +8,7 @@ const projectionService = require('./services/projectionService');
 const projectionModule = require('./projectionModule');
 const containerProjectionHandler = require('./handlers/containerProjectionHandler');
 const locationProjectionHandler = require('./handlers/locationProjectionHandler');
+const statusProjectionHandler = require('./handlers/statusProjectionHandler');
 
 module.exports = {
   ContainerReadModel,
@@ -16,4 +17,5 @@ module.exports = {
   projectionModule,
   containerProjectionHandler,
   locationProjectionHandler,
+  statusProjectionHandler,
 };
