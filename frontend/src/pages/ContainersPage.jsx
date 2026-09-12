@@ -1,124 +1,134 @@
 import React, { useState } from "react";
 
 function ContainersPage({ onNavigate, onLogout }) {
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedContainer, setSelectedContainer] = useState(null);
 
   const [containers, setContainers] = useState([
     {
       id: "ATL-4821",
-      status: "In Transit",
+      shipment: "SHIP-10482",
       location: "Singapore",
+      status: "In Transit",
       temperature: "4.2°C",
-      updated: "4 min ago"
+      lastUpdated: "4 min ago",
+      integrity: "Verified",
     },
     {
       id: "MSC-2917",
-      status: "At Warehouse",
+      shipment: "SHIP-20891",
       location: "Mumbai",
+      status: "At Warehouse",
       temperature: "5.1°C",
-      updated: "18 min ago"
+      lastUpdated: "18 min ago",
+      integrity: "Verified",
     },
     {
       id: "CMA-7732",
-      status: "Alert",
+      shipment: "SHIP-31942",
       location: "Dubai",
+      status: "Alert",
       temperature: "9.8°C",
-      updated: "32 min ago"
+      lastUpdated: "32 min ago",
+      integrity: "Review Required",
     },
     {
       id: "MAE-1048",
-      status: "Delivered",
+      shipment: "SHIP-42107",
       location: "Rotterdam",
+      status: "Delivered",
       temperature: "3.9°C",
-      updated: "1 hr ago"
-    }
+      lastUpdated: "1 hr ago",
+      integrity: "Verified",
+    },
   ]);
 
-  // Search
-  const [search, setSearch] = useState("");
-
-  // Add Container Modal
-  const [showAddModal, setShowAddModal] = useState(false);
-
-  // New Container Form
   const [newContainer, setNewContainer] = useState({
     id: "",
-    status: "In Transit",
     location: "",
-    temperature: ""
+    status: "In Transit",
+    temperature: "",
   });
 
-  // Filter containers
   const filteredContainers = containers.filter((container) =>
-    container.id.toLowerCase().includes(search.toLowerCase()) ||
-    container.status.toLowerCase().includes(search.toLowerCase()) ||
-    container.location.toLowerCase().includes(search.toLowerCase())
+    `${container.id} ${container.shipment} ${container.location} ${container.status}`
+      .toLowerCase()
+      .includes(search.toLowerCase())
   );
 
-  // Add new container
   const handleAddContainer = () => {
-
     if (
-      !newContainer.id.trim() ||
-      !newContainer.location.trim() ||
-      !newContainer.temperature.trim()
+      !newContainer.id ||
+      !newContainer.location ||
+      !newContainer.temperature
     ) {
-      alert("Please fill all container details.");
+      alert("Please fill all required fields.");
       return;
     }
 
-    const alreadyExists = containers.some(
+    const exists = containers.some(
       (container) =>
         container.id.toLowerCase() === newContainer.id.toLowerCase()
     );
 
-    if (alreadyExists) {
+    if (exists) {
       alert("Container ID already exists.");
       return;
     }
 
-    const containerToAdd = {
+    const container = {
       id: newContainer.id.toUpperCase(),
-      status: newContainer.status,
+      shipment: `SHIP-${Math.floor(10000 + Math.random() * 90000)}`,
       location: newContainer.location,
-      temperature: newContainer.temperature,
-      updated: "Just now"
+      status: newContainer.status,
+      temperature: `${newContainer.temperature}°C`,
+      lastUpdated: "Just now",
+      integrity: "Verified",
     };
 
-    setContainers([containerToAdd, ...containers]);
+    setContainers([container, ...containers]);
 
     setNewContainer({
       id: "",
-      status: "In Transit",
       location: "",
-      temperature: ""
+      status: "In Transit",
+      temperature: "",
     });
 
-    setShowAddModal(false);
+    setShowModal(false);
+  };
+
+  const getStatusClass = (status) => {
+    if (status === "Alert") return "status-alert";
+    if (status === "Delivered") return "status-delivered";
+    if (status === "At Warehouse") return "status-warehouse";
+    return "status-transit";
+  };
+
+  const openDetails = (container) => {
+    setSelectedContainer(container);
+  };
+
+  const closeDetails = () => {
+    setSelectedContainer(null);
   };
 
   return (
     <div className="audit-app">
 
-      {/* ================= SIDEBAR ================= */}
-
+      {/* SIDEBAR */}
       <aside className="audit-sidebar">
-
         <div className="audit-brand">
-
-          <div className="audit-brand-logo">
-            AT
-          </div>
+          <div className="audit-brand-logo">AT</div>
 
           <div>
             <h2>AuditTrail</h2>
             <span>FORENSIC LEDGER</span>
           </div>
-
         </div>
 
-        <div className="sidebar-label">
-          WORKSPACE
-        </div>
+        <div className="sidebar-label">WORKSPACE</div>
 
         <nav className="audit-nav">
 
@@ -184,26 +194,17 @@ function ContainersPage({ onNavigate, onLogout }) {
         <div className="sidebar-bottom">
 
           <div className="system-status">
-
             <span className="status-dot"></span>
 
             <div>
-              <strong>
-                System Operational
-              </strong>
-
-              <small>
-                All services running
-              </small>
+              <strong>System Operational</strong>
+              <small>All services running</small>
             </div>
-
           </div>
 
           <div className="sidebar-user">
 
-            <div className="user-avatar">
-              A
-            </div>
+            <div className="user-avatar">A</div>
 
             <div className="user-info">
               <strong>Admin</strong>
@@ -220,159 +221,143 @@ function ContainersPage({ onNavigate, onLogout }) {
           </div>
 
         </div>
-
       </aside>
 
-
-      {/* ================= MAIN ================= */}
-
+      {/* MAIN */}
       <main className="audit-main">
 
         <div className="audit-content">
 
-          {/* PAGE HEADING */}
-
+          {/* HEADER */}
           <div className="page-heading">
 
             <div>
+              <p className="eyebrow">AUDITTRAIL</p>
 
-              <p className="eyebrow">
-                AUDITTRAIL
-              </p>
-
-              <h1>
-                Containers
-              </h1>
+              <h1>Containers</h1>
 
               <p>
-                Track and monitor all shipment containers.
+                Monitor and manage tracked shipment containers.
               </p>
-
             </div>
+
+            <button
+              className="add-container-button"
+              onClick={() => setShowModal(true)}
+            >
+              + Add Container
+            </button>
 
           </div>
 
+          {/* SEARCH */}
+          <div className="container-search-section">
 
-          {/* ================= CONTAINER REGISTRY ================= */}
-
-          <div className="panel">
-
-            <div className="panel-header">
-
-              <div>
-
-                <h2>
-                  Container Registry
-                </h2>
-
-                <p>
-                  Live overview of tracked containers.
-                </p>
-
-              </div>
-
-
-              {/* ADD CONTAINER BUTTON */}
-
-              <button
-                className="primary-action"
-                onClick={() => setShowAddModal(true)}
-              >
-                + Add Container
-              </button>
-
-            </div>
-
-
-            {/* ================= SEARCH ================= */}
-
-            <div className="container-search">
-
+            <div className="container-search-box">
               <span>⌕</span>
 
               <input
                 type="text"
-                placeholder="Search container ID, location or status..."
+                placeholder="Search containers, shipments or locations..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
+            </div>
+
+            <div className="container-count">
+              {filteredContainers.length} containers
+            </div>
+
+          </div>
+
+          {/* TABLE */}
+          <div className="panel containers-panel">
+
+            <div className="containers-table-header">
+
+              <span>CONTAINER</span>
+              <span>LOCATION</span>
+              <span>STATUS</span>
+              <span>TEMPERATURE</span>
+              <span>UPDATED</span>
+              <span></span>
 
             </div>
 
+            {filteredContainers.length === 0 ? (
 
-            {/* ================= TABLE ================= */}
-
-            <div className="container-table">
-
-              <div className="table-header">
-
-                <span>CONTAINER</span>
-                <span>STATUS</span>
-                <span>LOCATION</span>
-                <span>TEMPERATURE</span>
-                <span>UPDATED</span>
-
+              <div className="containers-empty">
+                <div>⌕</div>
+                <h3>No containers found</h3>
+                <p>
+                  Try searching with another container ID,
+                  shipment or location.
+                </p>
               </div>
 
+            ) : (
 
-              {filteredContainers.length > 0 ? (
+              filteredContainers.map((container) => (
 
-                filteredContainers.map((container) => (
+                <div
+                  className="container-row"
+                  key={container.id}
+                  onClick={() => openDetails(container)}
+                >
 
-                  <div
-                    className="container-row"
-                    key={container.id}
-                  >
+                  <div className="container-main-info">
 
-                    <strong>
-                      {container.id}
-                    </strong>
+                    <div className="container-icon">
+                      📦
+                    </div>
 
+                    <div>
+                      <strong>{container.id}</strong>
 
-                    <span
-                      className={`container-status ${
-                        container.status === "Alert"
-                          ? "alert-status"
-                          : container.status === "Delivered"
-                          ? "delivered-status"
-                          : ""
-                      }`}
-                    >
-
-                      <i></i>
-
-                      {container.status}
-
-                    </span>
-
-
-                    <span>
-                      {container.location}
-                    </span>
-
-
-                    <span>
-                      {container.temperature}
-                    </span>
-
-
-                    <span>
-                      {container.updated}
-                    </span>
+                      <small>
+                        {container.shipment}
+                      </small>
+                    </div>
 
                   </div>
 
-                ))
+                  <div className="container-location">
+                    📍 {container.location}
+                  </div>
 
-              ) : (
+                  <div>
+                    <span
+                      className={`container-status ${getStatusClass(
+                        container.status
+                      )}`}
+                    >
+                      {container.status}
+                    </span>
+                  </div>
 
-                <div className="empty-container">
-                  No containers found.
+                  <div className="container-temperature">
+                    {container.temperature}
+                  </div>
+
+                  <div className="container-updated">
+                    {container.lastUpdated}
+                  </div>
+
+                  <button
+                    className="container-view-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openDetails(container);
+                    }}
+                  >
+                    View →
+                  </button>
+
                 </div>
 
-              )}
+              ))
 
-            </div>
+            )}
 
           </div>
 
@@ -380,197 +365,265 @@ function ContainersPage({ onNavigate, onLogout }) {
 
       </main>
 
-
-      {/* =====================================================
-          ADD CONTAINER MODAL
-          ===================================================== */}
-
-      {showAddModal && (
+      {/* ADD CONTAINER MODAL */}
+      {showModal && (
 
         <div
-          className="add-container-overlay"
-          onClick={(e) => {
-
-            if (e.target === e.currentTarget) {
-              setShowAddModal(false);
-            }
-
-          }}
+          className="container-modal-overlay"
+          onClick={() => setShowModal(false)}
         >
 
-          <div className="add-container-modal">
+          <div
+            className="container-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
 
-
-            {/* MODAL HEADER */}
-
-            <div className="add-modal-header">
+            <div className="container-modal-header">
 
               <div>
-
-                <p className="modal-eyebrow">
-                  AUDITTRAIL
-                </p>
-
-                <h2>
-                  Add Container
-                </h2>
-
-                <p>
-                  Register a new shipment container.
-                </p>
-
+                <span>NEW RECORD</span>
+                <h2>Add Container</h2>
+                <p>Create a new tracked shipment container.</p>
               </div>
 
-
               <button
-                className="modal-close"
-                onClick={() => setShowAddModal(false)}
+                onClick={() => setShowModal(false)}
               >
                 ×
               </button>
 
             </div>
 
+            <div className="container-form">
 
-            {/* FORM */}
-
-            <div className="add-container-form">
-
-
-              {/* CONTAINER ID */}
-
-              <div className="form-field">
-
-                <label>
-                  CONTAINER ID
-                </label>
-
+              <label>
+                Container ID
                 <input
-                  type="text"
-                  placeholder="e.g. ATL-5821"
+                  placeholder="e.g. MSC-4832"
                   value={newContainer.id}
                   onChange={(e) =>
                     setNewContainer({
                       ...newContainer,
-                      id: e.target.value
+                      id: e.target.value,
                     })
                   }
                 />
+              </label>
 
-              </div>
-
-
-              {/* LOCATION */}
-
-              <div className="form-field">
-
-                <label>
-                  LOCATION
-                </label>
-
+              <label>
+                Location
                 <input
-                  type="text"
-                  placeholder="e.g. Mumbai"
+                  placeholder="e.g. Mumbai Port"
                   value={newContainer.location}
                   onChange={(e) =>
                     setNewContainer({
                       ...newContainer,
-                      location: e.target.value
+                      location: e.target.value,
                     })
                   }
                 />
+              </label>
 
-              </div>
+              <div className="container-form-row">
 
-
-              {/* TWO COLUMNS */}
-
-              <div className="form-row">
-
-
-                {/* STATUS */}
-
-                <div className="form-field">
-
-                  <label>
-                    STATUS
-                  </label>
-
+                <label>
+                  Status
                   <select
                     value={newContainer.status}
                     onChange={(e) =>
                       setNewContainer({
                         ...newContainer,
-                        status: e.target.value
+                        status: e.target.value,
                       })
                     }
                   >
-
-                    <option>
-                      In Transit
-                    </option>
-
-                    <option>
-                      At Warehouse
-                    </option>
-
-                    <option>
-                      Delivered
-                    </option>
-
-                    <option>
-                      Alert
-                    </option>
-
+                    <option>In Transit</option>
+                    <option>At Warehouse</option>
+                    <option>Delivered</option>
+                    <option>Alert</option>
                   </select>
+                </label>
 
-                </div>
-
-
-                {/* TEMPERATURE */}
-
-                <div className="form-field">
-
-                  <label>
-                    TEMPERATURE
-                  </label>
-
+                <label>
+                  Temperature °C
                   <input
-                    type="text"
-                    placeholder="e.g. 5.2°C"
+                    type="number"
+                    step="0.1"
+                    placeholder="5.2"
                     value={newContainer.temperature}
                     onChange={(e) =>
                       setNewContainer({
                         ...newContainer,
-                        temperature: e.target.value
+                        temperature: e.target.value,
                       })
                     }
                   />
+                </label>
 
+              </div>
+
+              <button
+                className="container-create-button"
+                onClick={handleAddContainer}
+              >
+                Create Container
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
+
+      {/* CONTAINER DETAILS MODAL */}
+      {selectedContainer && (
+
+        <div
+          className="container-details-overlay"
+          onClick={closeDetails}
+        >
+
+          <div
+            className="container-details-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+
+            <div className="container-details-header">
+
+              <div>
+
+                <div className="container-details-id">
+                  <span>CONTAINER RECORD</span>
+
+                  <span
+                    className={`container-status ${getStatusClass(
+                      selectedContainer.status
+                    )}`}
+                  >
+                    {selectedContainer.status}
+                  </span>
                 </div>
+
+                <h2>{selectedContainer.id}</h2>
+
+                <p>
+                  Shipment {selectedContainer.shipment}
+                </p>
+
+              </div>
+
+              <button onClick={closeDetails}>
+                ×
+              </button>
+
+            </div>
+
+            {/* DETAILS GRID */}
+            <div className="container-details-grid">
+
+              <div className="container-detail-card">
+                <span>LOCATION</span>
+                <strong>
+                  📍 {selectedContainer.location}
+                </strong>
+              </div>
+
+              <div className="container-detail-card">
+                <span>TEMPERATURE</span>
+                <strong>
+                  {selectedContainer.temperature}
+                </strong>
+              </div>
+
+              <div className="container-detail-card">
+                <span>LAST UPDATED</span>
+                <strong>
+                  {selectedContainer.lastUpdated}
+                </strong>
+              </div>
+
+              <div className="container-detail-card">
+                <span>INTEGRITY</span>
+                <strong className="integrity-verified">
+                  ✓ {selectedContainer.integrity}
+                </strong>
+              </div>
+
+            </div>
+
+            {/* EVENT HISTORY */}
+            <div className="container-event-history">
+
+              <div className="container-section-heading">
+                <div>
+                  <span>FORENSIC HISTORY</span>
+                  <h3>Recent Events</h3>
+                </div>
+
+                <span className="history-live">
+                  ● LIVE
+                </span>
+              </div>
+
+              <div className="container-history-item">
+
+                <div className="history-marker"></div>
+
+                <div>
+                  <strong>Container location verified</strong>
+                  <p>
+                    Location integrity check completed
+                  </p>
+                </div>
+
+                <span>2 min ago</span>
+
+              </div>
+
+              <div className="container-history-item">
+
+                <div className="history-marker"></div>
+
+                <div>
+                  <strong>Temperature recorded</strong>
+                  <p>
+                    Sensor data successfully synchronized
+                  </p>
+                </div>
+
+                <span>8 min ago</span>
+
+              </div>
+
+              <div className="container-history-item">
+
+                <div className="history-marker"></div>
+
+                <div>
+                  <strong>Shipment status updated</strong>
+                  <p>
+                    Latest shipment state recorded
+                  </p>
+                </div>
+
+                <span>14 min ago</span>
 
               </div>
 
             </div>
 
+            {/* FOOTER */}
+            <div className="container-details-footer">
 
-            {/* MODAL BUTTONS */}
+              <div>
+                <span>LEDGER STATUS</span>
+                <strong>✓ Record verified</strong>
+              </div>
 
-            <div className="modal-actions">
-
-              <button
-                className="modal-cancel"
-                onClick={() => setShowAddModal(false)}
-              >
-                Cancel
-              </button>
-
-
-              <button
-                className="modal-add"
-                onClick={handleAddContainer}
-              >
-                Add Container
+              <button onClick={closeDetails}>
+                Close
               </button>
 
             </div>
