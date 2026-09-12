@@ -3,6 +3,7 @@ const InventoryReadModel = require('../models/InventoryReadModel');
 const containerProjectionHandler = require('../handlers/containerProjectionHandler');
 const locationProjectionHandler = require('../handlers/locationProjectionHandler');
 const statusProjectionHandler = require('../handlers/statusProjectionHandler');
+const temperatureProjectionHandler = require('../handlers/temperatureProjectionHandler');
 
 /**
  * Projection Service
@@ -37,7 +38,7 @@ class ProjectionService {
 
       case 'TEMPERATURE_READING':
       case 'TEMPERATURE_SPIKE':
-        return await this.projectTemperature(event);
+        return await temperatureProjectionHandler.handleTemperatureRecorded(event);
 
       default:
         return await this.projectMetadata(event);
@@ -62,34 +63,7 @@ class ProjectionService {
    * Project temperature readings and alerts
    */
   async projectTemperature(event) {
-    const { aggregateId, eventType, payload, version, timestamp, _id } = event;
-
-    if (!aggregateId) {
-      throw new Error('Event missing aggregateId');
-    }
-
-    const temp = payload.temperature !== undefined ? payload.temperature : payload.temp;
-    const isAlert = temp > 10.0 || eventType === 'TEMPERATURE_SPIKE';
-
-    const updateFields = {
-      containerId: aggregateId,
-      currentTemperature: temp,
-      temperatureAlert: isAlert,
-      lastEventId: _id || null,
-      lastEventType: eventType,
-      lastEventTimestamp: timestamp || new Date(),
-      version: version,
-    };
-
-    if (isAlert) {
-      updateFields.status = 'ALERT_SPIKE';
-    }
-
-    return await ContainerReadModel.findOneAndUpdate(
-      { containerId: aggregateId, version: { $lt: version } },
-      { $set: updateFields },
-      { upsert: true, new: true }
-    );
+    return await temperatureProjectionHandler.handleTemperatureRecorded(event);
   }
 
   /**

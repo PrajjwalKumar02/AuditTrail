@@ -2,8 +2,9 @@ const projectionService = require('../../projections/services/projectionService'
 const ContainerReadModel = require('../../projections/models/ContainerReadModel');
 const locationProjectionHandler = require('../../projections/handlers/locationProjectionHandler');
 const statusProjectionHandler = require('../../projections/handlers/statusProjectionHandler');
+const temperatureProjectionHandler = require('../../projections/handlers/temperatureProjectionHandler');
 
-describe('Member 4 - Projection Service & Status Handler Tests', () => {
+describe('Member 4 - Projection Handlers Tests', () => {
   it('should project location update event correctly via location handler', async () => {
     const mockEvent = {
       _id: 'event_123',
@@ -53,7 +54,7 @@ describe('Member 4 - Projection Service & Status Handler Tests', () => {
     ContainerReadModel.findOneAndUpdate.mockRestore();
   });
 
-  it('should project temperature spike event and trigger alert', async () => {
+  it('should project temperature spike event and trigger alert via temperature handler', async () => {
     const mockEvent = {
       _id: 'event_124',
       aggregateId: 'CONT_TEST_001',
@@ -71,7 +72,7 @@ describe('Member 4 - Projection Service & Status Handler Tests', () => {
       version: 3,
     });
 
-    const result = await projectionService.projectTemperature(mockEvent);
+    const result = await temperatureProjectionHandler.handleTemperatureRecorded(mockEvent);
 
     expect(result).toBeDefined();
     expect(result.temperatureAlert).toBe(true);
