@@ -383,3 +383,56 @@ describe("Event Store", () => {
     expect(result).toBe(true);
   });
 });
+  test("should keep events from different aggregates independent", async () => {
+    const events = [
+      {
+        aggregateId: "container-001",
+        version: 1,
+        eventType: "ContainerCreated",
+      },
+      {
+        aggregateId: "container-002",
+        version: 1,
+        eventType: "ContainerCreated",
+      },
+    ];
+
+    Event.find.mockReturnValue({
+      sort: jest.fn().mockResolvedValue(events),
+    });
+
+    const result = await getEventsByAggregate("container-001");
+
+    expect(Event.find).toHaveBeenCalledWith({
+      aggregateId: "container-001",
+    });
+
+    expect(result).toEqual(events);
+  });
+
+  test("should retrieve events only for the requested aggregate", async () => {
+    const aggregateEvents = [
+      {
+        aggregateId: "container-002",
+        version: 1,
+      },
+      {
+        aggregateId: "container-002",
+        version: 2,
+      },
+    ];
+
+    Event.find.mockReturnValue({
+      sort: jest.fn().mockResolvedValue(aggregateEvents),
+    });
+
+    const result = await getEventsByAggregate("container-002");
+
+    expect(Event.find).toHaveBeenCalledWith({
+      aggregateId: "container-002",
+    });
+
+    expect(result.every((event) => event.aggregateId === "container-002")).toBe(
+      true
+    );
+  });
