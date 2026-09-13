@@ -1,108 +1,110 @@
 import React, { useMemo, useState } from "react";
 
 function EventTimeline({ onNavigate, onLogout }) {
+  const [search, setSearch] = useState("");
+  const [severity, setSeverity] = useState("ALL");
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const events = [
     {
-      id: 1,
-      version: "v4",
-      container: "CTN-48291",
-      type: "CONTAINER_ARRIVED",
-      description: "Container arrived at Mumbai Port.",
+      id: 6,
+      version: "v6",
+      container: "ATL-4821",
+      type: "ARRIVED_AT_PORT",
+      description: "Container arrived at Mumbai Port",
       location: "Mumbai Port",
-      timestamp: "08 Sep 2026 • 20:42",
+      timestamp: "14:32",
       relative: "2 min ago",
       severity: "INFO",
       actor: "Port Gateway",
-      hash: "8f3a92d1c4e7",
-    },
-    {
-      id: 2,
-      version: "v3",
-      container: "CTN-19472",
-      type: "INSPECTION_COMPLETED",
-      description: "Container inspection completed successfully.",
-      location: "Singapore",
-      timestamp: "08 Sep 2026 • 20:26",
-      relative: "18 min ago",
-      severity: "INFO",
-      actor: "Inspection System",
-      hash: "a72d91bc48f2",
-    },
-    {
-      id: 3,
-      version: "v2",
-      container: "CTN-73510",
-      type: "TEMPERATURE_SPIKE",
-      description: "Temperature exceeded the configured threshold.",
-      location: "Arabian Sea",
-      timestamp: "08 Sep 2026 • 20:02",
-      relative: "42 min ago",
-      severity: "WARNING",
-      actor: "IoT Sensor",
-      hash: "d82f61a91c03",
-    },
-    {
-      id: 4,
-      version: "v7",
-      container: "CTN-29183",
-      type: "LOCATION_UPDATED",
-      description: "Container location was updated.",
-      location: "Dubai Port",
-      timestamp: "08 Sep 2026 • 19:35",
-      relative: "1 hr ago",
-      severity: "INFO",
-      actor: "GPS Tracker",
-      hash: "91bc72fa31de",
+      hash: "8f3a91c2...7d21",
     },
     {
       id: 5,
-      version: "v6",
-      container: "CTN-59321",
-      type: "UNAUTHORIZED_CHANGE",
-      description: "Unexpected container record modification detected.",
-      location: "Rotterdam",
-      timestamp: "08 Sep 2026 • 18:48",
-      relative: "2 hrs ago",
-      severity: "CRITICAL",
-      actor: "Security Monitor",
-      hash: "f72a91c83bd4",
+      version: "v5",
+      container: "ATL-4821",
+      type: "TEMPERATURE_SPIKE",
+      description: "Temperature exceeded the expected range",
+      location: "Arabian Sea",
+      timestamp: "11:20",
+      relative: "3 hr ago",
+      severity: "WARNING",
+      actor: "IoT Sensor",
+      hash: "3bc72e91...a842",
     },
     {
-      id: 6,
-      version: "v1",
-      container: "CTN-82461",
-      type: "CONTAINER_CREATED",
-      description: "New container record was created.",
-      location: "Warehouse-A",
-      timestamp: "08 Sep 2026 • 17:20",
-      relative: "3 hrs ago",
+      id: 4,
+      version: "v4",
+      container: "MSC-2917",
+      type: "LOADED_ON_SHIP",
+      description: "Container loaded successfully onto vessel",
+      location: "JNPT Terminal",
+      timestamp: "08:45",
+      relative: "6 hr ago",
+      severity: "INFO",
+      actor: "Terminal System",
+      hash: "91ad72e4...bb18",
+    },
+    {
+      id: 3,
+      version: "v3",
+      container: "CMA-7732",
+      type: "DOCUMENT_UPDATED",
+      description: "Shipment documentation was updated",
+      location: "Dubai Port",
+      timestamp: "07:30",
+      relative: "7 hr ago",
       severity: "INFO",
       actor: "Admin",
-      hash: "b31e72c91fa5",
+      hash: "a82cd721...44ef",
+    },
+    {
+      id: 2,
+      version: "v2",
+      container: "MAE-1048",
+      type: "LOCATION_VERIFIED",
+      description: "Container location successfully verified",
+      location: "Rotterdam",
+      timestamp: "06:15",
+      relative: "8 hr ago",
+      severity: "INFO",
+      actor: "GPS Gateway",
+      hash: "c821ad91...901a",
+    },
+    {
+      id: 1,
+      version: "v1",
+      container: "ATL-4821",
+      type: "CONTAINER_CREATED",
+      description: "Container record created in the ledger",
+      location: "Warehouse-A",
+      timestamp: "07:10",
+      relative: "Yesterday",
+      severity: "INFO",
+      actor: "System",
+      hash: "f129ac82...72cd",
     },
   ];
 
-  const [search, setSearch] = useState("");
-  const [severityFilter, setSeverityFilter] = useState("ALL");
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
   const filteredEvents = useMemo(() => {
     return events.filter((event) => {
-
       const matchesSearch =
-        event.container.toLowerCase().includes(search.toLowerCase()) ||
-        event.type.toLowerCase().includes(search.toLowerCase()) ||
-        event.location.toLowerCase().includes(search.toLowerCase()) ||
-        event.actor.toLowerCase().includes(search.toLowerCase());
+        `${event.container} ${event.type} ${event.location} ${event.description} ${event.actor}`
+          .toLowerCase()
+          .includes(search.toLowerCase());
 
       const matchesSeverity =
-        severityFilter === "ALL" ||
-        event.severity === severityFilter;
+        severity === "ALL" || event.severity === severity;
 
       return matchesSearch && matchesSeverity;
     });
-  }, [search, severityFilter]);
+  }, [search, severity]);
+
+  const getSeverityClass = (value) => {
+    if (value === "WARNING") return "timeline-warning";
+    if (value === "CRITICAL") return "timeline-critical";
+    return "timeline-info";
+  };
 
   return (
     <div className="audit-app">
@@ -112,21 +114,15 @@ function EventTimeline({ onNavigate, onLogout }) {
       <aside className="audit-sidebar">
 
         <div className="audit-brand">
-
-          <div className="audit-brand-logo">
-            AT
-          </div>
+          <div className="audit-brand-logo">AT</div>
 
           <div>
             <h2>AuditTrail</h2>
             <span>FORENSIC LEDGER</span>
           </div>
-
         </div>
 
-        <div className="sidebar-label">
-          WORKSPACE
-        </div>
+        <div className="sidebar-label">WORKSPACE</div>
 
         <nav className="audit-nav">
 
@@ -202,9 +198,7 @@ function EventTimeline({ onNavigate, onLogout }) {
 
           <div className="sidebar-user">
 
-            <div className="user-avatar">
-              A
-            </div>
+            <div className="user-avatar">A</div>
 
             <div className="user-info">
               <strong>Admin</strong>
@@ -214,6 +208,7 @@ function EventTimeline({ onNavigate, onLogout }) {
             <button
               className="logout-button"
               onClick={onLogout}
+              title="Logout"
             >
               ↪
             </button>
@@ -233,25 +228,19 @@ function EventTimeline({ onNavigate, onLogout }) {
 
           {/* HEADER */}
 
-          <div className="page-heading timeline-heading">
+          <div className="page-heading">
 
             <div>
+              <p className="eyebrow">AUDITTRAIL</p>
 
-              <p className="eyebrow">
-                AUDITTRAIL
-              </p>
-
-              <h1>
-                Event Timeline
-              </h1>
+              <h1>Event Timeline</h1>
 
               <p>
-                Chronological history of all container events.
+                Trace every event recorded in the forensic ledger.
               </p>
-
             </div>
 
-            <div className="live-badge">
+            <div className="dashboard-live">
               <span></span>
               LIVE
             </div>
@@ -259,32 +248,66 @@ function EventTimeline({ onNavigate, onLogout }) {
           </div>
 
 
-          {/* ================= EVENT PANEL ================= */}
+          {/* SUMMARY */}
+
+          <div className="timeline-summary">
+
+            <div className="timeline-summary-card">
+              <span>TOTAL EVENTS</span>
+              <strong>{events.length}</strong>
+              <small>Ledger records</small>
+            </div>
+
+            <div className="timeline-summary-card">
+              <span>INFO EVENTS</span>
+              <strong>
+                {events.filter((e) => e.severity === "INFO").length}
+              </strong>
+              <small>Normal activity</small>
+            </div>
+
+            <div className="timeline-summary-card">
+              <span>WARNINGS</span>
+              <strong>
+                {events.filter((e) => e.severity === "WARNING").length}
+              </strong>
+              <small>Needs attention</small>
+            </div>
+
+            <div className="timeline-summary-card">
+              <span>INTEGRITY</span>
+              <strong>100%</strong>
+              <small>All records verified</small>
+            </div>
+
+          </div>
+
+
+          {/* EVENT PANEL */}
 
           <div className="panel timeline-panel">
 
             <div className="panel-header">
 
               <div>
-                <h2>
-                  Event Stream
-                </h2>
+                <h2>Forensic Event Stream</h2>
 
                 <p>
-                  Immutable activity recorded across the ledger.
+                  Chronological record of container activity
                 </p>
               </div>
 
-              <div className="timeline-count">
-                {filteredEvents.length} Events
+              <div className="panel-status">
+                <span></span>
+                LIVE
               </div>
 
             </div>
 
 
-            {/* ================= FILTERS ================= */}
+            {/* SEARCH + FILTER */}
 
-            <div className="timeline-filters">
+            <div className="timeline-controls">
 
               <div className="timeline-search">
 
@@ -292,127 +315,132 @@ function EventTimeline({ onNavigate, onLogout }) {
 
                 <input
                   type="text"
-                  placeholder="Search container, event, location or actor..."
+                  placeholder="Search events, containers or locations..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
 
               </div>
 
+              <div className="timeline-filters">
 
-              <select
-                className="severity-filter"
-                value={severityFilter}
-                onChange={(e) => setSeverityFilter(e.target.value)}
-              >
-                <option value="ALL">
-                  All Severity
-                </option>
+                {["ALL", "INFO", "WARNING", "CRITICAL"].map((item) => (
 
-                <option value="INFO">
-                  Info
-                </option>
+                  <button
+                    key={item}
+                    className={
+                      severity === item
+                        ? "timeline-filter active"
+                        : "timeline-filter"
+                    }
+                    onClick={() => setSeverity(item)}
+                  >
+                    {item}
+                  </button>
 
-                <option value="WARNING">
-                  Warning
-                </option>
+                ))}
 
-                <option value="CRITICAL">
-                  Critical
-                </option>
-              </select>
+              </div>
 
             </div>
 
 
-            {/* ================= TIMELINE ================= */}
+            {/* EVENT LIST */}
 
-            <div className="forensic-timeline">
+            <div className="timeline-stream">
 
-              {filteredEvents.length > 0 ? (
+              {filteredEvents.length === 0 ? (
+
+                <div className="timeline-empty">
+
+                  <div>⌕</div>
+
+                  <h3>No events found</h3>
+
+                  <p>
+                    Try another search or severity filter.
+                  </p>
+
+                  <button
+                    onClick={() => {
+                      setSearch("");
+                      setSeverity("ALL");
+                    }}
+                  >
+                    Reset Filters
+                  </button>
+
+                </div>
+
+              ) : (
 
                 filteredEvents.map((event, index) => (
 
                   <div
-                    className={`forensic-event ${
-                      selectedEvent?.id === event.id
-                        ? "selected-event"
-                        : ""
-                    }`}
+                    className="forensic-event"
                     key={event.id}
                     onClick={() => setSelectedEvent(event)}
                   >
 
-                    <div className="timeline-line">
+                    {/* Timeline line */}
+
+                    <div className="forensic-line">
 
                       <div
-                        className={`timeline-event-dot ${event.severity.toLowerCase()}`}
-                      >
-                        {index + 1}
-                      </div>
+                        className={`forensic-dot ${getSeverityClass(
+                          event.severity
+                        )}`}
+                      ></div>
 
                     </div>
 
 
-                    <div className="event-card">
+                    {/* Event content */}
 
-                      <div className="event-card-top">
+                    <div className="forensic-event-content">
 
-                        <div className="event-main">
+                      <div className="forensic-event-top">
 
-                          <div className="event-type-row">
+                        <div className="forensic-event-title">
 
-                            <span className="event-version">
-                              {event.version}
-                            </span>
-
-                            <h3>
-                              {event.type}
-                            </h3>
-
-                          </div>
-
-                          <p className="event-description">
-                            {event.description}
-                          </p>
-
-                        </div>
-
-
-                        <div className="event-time">
-
-                          <strong>
-                            {event.relative}
-                          </strong>
-
-                          <span>
-                            {event.timestamp}
+                          <span className="event-version">
+                            {event.version}
                           </span>
 
+                          <h3>{event.type}</h3>
+
                         </div>
 
+                        <span className="event-time">
+                          {event.timestamp}
+                        </span>
+
                       </div>
+
+
+                      <p className="event-description">
+                        {event.description}
+                      </p>
 
 
                       <div className="event-meta">
 
                         <span>
-                          <b>Container</b>
-                          {event.container}
+                          📦 {event.container}
                         </span>
 
                         <span>
-                          <b>Location</b>
-                          {event.location}
+                          📍 {event.location}
                         </span>
 
                         <span>
-                          <b>Actor</b>
-                          {event.actor}
+                          ◷ {event.relative}
                         </span>
 
                         <span
-                          className={`event-severity ${event.severity.toLowerCase()}`}
+                          className={`event-severity ${getSeverityClass(
+                            event.severity
+                          )}`}
                         >
                           {event.severity}
                         </span>
@@ -421,27 +449,14 @@ function EventTimeline({ onNavigate, onLogout }) {
 
                     </div>
 
+
+                    <div className="event-arrow">
+                      →
+                    </div>
+
                   </div>
 
                 ))
-
-              ) : (
-
-                <div className="timeline-empty">
-
-                  <div>
-                    ⌕
-                  </div>
-
-                  <h3>
-                    No events found
-                  </h3>
-
-                  <p>
-                    Try changing your search or severity filter.
-                  </p>
-
-                </div>
 
               )}
 
@@ -449,101 +464,151 @@ function EventTimeline({ onNavigate, onLogout }) {
 
           </div>
 
+        </div>
 
-          {/* ================= EVENT DETAILS ================= */}
-
-          {selectedEvent && (
-
-            <div className="event-details-panel">
-
-              <div className="details-header">
-
-                <div>
-
-                  <p className="eyebrow">
-                    EVENT DETAILS
-                  </p>
-
-                  <h2>
-                    {selectedEvent.type}
-                  </h2>
-
-                </div>
-
-                <button
-                  className="details-close"
-                  onClick={() => setSelectedEvent(null)}
-                >
-                  ×
-                </button>
-
-              </div>
+      </main>
 
 
-              <div className="details-grid">
+      {/* ================= EVENT DETAILS ================= */}
 
-                <div>
-                  <span>Container</span>
-                  <strong>{selectedEvent.container}</strong>
-                </div>
+      {selectedEvent && (
 
-                <div>
-                  <span>Version</span>
-                  <strong>{selectedEvent.version}</strong>
-                </div>
+        <div
+          className="event-details-overlay"
+          onClick={() => setSelectedEvent(null)}
+        >
 
-                <div>
-                  <span>Location</span>
-                  <strong>{selectedEvent.location}</strong>
-                </div>
+          <div
+            className="event-details-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
 
-                <div>
-                  <span>Actor</span>
-                  <strong>{selectedEvent.actor}</strong>
-                </div>
+            <div className="event-details-header">
 
-                <div>
-                  <span>Timestamp</span>
-                  <strong>{selectedEvent.timestamp}</strong>
-                </div>
+              <div>
 
-                <div>
-                  <span>Severity</span>
+                <span>FORENSIC EVENT</span>
 
-                  <strong
-                    className={`detail-severity ${selectedEvent.severity.toLowerCase()}`}
-                  >
-                    {selectedEvent.severity}
-                  </strong>
+                <h2>{selectedEvent.type}</h2>
 
-                </div>
+                <p>
+                  Version {selectedEvent.version} ·{" "}
+                  {selectedEvent.container}
+                </p>
 
               </div>
 
+              <button
+                onClick={() => setSelectedEvent(null)}
+              >
+                ×
+              </button>
 
-              <div className="hash-box">
+            </div>
 
-                <span>
-                  EVENT HASH
-                </span>
 
-                <code>
-                  {selectedEvent.hash}
-                </code>
+            <div className="event-detail-status">
 
-                <small>
-                  Cryptographic fingerprint used to verify event integrity.
-                </small>
+              <span
+                className={`event-severity ${getSeverityClass(
+                  selectedEvent.severity
+                )}`}
+              >
+                {selectedEvent.severity}
+              </span>
+
+              <span>
+                ✓ Ledger verified
+              </span>
+
+            </div>
+
+
+            <div className="event-detail-grid">
+
+              <div>
+                <span>LOCATION</span>
+                <strong>📍 {selectedEvent.location}</strong>
+              </div>
+
+              <div>
+                <span>TIMESTAMP</span>
+                <strong>{selectedEvent.timestamp}</strong>
+              </div>
+
+              <div>
+                <span>ACTOR</span>
+                <strong>{selectedEvent.actor}</strong>
+              </div>
+
+              <div>
+                <span>VERSION</span>
+                <strong>{selectedEvent.version}</strong>
+              </div>
+
+            </div>
+
+
+            <div className="event-description-box">
+
+              <span>EVENT DESCRIPTION</span>
+
+              <p>
+                {selectedEvent.description}
+              </p>
+
+            </div>
+
+
+            <div className="event-hash">
+
+              <div>
+
+                <span>CRYPTOGRAPHIC HASH</span>
+
+                <strong>{selectedEvent.hash}</strong>
+
+              </div>
+
+              <div className="hash-verified">
+                ✓ VERIFIED
+              </div>
+
+            </div>
+
+
+            <div className="event-integrity">
+
+              <div className="integrity-check-small">
+                ✓
+              </div>
+
+              <div>
+
+                <strong>Record integrity confirmed</strong>
+
+                <p>
+                  This event is linked to the immutable audit
+                  chain and passed hash verification.
+                </p>
 
               </div>
 
             </div>
 
-          )}
+
+            <button
+              className="event-close-button"
+              onClick={() => setSelectedEvent(null)}
+            >
+              Close Event
+            </button>
+
+          </div>
 
         </div>
 
-      </main>
+      )}
 
     </div>
   );
