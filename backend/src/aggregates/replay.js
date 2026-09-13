@@ -8,7 +8,11 @@ function replayEvents(events) {
     throw new TypeError("Events must be an array");
   }
 
-  return events.reduce((state, event) => {
+  const orderedEvents = [...events].sort((a, b) => {
+    return a.version - b.version;
+  });
+
+  return orderedEvents.reduce((state, event) => {
     return applyEvent(state, event);
   }, createInitialContainerState());
 }
