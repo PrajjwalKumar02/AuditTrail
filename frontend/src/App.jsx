@@ -5,502 +5,388 @@ import DashboardPage from "./pages/DashboardPage";
 import ContainersPage from "./pages/ContainersPage";
 import EventTimeline from "./pages/EventTimeline";
 import AnalyticsPage from "./pages/AnalyticsPage";
-import LocationCard from "./pages/LocationCard";
+
+import ShipmentMap from "./components/map/ShipmentMap";
+
+/* =====================================================
+   SHARED SIDEBAR
+===================================================== */
+
+function AppSidebar({ activePage, onNavigate, onLogout }) {
+  return (
+    <aside className="audit-sidebar">
+
+      <div className="audit-brand">
+        <div className="audit-brand-logo">
+          AT
+        </div>
+
+        <div>
+          <h2>AuditTrail</h2>
+          <span>FORENSIC LEDGER</span>
+        </div>
+      </div>
+
+      <div className="sidebar-label">
+        WORKSPACE
+      </div>
+
+      <nav className="audit-nav">
+
+        <button
+          className={`nav-link ${
+            activePage === "dashboard" ? "active" : ""
+          }`}
+          onClick={() => onNavigate("dashboard")}
+        >
+          <span>◇</span>
+          Dashboard
+        </button>
+
+        <button
+          className={`nav-link ${
+            activePage === "containers" ? "active" : ""
+          }`}
+          onClick={() => onNavigate("containers")}
+        >
+          <span>▣</span>
+          Containers
+        </button>
+
+        <button
+          className={`nav-link ${
+            activePage === "timeline" ? "active" : ""
+          }`}
+          onClick={() => onNavigate("timeline")}
+        >
+          <span>◷</span>
+          Event Timeline
+        </button>
+
+        <button
+          className={`nav-link ${
+            activePage === "locations" ? "active" : ""
+          }`}
+          onClick={() => onNavigate("locations")}
+        >
+          <span>⚑</span>
+          Locations
+        </button>
+
+        <button
+          className={`nav-link ${
+            activePage === "analytics" ? "active" : ""
+          }`}
+          onClick={() => onNavigate("analytics")}
+        >
+          <span>▥</span>
+          Analytics
+        </button>
+
+        <div className="sidebar-label security-label">
+          SECURITY
+        </div>
+
+        <button
+          className={`nav-link ${
+            activePage === "audit" ? "active" : ""
+          }`}
+          onClick={() => onNavigate("audit")}
+        >
+          <span>◇</span>
+          Audit Integrity
+        </button>
+
+        <button
+          className={`nav-link ${
+            activePage === "alerts" ? "active" : ""
+          }`}
+          onClick={() => onNavigate("alerts")}
+        >
+          <span>!</span>
+          Alerts
+        </button>
+
+      </nav>
+
+      <div className="sidebar-bottom">
+
+        <div className="system-status">
+
+          <span className="status-dot"></span>
+
+          <div>
+            <strong>
+              System Operational
+            </strong>
+
+            <small>
+              All services running
+            </small>
+          </div>
+
+        </div>
+
+        <div className="sidebar-user">
+
+          <div className="user-avatar">
+            A
+          </div>
+
+          <div className="user-info">
+            <strong>Admin</strong>
+            <span>Administrator</span>
+          </div>
+
+          <button
+            className="logout-button"
+            onClick={onLogout}
+            title="Logout"
+          >
+            ↪
+          </button>
+
+        </div>
+
+      </div>
+
+    </aside>
+  );
+}
 
 
-/* ================= LOCATIONS ================= */
+/* =====================================================
+   LOCATIONS PAGE
+===================================================== */
 
-function LocationsPage({ onNavigate, onLogout }) {
+function LocationsPage({
+  onNavigate,
+  onLogout,
+}) {
+
   const locations = [
     {
-      name: "Mumbai Port",
-      containers: "128",
-      shipments: "34",
-      temperature: "5.2°C",
-      updated: "2 min ago",
-      coordinates: "18.9388° N, 72.8354° E",
+      id: "ATL-4821",
+      shipment: "SHIP-10482",
+      location: "Singapore Port",
+      country: "Singapore",
+      status: "In Transit",
+      temperature: "4.2°C",
+      updated: "4 min ago",
+      latitude: 1.2644,
+      longitude: 103.8222,
+      coordinates: "1.2644° N, 103.8222° E",
+      route: "Singapore → Mumbai",
+      progress: 42,
     },
+
     {
-      name: "JNPT Terminal",
-      containers: "94",
-      shipments: "27",
-      temperature: "4.8°C",
-      updated: "5 min ago",
-      coordinates: "18.9490° N, 72.9500° E",
+      id: "MSC-2917",
+      shipment: "SHIP-20891",
+      location: "Mumbai Port",
+      country: "India",
+      status: "At Warehouse",
+      temperature: "5.1°C",
+      updated: "18 min ago",
+      latitude: 18.949,
+      longitude: 72.952,
+      coordinates: "18.9490° N, 72.9520° E",
+      route: "Mumbai → Dubai",
+      progress: 68,
     },
+
     {
-      name: "Dubai Port",
-      containers: "76",
-      shipments: "19",
-      temperature: "7.1°C",
-      updated: "8 min ago",
-      coordinates: "25.2697° N, 55.3095° E",
+      id: "CMA-7732",
+      shipment: "SHIP-31942",
+      location: "Dubai Port",
+      country: "UAE",
+      status: "Alert",
+      temperature: "9.8°C",
+      updated: "32 min ago",
+      latitude: 25.2769,
+      longitude: 55.282,
+      coordinates: "25.2769° N, 55.2820° E",
+      route: "Dubai → Rotterdam",
+      progress: 74,
     },
+
     {
-      name: "Singapore Port",
-      containers: "52",
-      shipments: "14",
-      temperature: "4.1°C",
-      updated: "12 min ago",
-      coordinates: "1.2644° N, 103.8200° E",
+      id: "MAE-1048",
+      shipment: "SHIP-42107",
+      location: "Rotterdam Port",
+      country: "Netherlands",
+      status: "Delivered",
+      temperature: "3.9°C",
+      updated: "1 hr ago",
+      latitude: 51.9244,
+      longitude: 4.4777,
+      coordinates: "51.9244° N, 4.4777° E",
+      route: "Singapore → Rotterdam",
+      progress: 100,
     },
   ];
 
-  return (
-    <div className="audit-app">
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [selectedLocation, setSelectedLocation] =
+    useState(null);
 
-      <aside className="audit-sidebar">
+  const filteredLocations =
+    locations.filter((location) => {
 
-        <div className="audit-brand">
-          <div className="audit-brand-logo">AT</div>
+      const value =
+        search.toLowerCase().trim();
 
-          <div>
-            <h2>AuditTrail</h2>
-            <span>FORENSIC LEDGER</span>
-          </div>
-        </div>
+      const matchesSearch =
+        location.id
+          .toLowerCase()
+          .includes(value) ||
+        location.location
+          .toLowerCase()
+          .includes(value) ||
+        location.country
+          .toLowerCase()
+          .includes(value) ||
+        location.status
+          .toLowerCase()
+          .includes(value);
 
-        <div className="sidebar-label">WORKSPACE</div>
+      const matchesFilter =
+        filter === "All" ||
+        location.status === filter;
 
-        <nav className="audit-nav">
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("dashboard")}
-          >
-            <span>◇</span> Dashboard
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("containers")}
-          >
-            <span>▣</span> Containers
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("timeline")}
-          >
-            <span>◷</span> Event Timeline
-          </button>
-
-          <button className="nav-link active">
-            <span>⚑</span> Locations
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("analytics")}
-          >
-            <span>▥</span> Analytics
-          </button>
-
-          <div className="sidebar-label security-label">
-            SECURITY
-          </div>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("audit")}
-          >
-            <span>◇</span> Audit Integrity
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("alerts")}
-          >
-            <span>!</span> Alerts
-          </button>
-
-        </nav>
-
-        <div className="sidebar-bottom">
-
-          <div className="system-status">
-            <span className="status-dot"></span>
-
-            <div>
-              <strong>System Operational</strong>
-              <small>All services running</small>
-            </div>
-          </div>
-
-          <div className="sidebar-user">
-
-            <div className="user-avatar">A</div>
-
-            <div className="user-info">
-              <strong>Admin</strong>
-              <span>Administrator</span>
-            </div>
-
-            <button
-              className="logout-button"
-              onClick={onLogout}
-            >
-              ↪
-            </button>
-
-          </div>
-
-        </div>
-
-      </aside>
+      return matchesSearch && matchesFilter;
+    });
 
 
-      <main className="audit-main">
+  const statusClass = (status) => {
 
-        <div className="audit-content">
+    if (status === "Alert") {
+      return "map-status-alert";
+    }
 
-          <div className="page-heading">
+    if (status === "Delivered") {
+      return "map-status-delivered";
+    }
 
-            <div>
-              <p className="eyebrow">AUDITTRAIL</p>
+    if (status === "At Warehouse") {
+      return "map-status-warehouse";
+    }
 
-              <h1>Locations</h1>
-
-              <p>
-                Monitor active shipment and container locations.
-              </p>
-            </div>
-
-            <div className="dashboard-live">
-              <span></span>
-              LIVE
-            </div>
-
-          </div>
-
-
-          <div className="panel module-panel">
-
-            <div className="panel-header">
-
-              <div>
-                <h2>Active Locations</h2>
-
-                <p>
-                  Live container monitoring across locations
-                </p>
-              </div>
-
-              <div className="panel-status">
-                <span></span>
-                ACTIVE
-              </div>
-
-            </div>
-
-
-            <div className="locations-working-list">
-
-              {locations.map((location, index) => (
-
-                <LocationCard
-                  key={index}
-                  container={{
-                    location: location.name,
-                    containers: location.containers,
-                    shipments: location.shipments,
-                    temperature: location.temperature,
-                    lastUpdated: location.updated,
-                    coordinates: location.coordinates,
-                  }}
-                />
-
-              ))}
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </main>
-
-    </div>
-  );
-}
-
-
-/* ================= ALERTS ================= */
-
-function AlertsPage({ onNavigate, onLogout }) {
-
-  const [alerts, setAlerts] = useState([
-    {
-      id: 1,
-      title: "Container CTN-48291",
-      message: "Inspection required",
-      severity: "Medium",
-      time: "2 min ago",
-      status: "Active",
-    },
-    {
-      id: 2,
-      title: "Mumbai Port",
-      message: "Delay detected",
-      severity: "Low",
-      time: "8 min ago",
-      status: "Active",
-    },
-    {
-      id: 3,
-      title: "Container CTN-73510",
-      message: "Document verification pending",
-      severity: "Medium",
-      time: "15 min ago",
-      status: "Active",
-    },
-    {
-      id: 4,
-      title: "System",
-      message: "All services operational",
-      severity: "Normal",
-      time: "21 min ago",
-      status: "Active",
-    },
-  ]);
-
-  const [selectedAlert, setSelectedAlert] = useState(null);
-
-  const acknowledgeAlert = (id) => {
-    setAlerts((current) =>
-      current.map((alert) =>
-        alert.id === id
-          ? { ...alert, status: "Acknowledged" }
-          : alert
-      )
-    );
-
-    setSelectedAlert(null);
+    return "map-status-transit";
   };
 
-  const activeAlerts = alerts.filter(
-    (alert) => alert.status === "Active"
-  ).length;
+
+  const total = locations.length;
+
+  const transitCount =
+    locations.filter(
+      (x) => x.status === "In Transit"
+    ).length;
+
+  const warehouseCount =
+    locations.filter(
+      (x) => x.status === "At Warehouse"
+    ).length;
+
+  const alertCount =
+    locations.filter(
+      (x) => x.status === "Alert"
+    ).length;
+
 
   return (
     <div className="audit-app">
 
-      <aside className="audit-sidebar">
-
-        <div className="audit-brand">
-          <div className="audit-brand-logo">AT</div>
-
-          <div>
-            <h2>AuditTrail</h2>
-            <span>FORENSIC LEDGER</span>
-          </div>
-        </div>
-
-        <div className="sidebar-label">WORKSPACE</div>
-
-        <nav className="audit-nav">
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("dashboard")}
-          >
-            <span>◇</span> Dashboard
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("containers")}
-          >
-            <span>▣</span> Containers
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("timeline")}
-          >
-            <span>◷</span> Event Timeline
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("locations")}
-          >
-            <span>⚑</span> Locations
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("analytics")}
-          >
-            <span>▥</span> Analytics
-          </button>
-
-          <div className="sidebar-label security-label">
-            SECURITY
-          </div>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("audit")}
-          >
-            <span>◇</span> Audit Integrity
-          </button>
-
-          <button className="nav-link active">
-            <span>!</span> Alerts
-          </button>
-
-        </nav>
-
-        <div className="sidebar-bottom">
-
-          <div className="system-status">
-            <span className="status-dot"></span>
-
-            <div>
-              <strong>System Operational</strong>
-              <small>All services running</small>
-            </div>
-          </div>
-
-          <div className="sidebar-user">
-
-            <div className="user-avatar">A</div>
-
-            <div className="user-info">
-              <strong>Admin</strong>
-              <span>Administrator</span>
-            </div>
-
-            <button
-              className="logout-button"
-              onClick={onLogout}
-            >
-              ↪
-            </button>
-
-          </div>
-
-        </div>
-
-      </aside>
-
+      <AppSidebar
+        activePage="locations"
+        onNavigate={onNavigate}
+        onLogout={onLogout}
+      />
 
       <main className="audit-main">
 
-        <div className="audit-content">
+        <div className="audit-content locations-map-page">
 
-          <div className="page-heading">
+          {/* ================= HEADER ================= */}
+
+          <div className="locations-map-header">
 
             <div>
-              <p className="eyebrow">AUDITTRAIL</p>
 
-              <h1>Alerts</h1>
+              <p className="eyebrow">
+                AUDITTRAIL / LIVE TRACKING
+              </p>
+
+              <h1>
+                Shipment Locations
+              </h1>
 
               <p>
-                Review active warnings and system notifications.
+                Real-time geographic tracking of
+                audited containers.
               </p>
+
             </div>
 
-            <div className="dashboard-live">
+            <div className="locations-live-badge">
               <span></span>
-              LIVE
+              LIVE TRACKING
             </div>
 
           </div>
 
 
-          <div className="alerts-summary">
+          {/* ================= CONTROLS ================= */}
 
-            <div>
-              <span>ACTIVE ALERTS</span>
-              <strong>{activeAlerts}</strong>
-              <small>Require attention</small>
-            </div>
+          <div className="locations-map-controls">
 
-            <div>
-              <span>TOTAL ALERTS</span>
-              <strong>{alerts.length}</strong>
-              <small>Recorded notifications</small>
-            </div>
+            <div className="locations-map-search">
 
-            <div>
-              <span>SYSTEM STATUS</span>
-              <strong className="alert-safe">
-                Operational
-              </strong>
-              <small>All services running</small>
-            </div>
+              <span>⌕</span>
 
-          </div>
+              <input
+                value={search}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
+                placeholder="Search container, port or country..."
+              />
 
-
-          <div className="panel alerts-panel">
-
-            <div className="panel-header">
-
-              <div>
-                <h2>Active Alerts</h2>
-                <p>
-                  Warnings and notifications requiring review
-                </p>
-              </div>
-
-              <div className="panel-status">
-                <span></span>
-                {activeAlerts} ACTIVE
-              </div>
-
-            </div>
-
-
-            <div className="alerts-list">
-
-              {alerts.map((alert) => (
-
-                <div
-                  className={`alert-working-card ${
-                    alert.status === "Acknowledged"
-                      ? "acknowledged"
-                      : ""
-                  }`}
-                  key={alert.id}
-                  onClick={() => setSelectedAlert(alert)}
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
                 >
+                  ×
+                </button>
+              )}
 
-                  <div className="alert-icon">
-                    {alert.severity === "Normal"
-                      ? "✓"
-                      : "!"}
-                  </div>
+            </div>
 
-                  <div className="alert-info">
 
-                    <strong>
-                      {alert.title}
-                    </strong>
+            <div className="locations-map-filters">
 
-                    <span>
-                      {alert.message}
-                    </span>
+              {[
+                "All",
+                "In Transit",
+                "At Warehouse",
+                "Delivered",
+                "Alert",
+              ].map((item) => (
 
-                  </div>
-
-                  <div className="alert-time">
-                    {alert.time}
-                  </div>
-
-                  <div className="alert-severity">
-                    {alert.status === "Acknowledged"
-                      ? "Acknowledged"
-                      : alert.severity}
-                  </div>
-
-                  <div className="alert-arrow">
-                    →
-                  </div>
-
-                </div>
+                <button
+                  key={item}
+                  className={
+                    filter === item
+                      ? "map-filter active"
+                      : "map-filter"
+                  }
+                  onClick={() =>
+                    setFilter(item)
+                  }
+                >
+                  {item}
+                </button>
 
               ))}
 
@@ -508,129 +394,364 @@ function AlertsPage({ onNavigate, onLogout }) {
 
           </div>
 
-        </div>
 
-      </main>
+          {/* ================= MAIN MAP AREA ================= */}
 
+          <div className="locations-map-layout">
 
-      {selectedAlert && (
+            {/* MAP */}
 
-        <div
-          className="alert-modal-overlay"
-          onClick={() => setSelectedAlert(null)}
-        >
+            <div className="locations-map-panel">
 
-          <div
-            className="alert-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
+              <div className="locations-map-panel-header">
 
-            <div className="alert-modal-header">
+                <div>
+                  <span>GLOBAL SHIPMENT MAP</span>
 
-              <div>
+                  <h2>
+                    Live Container Network
+                  </h2>
+                </div>
 
-                <span>ALERT DETAILS</span>
-
-                <h2>
-                  {selectedAlert.title}
-                </h2>
-
-                <p>
-                  {selectedAlert.message}
-                </p>
+                <div className="map-record-count">
+                  {filteredLocations.length} tracked
+                </div>
 
               </div>
 
-              <button
-                onClick={() => setSelectedAlert(null)}
-              >
-                ×
-              </button>
 
-            </div>
+              <div className="locations-map-container">
 
+                <ShipmentMap
+                  locations={filteredLocations}
+                  selectedLocation={selectedLocation}
+                  onSelectLocation={
+                    setSelectedLocation
+                  }
+                />
 
-            <div className="alert-detail-status">
-              <span></span>
-              {selectedAlert.status}
-            </div>
-
-
-            <div className="alert-detail-grid">
-
-              <div>
-                <small>SEVERITY</small>
-                <strong>
-                  {selectedAlert.severity}
-                </strong>
               </div>
 
-              <div>
-                <small>TIME</small>
-                <strong>
-                  {selectedAlert.time}
-                </strong>
-              </div>
 
-              <div>
-                <small>ALERT ID</small>
-                <strong>
-                  ALT-{String(selectedAlert.id).padStart(4, "0")}
-                </strong>
-              </div>
+              {/* MAP LEGEND */}
 
-              <div>
-                <small>SOURCE</small>
-                <strong>
-                  AuditTrail Monitor
-                </strong>
+              <div className="locations-map-legend">
+
+                <div>
+                  <span className="legend-dot transit"></span>
+                  In Transit
+                </div>
+
+                <div>
+                  <span className="legend-dot warehouse"></span>
+                  Warehouse
+                </div>
+
+                <div>
+                  <span className="legend-dot delivered"></span>
+                  Delivered
+                </div>
+
+                <div>
+                  <span className="legend-dot alert"></span>
+                  Alert
+                </div>
+
               </div>
 
             </div>
 
 
-            <div className="alert-description">
+            {/* RIGHT LIST */}
 
-              <h3>Recommended Action</h3>
+            <div className="locations-live-panel">
 
-              <p>
-                Review this notification and verify the
-                associated container or system activity.
-              </p>
+              <div className="locations-live-header">
+
+                <div>
+                  <span>TRACKING FEED</span>
+
+                  <h2>
+                    Live Locations
+                  </h2>
+                </div>
+
+                <div className="verified-badge">
+                  ✓ Verified
+                </div>
+
+              </div>
+
+
+              <div className="locations-live-list">
+
+                {filteredLocations.length === 0 ? (
+
+                  <div className="map-empty">
+
+                    <div>⌕</div>
+
+                    <strong>
+                      No locations found
+                    </strong>
+
+                    <p>
+                      Try another search or filter.
+                    </p>
+
+                    <button
+                      onClick={() => {
+                        setSearch("");
+                        setFilter("All");
+                      }}
+                    >
+                      Clear Filters
+                    </button>
+
+                  </div>
+
+                ) : (
+
+                  filteredLocations.map(
+                    (location) => (
+
+                      <button
+                        key={location.id}
+                        className={`live-location-item ${
+                          selectedLocation?.id ===
+                          location.id
+                            ? "selected"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          setSelectedLocation(
+                            location
+                          )
+                        }
+                      >
+
+                        <div className="live-location-marker">
+                          <span></span>
+                        </div>
+
+
+                        <div className="live-location-info">
+
+                          <div className="live-location-top">
+
+                            <strong>
+                              {location.id}
+                            </strong>
+
+                            <span
+                              className={`map-status ${statusClass(
+                                location.status
+                              )}`}
+                            >
+                              {location.status}
+                            </span>
+
+                          </div>
+
+                          <h3>
+                            {location.location}
+                          </h3>
+
+                          <p>
+                            {location.route}
+                          </p>
+
+
+                          <div className="live-location-meta">
+
+                            <span>
+                              🌡 {location.temperature}
+                            </span>
+
+                            <span>
+                              {location.updated}
+                            </span>
+
+                          </div>
+
+
+                          <div className="location-progress">
+
+                            <div>
+                              <span>
+                                Shipment progress
+                              </span>
+
+                              <b>
+                                {location.progress}%
+                              </b>
+                            </div>
+
+                            <div className="location-progress-track">
+                              <span
+                                style={{
+                                  width: `${location.progress}%`,
+                                }}
+                              ></span>
+                            </div>
+
+                          </div>
+
+                        </div>
+
+                        <span className="location-arrow">
+                          →
+                        </span>
+
+                      </button>
+
+                    )
+                  )
+
+                )}
+
+              </div>
 
             </div>
-
-
-            {selectedAlert.status === "Active" && (
-
-              <button
-                className="alert-acknowledge"
-                onClick={() =>
-                  acknowledgeAlert(selectedAlert.id)
-                }
-              >
-                ✓ Acknowledge Alert
-              </button>
-
-            )}
 
           </div>
 
+
+          {/* ================= BOTTOM STATS ================= */}
+
+          <div className="locations-bottom-stats">
+
+            <div className="location-bottom-stat">
+
+              <div className="bottom-stat-icon">
+                ◉
+              </div>
+
+              <div>
+                <span>TRACKED</span>
+                <strong>{total}</strong>
+              </div>
+
+            </div>
+
+
+            <div className="location-bottom-stat">
+
+              <div className="bottom-stat-icon transit-icon">
+                ↗
+              </div>
+
+              <div>
+                <span>MOVING</span>
+                <strong>{transitCount}</strong>
+              </div>
+
+            </div>
+
+
+            <div className="location-bottom-stat">
+
+              <div className="bottom-stat-icon warehouse-icon">
+                ▣
+              </div>
+
+              <div>
+                <span>WAREHOUSE</span>
+                <strong>{warehouseCount}</strong>
+              </div>
+
+            </div>
+
+
+            <div className="location-bottom-stat">
+
+              <div className="bottom-stat-icon alert-icon">
+                !
+              </div>
+
+              <div>
+                <span>ALERTS</span>
+                <strong>{alertCount}</strong>
+              </div>
+
+            </div>
+
+
+            <div className="location-bottom-stat">
+
+              <div className="bottom-stat-icon verified-icon">
+                ✓
+              </div>
+
+              <div>
+                <span>VERIFIED</span>
+                <strong>100%</strong>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          {/* ================= SELECTED LOCATION ================= */}
+
+          {selectedLocation && (
+
+            <div className="location-focus-bar">
+
+              <div>
+
+                <span>
+                  SELECTED CONTAINER
+                </span>
+
+                <strong>
+                  {selectedLocation.id}
+                </strong>
+
+                <small>
+                  {selectedLocation.location}
+                  {" • "}
+                  {selectedLocation.coordinates}
+                </small>
+
+              </div>
+
+              <button
+                onClick={() =>
+                  setSelectedLocation(null)
+                }
+              >
+                Clear Selection ×
+              </button>
+
+            </div>
+
+          )}
+
         </div>
 
-      )}
+      </main>
 
     </div>
   );
 }
 
 
-/* ================= AUDIT INTEGRITY ================= */
+/* =====================================================
+   AUDIT INTEGRITY
+===================================================== */
 
-function AuditIntegrity({ onNavigate, onLogout }) {
+function AuditIntegrity({
+  onNavigate,
+  onLogout,
+}) {
 
-  const [verifying, setVerifying] = useState(false);
-  const [progress, setProgress] = useState(100);
+  const [verifying, setVerifying] =
+    useState(false);
+
+  const [progress, setProgress] =
+    useState(100);
 
   const runVerification = () => {
 
@@ -657,109 +778,39 @@ function AuditIntegrity({ onNavigate, onLogout }) {
     }, 150);
   };
 
+
+  const checks = [
+    [
+      "Ledger Chain Verification",
+      "Complete event chain validated",
+      "Just now",
+    ],
+    [
+      "Hash Integrity Check",
+      "Stored hashes successfully matched",
+      "2 min ago",
+    ],
+    [
+      "Event Sequence Validation",
+      "Chronological event ordering verified",
+      "5 min ago",
+    ],
+    [
+      "Container Audit Validation",
+      "Container audit records validated",
+      "8 min ago",
+    ],
+  ];
+
+
   return (
     <div className="audit-app">
 
-      <aside className="audit-sidebar">
-
-        <div className="audit-brand">
-          <div className="audit-brand-logo">AT</div>
-
-          <div>
-            <h2>AuditTrail</h2>
-            <span>FORENSIC LEDGER</span>
-          </div>
-        </div>
-
-        <div className="sidebar-label">WORKSPACE</div>
-
-        <nav className="audit-nav">
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("dashboard")}
-          >
-            <span>◇</span> Dashboard
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("containers")}
-          >
-            <span>▣</span> Containers
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("timeline")}
-          >
-            <span>◷</span> Event Timeline
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("locations")}
-          >
-            <span>⚑</span> Locations
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("analytics")}
-          >
-            <span>▥</span> Analytics
-          </button>
-
-          <div className="sidebar-label security-label">
-            SECURITY
-          </div>
-
-          <button className="nav-link active">
-            <span>◇</span> Audit Integrity
-          </button>
-
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("alerts")}
-          >
-            <span>!</span> Alerts
-          </button>
-
-        </nav>
-
-        <div className="sidebar-bottom">
-
-          <div className="system-status">
-            <span className="status-dot"></span>
-
-            <div>
-              <strong>System Operational</strong>
-              <small>All services running</small>
-            </div>
-          </div>
-
-          <div className="sidebar-user">
-
-            <div className="user-avatar">A</div>
-
-            <div className="user-info">
-              <strong>Admin</strong>
-              <span>Administrator</span>
-            </div>
-
-            <button
-              className="logout-button"
-              onClick={onLogout}
-            >
-              ↪
-            </button>
-
-          </div>
-
-        </div>
-
-      </aside>
-
+      <AppSidebar
+        activePage="audit"
+        onNavigate={onNavigate}
+        onLogout={onLogout}
+      />
 
       <main className="audit-main">
 
@@ -768,13 +819,19 @@ function AuditIntegrity({ onNavigate, onLogout }) {
           <div className="page-heading">
 
             <div>
-              <p className="eyebrow">AUDITTRAIL</p>
 
-              <h1>Audit Integrity</h1>
+              <p className="eyebrow">
+                AUDITTRAIL
+              </p>
+
+              <h1>
+                Audit Integrity
+              </h1>
 
               <p>
                 Verify the integrity of your event-sourced ledger.
               </p>
+
             </div>
 
             <div className="dashboard-live">
@@ -790,10 +847,15 @@ function AuditIntegrity({ onNavigate, onLogout }) {
             <div className="panel-header">
 
               <div>
-                <h2>Ledger Integrity</h2>
+
+                <h2>
+                  Ledger Integrity
+                </h2>
+
                 <p>
                   Cryptographic verification of audit records
                 </p>
+
               </div>
 
               <div className="panel-status">
@@ -806,7 +868,11 @@ function AuditIntegrity({ onNavigate, onLogout }) {
 
             <div className="integrity-working-content">
 
-              <div className="integrity-icon">
+              <div
+                className={`integrity-icon ${
+                  verifying ? "checking" : ""
+                }`}
+              >
                 {verifying ? "↻" : "✓"}
               </div>
 
@@ -822,9 +888,7 @@ function AuditIntegrity({ onNavigate, onLogout }) {
                   : "All audit records passed integrity verification."}
               </p>
 
-
               {verifying && (
-
                 <>
                   <div className="integrity-progress">
                     <div
@@ -838,18 +902,13 @@ function AuditIntegrity({ onNavigate, onLogout }) {
                     {progress}% complete
                   </span>
                 </>
-
               )}
 
-
               {!verifying && (
-
                 <div className="integrity-success">
                   ✓ No integrity issues detected
                 </div>
-
               )}
-
 
               <button
                 className="integrity-verify-button"
@@ -902,8 +961,13 @@ function AuditIntegrity({ onNavigate, onLogout }) {
             <div className="panel-header">
 
               <div>
-                <h2>Verification Checks</h2>
-                <p>Recent ledger security checks</p>
+                <h2>
+                  Verification Checks
+                </h2>
+
+                <p>
+                  Recent ledger security checks
+                </p>
               </div>
 
               <div className="panel-status">
@@ -914,47 +978,42 @@ function AuditIntegrity({ onNavigate, onLogout }) {
             </div>
 
 
-            {[
-              [
-                "Ledger Chain Verification",
-                "Complete event chain validated",
-                "Just now",
-              ],
-              [
-                "Hash Integrity Check",
-                "Stored hashes successfully matched",
-                "2 min ago",
-              ],
-              [
-                "Event Sequence Validation",
-                "Chronological event ordering verified",
-                "5 min ago",
-              ],
-              [
-                "Container Audit Validation",
-                "Container audit records validated",
-                "8 min ago",
-              ],
-            ].map((check, index) => (
+            {checks.map(
+              ([title, description, time]) => (
 
-              <div className="integrity-check-row" key={index}>
+                <div
+                  className="integrity-check-row"
+                  key={title}
+                >
 
-                <div className="integrity-check-icon">
-                  ✓
+                  <div className="integrity-check-icon">
+                    ✓
+                  </div>
+
+                  <div>
+
+                    <strong>
+                      {title}
+                    </strong>
+
+                    <span>
+                      {description}
+                    </span>
+
+                  </div>
+
+                  <b>
+                    PASSED
+                  </b>
+
+                  <small>
+                    {time}
+                  </small>
+
                 </div>
 
-                <div>
-                  <strong>{check[0]}</strong>
-                  <span>{check[1]}</span>
-                </div>
-
-                <b>PASSED</b>
-
-                <small>{check[2]}</small>
-
-              </div>
-
-            ))}
+              )
+            )}
 
           </div>
 
@@ -967,15 +1026,322 @@ function AuditIntegrity({ onNavigate, onLogout }) {
 }
 
 
-/* ================= APP ================= */
+/* =====================================================
+   ALERTS
+===================================================== */
+
+function AlertsPage({
+  onNavigate,
+  onLogout,
+}) {
+
+  const [alerts, setAlerts] =
+    useState([
+      {
+        id: 1,
+        source: "Container CTN-48291",
+        title: "Inspection required",
+        severity: "Medium",
+        time: "2 min ago",
+        status: "Active",
+      },
+      {
+        id: 2,
+        source: "Mumbai Port",
+        title: "Delay detected",
+        severity: "Low",
+        time: "8 min ago",
+        status: "Active",
+      },
+      {
+        id: 3,
+        source: "Container CTN-73510",
+        title: "Document verification pending",
+        severity: "Medium",
+        time: "15 min ago",
+        status: "Active",
+      },
+      {
+        id: 4,
+        source: "System",
+        title: "All services operational",
+        severity: "Normal",
+        time: "21 min ago",
+        status: "Resolved",
+      },
+    ]);
+
+  const [selectedAlert, setSelectedAlert] =
+    useState(null);
+
+
+  const acknowledgeAlert = (id) => {
+
+    setAlerts((current) =>
+      current.map((alert) =>
+        alert.id === id
+          ? {
+              ...alert,
+              status: "Resolved",
+            }
+          : alert
+      )
+    );
+
+    setSelectedAlert(null);
+  };
+
+
+  return (
+    <div className="audit-app">
+
+      <AppSidebar
+        activePage="alerts"
+        onNavigate={onNavigate}
+        onLogout={onLogout}
+      />
+
+      <main className="audit-main">
+
+        <div className="audit-content">
+
+          <div className="page-heading">
+
+            <div>
+
+              <p className="eyebrow">
+                AUDITTRAIL
+              </p>
+
+              <h1>
+                Alerts
+              </h1>
+
+              <p>
+                Review active warnings and system notifications.
+              </p>
+
+            </div>
+
+            <div className="dashboard-live">
+              <span></span>
+              LIVE
+            </div>
+
+          </div>
+
+
+          <div className="panel module-panel">
+
+            <div className="panel-header">
+
+              <div>
+
+                <h2>
+                  System Alerts
+                </h2>
+
+                <p>
+                  Review active audit and shipment alerts
+                </p>
+
+              </div>
+
+              <div className="panel-status">
+                <span></span>
+                ACTIVE
+              </div>
+
+            </div>
+
+
+            <div className="module-list">
+
+              {alerts.map((alert) => (
+
+                <button
+                  className={`module-row ${
+                    alert.status === "Resolved"
+                      ? "alert-resolved"
+                      : ""
+                  }`}
+                  key={alert.id}
+                  onClick={() =>
+                    setSelectedAlert(alert)
+                  }
+                >
+
+                  <div className="module-row-icon">
+                    !
+                  </div>
+
+                  <div className="module-row-info">
+
+                    <strong>
+                      {alert.source}
+                    </strong>
+
+                    <span>
+                      {alert.title}
+                    </span>
+
+                  </div>
+
+                  <div className="module-row-status">
+                    {alert.severity}
+                  </div>
+
+                  <small>
+                    {alert.time}
+                  </small>
+
+                </button>
+
+              ))}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
+
+
+      {selectedAlert && (
+
+        <div
+          className="location-details-overlay"
+          onClick={() =>
+            setSelectedAlert(null)
+          }
+        >
+
+          <div
+            className="location-details"
+            onClick={(e) =>
+              e.stopPropagation()
+            }
+          >
+
+            <div className="location-details-header">
+
+              <div>
+
+                <span className="location-details-label">
+                  SYSTEM ALERT
+                </span>
+
+                <h2>
+                  {selectedAlert.title}
+                </h2>
+
+              </div>
+
+              <button
+                className="location-details-close"
+                onClick={() =>
+                  setSelectedAlert(null)
+                }
+              >
+                ×
+              </button>
+
+            </div>
+
+
+            <div className="location-details-grid">
+
+              <div className="location-detail-item">
+                <span>Source</span>
+                <strong>
+                  {selectedAlert.source}
+                </strong>
+              </div>
+
+              <div className="location-detail-item">
+                <span>Severity</span>
+                <strong>
+                  {selectedAlert.severity}
+                </strong>
+              </div>
+
+              <div className="location-detail-item">
+                <span>Status</span>
+                <strong>
+                  {selectedAlert.status}
+                </strong>
+              </div>
+
+              <div className="location-detail-item">
+                <span>Detected</span>
+                <strong>
+                  {selectedAlert.time}
+                </strong>
+              </div>
+
+            </div>
+
+
+            <div className="location-details-footer">
+
+              <div>
+
+                <span>
+                  Alert Management
+                </span>
+
+                <strong>
+                  {selectedAlert.status === "Active"
+                    ? "Action required"
+                    : "No action required"}
+                </strong>
+
+              </div>
+
+              {selectedAlert.status === "Active" && (
+
+                <button
+                  className="location-close-button"
+                  onClick={() =>
+                    acknowledgeAlert(
+                      selectedAlert.id
+                    )
+                  }
+                >
+                  Acknowledge Alert
+                </button>
+
+              )}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
+
+    </div>
+  );
+}
+
+
+/* =====================================================
+   MAIN APP
+===================================================== */
 
 function App() {
 
-  const [loggedIn, setLoggedIn] = useState(
-    localStorage.getItem("audittrail_auth") === "true"
-  );
+  const [loggedIn, setLoggedIn] =
+    useState(
+      localStorage.getItem(
+        "audittrail_auth"
+      ) === "true"
+    );
 
-  const [page, setPage] = useState("dashboard");
+  const [page, setPage] =
+    useState("dashboard");
 
 
   const handleLogin = () => {
@@ -1004,9 +1370,10 @@ function App() {
   if (!loggedIn) {
 
     return (
-      <LoginPage onLogin={handleLogin} />
+      <LoginPage
+        onLogin={handleLogin}
+      />
     );
-
   }
 
 
@@ -1018,7 +1385,6 @@ function App() {
         onLogout={handleLogout}
       />
     );
-
   }
 
 
@@ -1030,7 +1396,6 @@ function App() {
         onLogout={handleLogout}
       />
     );
-
   }
 
 
@@ -1042,7 +1407,6 @@ function App() {
         onLogout={handleLogout}
       />
     );
-
   }
 
 
@@ -1054,7 +1418,6 @@ function App() {
         onLogout={handleLogout}
       />
     );
-
   }
 
 
@@ -1066,7 +1429,6 @@ function App() {
         onLogout={handleLogout}
       />
     );
-
   }
 
 
@@ -1078,7 +1440,6 @@ function App() {
         onLogout={handleLogout}
       />
     );
-
   }
 
 
@@ -1090,12 +1451,10 @@ function App() {
         onLogout={handleLogout}
       />
     );
-
   }
 
 
   return null;
 }
-
 
 export default App;

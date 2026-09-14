@@ -1,19 +1,101 @@
-import { MapContainer, TileLayer, Polyline } from "react-leaflet";
-import LocationMarkers from "./LocationMarkers";
+import {
+  MapContainer,
+  TileLayer,
+  useMap,
+} from "react-leaflet";
+
+import { useEffect } from "react";
+
+import LocationMarker from "./LocationMarker";
+
 import "leaflet/dist/leaflet.css";
 
-export default function ShipmentMap({ locations = [] }) {
-  if (!locations.length) return <div className="empty-state">No shipment locations available.</div>;
-  const center = [locations[0].lat, locations[0].lng];
-  const route = locations.map((location) => [location.lat, location.lng]);
+
+/* =====================================================
+   MAP FOCUS
+===================================================== */
+
+function MapFocus({ location }) {
+
+  const map = useMap();
+
+  useEffect(() => {
+
+    if (!location) return;
+
+    map.flyTo(
+      [
+        location.latitude,
+        location.longitude,
+      ],
+      5,
+      {
+        duration: 1.2,
+      }
+    );
+
+  }, [location, map]);
+
+  return null;
+}
+
+
+/* =====================================================
+   MAP COMPONENT
+===================================================== */
+
+function ShipmentMap({
+  locations = [],
+  selectedLocation,
+  onSelectLocation,
+}) {
+
   return (
-    <div className="shipment-map">
-      <h2>Shipment Map</h2>
-      <MapContainer center={center} zoom={4} style={{ height: "400px", width: "100%" }}>
-        <TileLayer attribution='&copy; OpenStreetMap contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <LocationMarkers locations={locations} />
-        <Polyline positions={route} />
-      </MapContainer>
-    </div>
+
+    <MapContainer
+      center={[20, 75]}
+      zoom={2}
+      minZoom={2}
+      maxZoom={12}
+      scrollWheelZoom={true}
+      className="audit-leaflet-map"
+      worldCopyJump={true}
+    >
+
+      <TileLayer
+        attribution='&copy; OpenStreetMap contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+
+
+      {/* MAP FOCUS */}
+
+      <MapFocus
+        location={selectedLocation}
+      />
+
+
+      {/* LOCATION MARKERS */}
+
+      {locations.map((location) => (
+
+        <LocationMarker
+          key={location.id}
+          location={location}
+          selected={
+            selectedLocation?.id ===
+            location.id
+          }
+          onSelect={() =>
+            onSelectLocation(location)
+          }
+        />
+
+      ))}
+
+    </MapContainer>
+
   );
 }
+
+export default ShipmentMap;
