@@ -11,6 +11,8 @@ const locationProjectionHandler = require('./handlers/locationProjectionHandler'
 const statusProjectionHandler = require('./handlers/statusProjectionHandler');
 const temperatureProjectionHandler = require('./handlers/temperatureProjectionHandler');
 const versionProjectionHandler = require('./handlers/versionProjectionHandler');
+const projectionQueryController = require('./controllers/projectionQueryController');
+const projectionQueryRoutes = require('./routes/projectionQueryRoutes');
 
 module.exports = {
   ContainerReadModel,
@@ -22,4 +24,6 @@ module.exports = {
   statusProjectionHandler,
   temperatureProjectionHandler,
   versionProjectionHandler,
+  projectionQueryController,
+  projectionQueryRoutes,
 };
