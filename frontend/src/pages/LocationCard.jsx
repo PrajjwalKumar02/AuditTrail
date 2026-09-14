@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-function LocationCard({ container }) {
+function LocationCard({ location }) {
   const [showDetails, setShowDetails] = useState(false);
+
+  const statusClass =
+    location.status === "In Transit"
+      ? "location-status-transit"
+      : location.status === "At Warehouse"
+      ? "location-status-warehouse"
+      : location.status === "Delivered"
+      ? "location-status-delivered"
+      : "location-status-alert";
 
   return (
     <>
-      {/* LOCATION CARD */}
       <div
         className="location-working-card"
         onClick={() => setShowDetails(true)}
@@ -14,28 +22,37 @@ function LocationCard({ container }) {
           <div className="location-card-icon">📍</div>
 
           <div>
-            <p className="location-card-label">CURRENT LOCATION</p>
-            <h3>{container.location}</h3>
+            <p className="location-card-label">{location.container}</p>
+
+            <h3>{location.location}</h3>
 
             <p className="location-updated">
-              Last updated: {container.lastUpdated || "Just now"}
+              Last updated {location.updated}
             </p>
           </div>
         </div>
 
         <div className="location-card-right">
-          <span className="location-operational">
-            <span></span>
-            Operational
+          <span className={`location-operational ${statusClass}`}>
+            {location.status}
           </span>
 
-          <span className="location-view">
-            View details →
+          <span className="location-temperature">
+            {location.temperature}
           </span>
+
+          <button
+            className="location-view"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowDetails(true);
+            }}
+          >
+            View Details →
+          </button>
         </div>
       </div>
 
-      {/* DETAILS POPUP */}
       {showDetails && (
         <div
           className="location-details-overlay"
@@ -47,82 +64,69 @@ function LocationCard({ container }) {
           >
             <div className="location-details-header">
               <div>
-                <span>LOCATION DETAILS</span>
-                <h2>{container.location}</h2>
-                <p>Live container monitoring</p>
+                <span className="location-details-label">
+                  CONTAINER LOCATION
+                </span>
+
+                <h2>{location.container}</h2>
               </div>
 
-              <button onClick={() => setShowDetails(false)}>
+              <button
+                className="location-details-close"
+                onClick={() => setShowDetails(false)}
+              >
                 ×
               </button>
             </div>
 
-            <div className="location-live">
-              <span></span>
-              LOCATION OPERATIONAL
+            <div className="location-details-status">
+              <span className={statusClass}>{location.status}</span>
             </div>
 
-            <div className="location-detail-grid">
-              <div>
-                <small>CONTAINERS</small>
-                <strong>{container.containers || "128"}</strong>
+            <div className="location-details-grid">
+              <div className="location-detail-item">
+                <span>Current Location</span>
+                <strong>{location.location}</strong>
               </div>
 
-              <div>
-                <small>ACTIVE SHIPMENTS</small>
-                <strong>{container.shipments || "34"}</strong>
+              <div className="location-detail-item">
+                <span>Temperature</span>
+                <strong>{location.temperature}</strong>
               </div>
 
-              <div>
-                <small>TEMPERATURE</small>
-                <strong>{container.temperature || "5.2°C"}</strong>
+              <div className="location-detail-item">
+                <span>Latitude</span>
+                <strong>{location.latitude}</strong>
               </div>
 
-              <div>
-                <small>LAST UPDATE</small>
-                <strong>{container.lastUpdated || "Just now"}</strong>
+              <div className="location-detail-item">
+                <span>Longitude</span>
+                <strong>{location.longitude}</strong>
+              </div>
+
+              <div className="location-detail-item">
+                <span>Last Updated</span>
+                <strong>{location.updated}</strong>
+              </div>
+
+              <div className="location-detail-item">
+                <span>Shipment</span>
+                <strong>{location.shipment}</strong>
               </div>
             </div>
 
-            <div className="location-coordinates">
-              <span>📍 CURRENT COORDINATES</span>
-              <strong>
-                {container.coordinates || "18.9388° N, 72.8354° E"}
-              </strong>
-            </div>
-
-            <div className="location-activity">
-              <div className="activity-title">
-                <h3>Recent Activity</h3>
-                <span>LIVE</span>
+            <div className="location-details-footer">
+              <div>
+                <span>Tracking Status</span>
+                <strong>✓ Location verified</strong>
               </div>
 
-              <div className="location-activity-item">
-                <i></i>
-                <div>
-                  <strong>Container movement detected</strong>
-                  <p>Shipment activity recorded</p>
-                </div>
-                <small>2m</small>
-              </div>
-
-              <div className="location-activity-item">
-                <i></i>
-                <div>
-                  <strong>Location verified</strong>
-                  <p>Integrity check completed</p>
-                </div>
-                <small>8m</small>
-              </div>
-
-              <div className="location-activity-item">
-                <i></i>
-                <div>
-                  <strong>Shipment synchronized</strong>
-                  <p>Latest container data received</p>
-                </div>
-                <small>14m</small>
-              </div>
+              <button
+                className="location-close-button"
+                onClick={() => setShowDetails(false)}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

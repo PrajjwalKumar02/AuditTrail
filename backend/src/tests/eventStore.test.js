@@ -436,3 +436,36 @@ describe("Event Store", () => {
       true
     );
   });
+    test("should reject an event chain that starts with an invalid version", async () => {
+    const invalidEvent = {
+      aggregateId: "container-001",
+      aggregateType: "Container",
+      eventType: "ContainerCreated",
+      payload: {
+        status: "created",
+      },
+      version: 2,
+      timestamp: new Date("2026-09-08T10:00:00.000Z"),
+      previousHash: null,
+    };
+
+    const invalidHashData = {
+      aggregateId: invalidEvent.aggregateId,
+      aggregateType: invalidEvent.aggregateType,
+      eventType: invalidEvent.eventType,
+      payload: invalidEvent.payload,
+      version: invalidEvent.version,
+      timestamp: invalidEvent.timestamp,
+      previousHash: invalidEvent.previousHash,
+    };
+
+    invalidEvent.hash = generateHash(invalidHashData);
+
+    Event.find.mockReturnValue({
+      sort: jest.fn().mockResolvedValue([invalidEvent]),
+    });
+
+    const result = await verifyEventChain("container-001");
+
+    expect(result).toBe(false);
+  });
