@@ -4,6 +4,7 @@ const containerProjectionHandler = require('../handlers/containerProjectionHandl
 const locationProjectionHandler = require('../handlers/locationProjectionHandler');
 const statusProjectionHandler = require('../handlers/statusProjectionHandler');
 const temperatureProjectionHandler = require('../handlers/temperatureProjectionHandler');
+const versionProjectionHandler = require('../handlers/versionProjectionHandler');
 
 /**
  * Projection Service
@@ -40,6 +41,9 @@ class ProjectionService {
       case 'TEMPERATURE_SPIKE':
         return await temperatureProjectionHandler.handleTemperatureRecorded(event);
 
+      case 'VERSION_UPDATED':
+        return await versionProjectionHandler.handleVersionUpdated(event);
+
       default:
         return await this.projectMetadata(event);
     }
@@ -67,25 +71,17 @@ class ProjectionService {
   }
 
   /**
+   * Project version updates
+   */
+  async projectVersion(event) {
+    return await versionProjectionHandler.handleVersionUpdated(event);
+  }
+
+  /**
    * Project metadata and version tracking
    */
   async projectMetadata(event) {
-    const { aggregateId, eventType, version, timestamp, _id } = event;
-
-    if (!aggregateId) return null;
-
-    return await ContainerReadModel.findOneAndUpdate(
-      { containerId: aggregateId, version: { $lt: version } },
-      {
-        $set: {
-          lastEventId: _id || null,
-          lastEventType: eventType,
-          lastEventTimestamp: timestamp || new Date(),
-          version: version,
-        },
-      },
-      { new: true }
-    );
+    return await versionProjectionHandler.handleVersionUpdated(event);
   }
 
   /**
