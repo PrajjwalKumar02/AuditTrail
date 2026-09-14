@@ -1,6 +1,6 @@
 const {
   getEventsByAggregate,
-} = require("../events/eventStore");
+} = require("../events/services/eventStore");
 
 const {
   replayEvents,

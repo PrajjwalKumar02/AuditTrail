@@ -1,10 +1,10 @@
-jest.mock("../events/eventStore", () => ({
+jest.mock("../events/services/eventStore", () => ({
   getEventsByAggregate: jest.fn(),
 }));
 
 const {
   getEventsByAggregate,
-} = require("../events/eventStore");
+} = require("../events/services/eventStore");
 
 const {
   getAggregateEventHistory,
