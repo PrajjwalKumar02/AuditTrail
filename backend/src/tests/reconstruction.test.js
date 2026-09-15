@@ -1,12 +1,10 @@
-jest.mock("../events/Event", () => {
-  const Event = jest.fn();
+jest.mock("../events/services/eventStore", () => ({
+  getEventsByAggregate: jest.fn(),
+}));
 
-  Event.find = jest.fn();
-
-  return Event;
-});
-
-const Event = require("../events/Event");
+const {
+  getEventsByAggregate,
+} = require("../events/services/eventStore");
 
 const {
   reconstructCurrentState,
@@ -57,15 +55,11 @@ describe("Current State Reconstruction", () => {
       },
     ];
 
-    Event.find.mockReturnValue({
-      sort: jest.fn().mockResolvedValue(events),
-    });
+    getEventsByAggregate.mockResolvedValue(events);
 
     const result = await reconstructCurrentState("CNT-001");
 
-    expect(Event.find).toHaveBeenCalledWith({
-      aggregateId: "CNT-001",
-    });
+    expect(getEventsByAggregate).toHaveBeenCalledWith("CNT-001");
 
     expect(result).toMatchObject({
       aggregateId: "CNT-001",
@@ -81,5 +75,7 @@ describe("Current State Reconstruction", () => {
     await expect(
       reconstructCurrentState()
     ).rejects.toThrow("Aggregate ID is required");
+
+    expect(getEventsByAggregate).not.toHaveBeenCalled();
   });
 });

@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
 /**
- * Inventory Read Model Schema (Member 4 - Commit #3)
+ * Inventory Read Model Schema (Member 4 - Item #17)
  * 
- * Highly optimized Mongoose collection for fast querying of inventory item stock levels and locations inside containers.
- * Updated continuously by Member 4's Projection Worker when raw events are emitted.
+ * Highly optimized Mongoose collection for fast querying of inventory item stock levels and locations.
  */
 const inventoryReadModelSchema = new mongoose.Schema(
   {
@@ -49,8 +48,10 @@ const inventoryReadModelSchema = new mongoose.Schema(
   }
 );
 
-// Compound index for querying inventory items by container
+// Compound indexes for fast querying of inventory items by container and status (Item #17)
 inventoryReadModelSchema.index({ containerId: 1, status: 1 });
+inventoryReadModelSchema.index({ containerId: 1, itemName: 1 });
+inventoryReadModelSchema.index({ status: 1, updatedAt: -1 });
 
 const InventoryReadModel = mongoose.model('InventoryReadModel', inventoryReadModelSchema);
 

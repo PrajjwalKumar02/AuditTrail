@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
 /**
- * Container Read Model Schema (Member 4 - Commit #2)
+ * Container Read Model Schema (Member 4 - Item #17)
  * 
- * Highly optimized Mongoose model for storing and fast-querying shipping container current states.
- * Updated continuously by Member 4's Projection Worker when raw events are emitted.
+ * Highly optimized Mongoose model with compound indexes for high-speed read queries.
  */
 const containerReadModelSchema = new mongoose.Schema(
   {
@@ -57,8 +56,11 @@ const containerReadModelSchema = new mongoose.Schema(
   }
 );
 
-// Compound index for fast filtering by status and location
+// Compound indexes for fast filtering by status, location, alerts and timestamps (Item #17)
 containerReadModelSchema.index({ status: 1, currentLocation: 1 });
+containerReadModelSchema.index({ temperatureAlert: 1, status: 1 });
+containerReadModelSchema.index({ currentLocation: 1, updatedAt: -1 });
+containerReadModelSchema.index({ version: 1 });
 
 const ContainerReadModel = mongoose.model('ContainerReadModel', containerReadModelSchema);
 

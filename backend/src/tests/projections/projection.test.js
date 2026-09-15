@@ -3,6 +3,7 @@ const ContainerReadModel = require('../../projections/models/ContainerReadModel'
 const locationProjectionHandler = require('../../projections/handlers/locationProjectionHandler');
 const statusProjectionHandler = require('../../projections/handlers/statusProjectionHandler');
 const temperatureProjectionHandler = require('../../projections/handlers/temperatureProjectionHandler');
+const versionProjectionHandler = require('../../projections/handlers/versionProjectionHandler');
 
 describe('Member 4 - Projection Handlers Tests', () => {
   it('should project location update event correctly via location handler', async () => {
@@ -77,6 +78,28 @@ describe('Member 4 - Projection Handlers Tests', () => {
     expect(result).toBeDefined();
     expect(result.temperatureAlert).toBe(true);
     expect(result.status).toBe('ALERT_SPIKE');
+
+    ContainerReadModel.findOneAndUpdate.mockRestore();
+  });
+
+  it('should project version update event correctly via version handler', async () => {
+    const mockEvent = {
+      _id: 'event_126',
+      aggregateId: 'CONT_TEST_001',
+      eventType: 'VERSION_UPDATED',
+      version: 4,
+      timestamp: new Date(),
+    };
+
+    jest.spyOn(ContainerReadModel, 'findOneAndUpdate').mockResolvedValue({
+      containerId: 'CONT_TEST_001',
+      version: 4,
+    });
+
+    const result = await versionProjectionHandler.handleVersionUpdated(mockEvent);
+
+    expect(result).toBeDefined();
+    expect(result.version).toBe(4);
 
     ContainerReadModel.findOneAndUpdate.mockRestore();
   });
