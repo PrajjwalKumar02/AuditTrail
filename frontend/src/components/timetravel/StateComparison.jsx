@@ -11,7 +11,14 @@ function StateValue({ label, before, after }) {
   );
 }
 export default function StateComparison({ before, after }) {
-  if (!before || !after) return <div className="state-comparison"><h2>Before / After Comparison</h2><p>Select two states to compare.</p></div>;
+  if (!before || !after) {
+    return (
+      <div className="state-comparison">
+        <h2>Before / After Comparison</h2>
+      <p>Select two states to compare.</p>
+      </div>
+    );
+  }
   return (
     <div className="state-comparison">
       <h2>Before / After Comparison</h2>
