@@ -1,6 +1,12 @@
 import IntegrityStatus from "./IntegrityStatus";
 export default function AuditStatus({ audit }) {
-  if (!audit) return <div className="audit-status"><h2>Audit Status</h2><p>No audit information available.</p></div>;
+  if (!audit) 
+    return (
+      <div className="audit-status">
+        <h2>Audit Status</h2>
+        <p>No audit information available.</p>
+      </div>
+    );
   return (
     <div className="audit-status">
       <h2>Audit Status</h2>
