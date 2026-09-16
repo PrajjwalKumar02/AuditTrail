@@ -14,6 +14,7 @@ const versionProjectionHandler = require('./handlers/versionProjectionHandler');
 const projectionQueryController = require('./controllers/projectionQueryController');
 const projectionQueryRoutes = require('./routes/projectionQueryRoutes');
 const projectionWorker = require('./workers/projectionWorker');
+const { registerWorkerListeners, shutdownWorker } = require('./workers/workerEventListener');
 
 module.exports = {
   ContainerReadModel,
@@ -28,4 +29,6 @@ module.exports = {
   projectionQueryController,
   projectionQueryRoutes,
   projectionWorker,
+  registerWorkerListeners,
+  shutdownWorker,
 };
