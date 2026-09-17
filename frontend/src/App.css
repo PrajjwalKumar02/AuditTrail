@@ -9735,3 +9735,1178 @@ button {
     grid-template-columns: 1fr 1fr;
   }
 }
+/* =========================================================
+   AUDITTRAIL — GLOBAL TYPOGRAPHY SYSTEM
+   SAME FONT + CONSISTENT SIZING ACROSS ENTIRE FRONTEND
+========================================================= */
+
+:root {
+  --font-main: Inter, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+
+  --text-xs: 10px;
+  --text-sm: 12px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 28px;
+  --text-title: 40px;
+}
+
+/* ================= GLOBAL ================= */
+
+html,
+body,
+#root {
+  font-family: var(--font-main) !important;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-main) !important;
+}
+
+/* Remove inconsistent default heading styles */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+strong,
+small,
+button,
+input,
+label,
+th,
+td {
+  font-family: var(--font-main) !important;
+}
+
+/* ================= PAGE TITLES ================= */
+
+.analytics-header h1,
+.dashboard-header h1,
+.containers-header h1,
+.timeline-header h1,
+.locations-header h1,
+.audit-header h1,
+.alerts-header h1,
+.page-header h1 {
+  font-size: var(--text-title) !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -1.2px !important;
+}
+
+/* ================= PAGE SUBTITLES ================= */
+
+.analytics-header p,
+.dashboard-header p,
+.containers-header p,
+.timeline-header p,
+.locations-header p,
+.audit-header p,
+.alerts-header p,
+.page-header p {
+  font-size: var(--text-md) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+/* ================= SECTION HEADINGS ================= */
+
+.analytics-page h2,
+.dashboard-page h2,
+.containers-page h2,
+.timeline-page h2,
+.locations-page h2,
+.audit-page h2,
+.alerts-page h2 {
+  font-size: var(--text-lg) !important;
+  font-weight: 650 !important;
+  line-height: 1.25 !important;
+}
+
+/* ================= NORMAL BODY TEXT ================= */
+
+.analytics-page p,
+.dashboard-page p,
+.containers-page p,
+.timeline-page p,
+.locations-page p,
+.audit-page p,
+.alerts-page p {
+  font-size: var(--text-sm) !important;
+  line-height: 1.5;
+}
+
+/* ================= SIDEBAR ================= */
+
+.analytics-sidebar,
+.dashboard-sidebar,
+.containers-sidebar,
+.timeline-sidebar,
+.locations-sidebar,
+.audit-sidebar,
+.alerts-sidebar {
+  font-family: var(--font-main) !important;
+}
+
+.analytics-nav-item,
+.dashboard-nav-item,
+.containers-nav-item,
+.timeline-nav-item,
+.locations-nav-item,
+.audit-nav-item,
+.alerts-nav-item {
+  font-size: var(--text-md) !important;
+  font-weight: 500 !important;
+}
+
+.analytics-nav-title,
+.dashboard-nav-title,
+.containers-nav-title,
+.timeline-nav-title,
+.locations-nav-title,
+.audit-nav-title,
+.alerts-nav-title {
+  font-size: var(--text-xs) !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.7px !important;
+}
+
+/* ================= BRAND ================= */
+
+.analytics-brand strong,
+.dashboard-brand strong,
+.containers-brand strong,
+.timeline-brand strong,
+.locations-brand strong,
+.audit-brand strong,
+.alerts-brand strong {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+.analytics-brand span,
+.dashboard-brand span,
+.containers-brand span,
+.timeline-brand span,
+.locations-brand span,
+.audit-brand span,
+.alerts-brand span {
+  font-size: 8px !important;
+  font-weight: 600 !important;
+  letter-spacing: 2px !important;
+}
+
+/* ================= CARDS ================= */
+
+.analytics-kpi-card,
+.dashboard-card,
+.container-card,
+.status-card,
+.location-card,
+.analytics-panel,
+.alerts-summary-card {
+  font-family: var(--font-main) !important;
+}
+
+/* Card labels */
+
+.analytics-kpi-top > span,
+.card-label,
+.status-label,
+.location-label,
+.metric-label,
+.stat-label {
+  font-size: var(--text-xs) !important;
+  font-weight: 600 !important;
+}
+
+/* Card values */
+
+.analytics-kpi-card > strong,
+.metric-value,
+.stat-value {
+  font-size: 30px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.6px !important;
+}
+
+/* ================= SMALL LABELS ================= */
+
+.analytics-eyebrow,
+.analytics-panel-label,
+.dashboard-eyebrow,
+.timeline-eyebrow,
+.audit-eyebrow,
+.alerts-eyebrow {
+  font-size: var(--text-xs) !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.8px !important;
+}
+
+/* ================= SEARCH ================= */
+
+input,
+textarea,
+select {
+  font-size: var(--text-sm) !important;
+}
+
+/* ================= BUTTONS ================= */
+
+button {
+  font-size: var(--text-sm) !important;
+  font-weight: 500;
+}
+
+/* ================= TABLES ================= */
+
+table th {
+  font-size: var(--text-xs) !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.2px !important;
+}
+
+table td {
+  font-size: var(--text-sm) !important;
+}
+
+table td strong {
+  font-size: var(--text-sm) !important;
+  font-weight: 650 !important;
+}
+
+/* ================= TIMELINE ================= */
+
+.event-title,
+.timeline-event-title {
+  font-size: var(--text-md) !important;
+  font-weight: 600 !important;
+}
+
+.event-description,
+.timeline-event-description {
+  font-size: var(--text-sm) !important;
+}
+
+.event-meta,
+.timeline-event-meta {
+  font-size: var(--text-xs) !important;
+}
+
+/* ================= ANALYTICS ================= */
+
+.analytics-page .analytics-status-info strong {
+  font-size: var(--text-md) !important;
+  font-weight: 600 !important;
+}
+
+.analytics-page .analytics-status-info span {
+  font-size: var(--text-xs) !important;
+}
+
+.analytics-page .health-metrics span {
+  font-size: var(--text-xs) !important;
+}
+
+.analytics-page .health-metrics strong {
+  font-size: var(--text-md) !important;
+  font-weight: 600 !important;
+}
+
+.analytics-page .audit-big-number {
+  font-size: 32px !important;
+  font-weight: 700 !important;
+}
+
+/* ================= ALERTS ================= */
+
+.alerts-summary-card strong {
+  font-size: 30px !important;
+  font-weight: 700 !important;
+}
+
+.alert-item-top strong {
+  font-size: var(--text-md) !important;
+  font-weight: 600 !important;
+}
+
+.alert-item-content p {
+  font-size: var(--text-sm) !important;
+}
+
+.alert-item-meta {
+  font-size: var(--text-xs) !important;
+}
+
+/* ================= MODALS ================= */
+
+.analytics-modal h2,
+.alert-modal h2 {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+}
+
+.analytics-modal-grid span,
+.alert-detail-grid span {
+  font-size: var(--text-xs) !important;
+}
+
+.analytics-modal-grid strong,
+.alert-detail-grid strong {
+  font-size: var(--text-sm) !important;
+  font-weight: 600 !important;
+}
+
+/* ================= SIDEBAR USER ================= */
+
+.sidebar-user-name,
+.analytics-admin-info strong,
+.alerts-admin-info strong {
+  font-size: var(--text-sm) !important;
+  font-weight: 600 !important;
+}
+
+.sidebar-user-role,
+.analytics-admin-info span,
+.alerts-admin-info span {
+  font-size: var(--text-xs) !important;
+}
+
+/* ================= FOOTERS ================= */
+
+.dashboard-footer,
+.analytics-footer,
+.alerts-footer {
+  font-size: var(--text-xs) !important;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 760px) {
+  .analytics-header h1,
+  .dashboard-header h1,
+  .containers-header h1,
+  .timeline-header h1,
+  .locations-header h1,
+  .audit-header h1,
+  .alerts-header h1,
+  .page-header h1 {
+    font-size: 34px !important;
+  }
+}
+/* =========================================================
+   AUDITTRAIL — UNIVERSAL SIDEBAR BOTTOM
+   SAME ON EVERY PAGE
+========================================================= */
+
+/* System Operational card */
+.analytics-sidebar-bottom,
+.alerts-sidebar-bottom,
+.dashboard-sidebar-bottom,
+.containers-sidebar-bottom,
+.timeline-sidebar-bottom,
+.locations-sidebar-bottom,
+.audit-sidebar-bottom,
+.sidebar-bottom {
+  margin-top: auto !important;
+  padding-top: 18px !important;
+}
+
+/* System status card */
+.analytics-system-status,
+.alerts-system-status,
+.dashboard-system-status,
+.containers-system-status,
+.timeline-system-status,
+.locations-system-status,
+.audit-system-status,
+.system-card {
+  width: 100% !important;
+  min-height: 60px !important;
+  padding: 12px 14px !important;
+  box-sizing: border-box !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+
+  background: rgba(255, 255, 255, 0.035) !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+
+  font-family: Inter, sans-serif !important;
+}
+
+/* Green operational dot */
+.analytics-system-status > span,
+.alerts-system-status > span,
+.dashboard-system-status > span,
+.containers-system-status > span,
+.timeline-system-status > span,
+.locations-system-status > span,
+.audit-system-status > span,
+.system-card > span {
+  width: 9px !important;
+  height: 9px !important;
+  min-width: 9px !important;
+  flex-shrink: 0 !important;
+
+  border-radius: 50% !important;
+
+  background: #72f5a2 !important;
+  box-shadow: 0 0 12px rgba(114, 245, 162, 0.55) !important;
+}
+
+/* If the page uses text directly */
+.analytics-system-status,
+.alerts-system-status,
+.dashboard-system-status,
+.containers-system-status,
+.timeline-system-status,
+.locations-system-status,
+.audit-system-status {
+  color: #f4f1ff !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+/* System status text wrapper */
+.analytics-system-status div,
+.alerts-system-status div,
+.dashboard-system-status div,
+.containers-system-status div,
+.timeline-system-status div,
+.locations-system-status div,
+.audit-system-status div,
+.system-card div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Main status text */
+.system-card strong,
+.analytics-system-status strong,
+.alerts-system-status strong,
+.dashboard-system-status strong,
+.containers-system-status strong,
+.timeline-system-status strong,
+.locations-system-status strong,
+.audit-system-status strong {
+  color: #f4f1ff !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+}
+
+/* Secondary text */
+.system-card small,
+.analytics-system-status small,
+.alerts-system-status small,
+.dashboard-system-status small,
+.containers-system-status small,
+.timeline-system-status small,
+.locations-system-status small,
+.audit-system-status small {
+  color: #858096 !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   UNIVERSAL ADMIN ROW
+========================================================= */
+
+.sidebar-user,
+.analytics-admin-row,
+.alerts-admin-row,
+.dashboard-admin-row,
+.containers-admin-row,
+.timeline-admin-row,
+.locations-admin-row,
+.audit-admin-row {
+  margin-top: 18px !important;
+  padding: 0 8px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+
+/* Admin avatar */
+.sidebar-avatar,
+.analytics-admin-avatar,
+.alerts-admin-avatar,
+.dashboard-admin-avatar,
+.containers-admin-avatar,
+.timeline-admin-avatar,
+.locations-admin-avatar,
+.audit-admin-avatar {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+
+  border-radius: 11px !important;
+
+  background: rgba(141, 82, 255, 0.16) !important;
+  color: #b78cff !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  font-family: Inter, sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+
+/* Admin information */
+.sidebar-user-name,
+.analytics-admin-info strong,
+.alerts-admin-info strong,
+.dashboard-admin-info strong,
+.containers-admin-info strong,
+.timeline-admin-info strong,
+.locations-admin-info strong,
+.audit-admin-info strong {
+  color: #f1eef8 !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+}
+
+.sidebar-user-role,
+.analytics-admin-info span,
+.alerts-admin-info span,
+.dashboard-admin-info span,
+.containers-admin-info span,
+.timeline-admin-info span,
+.locations-admin-info span,
+.audit-admin-info span {
+  color: #817b91 !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   UNIVERSAL LOGOUT ICON
+========================================================= */
+
+.sidebar-logout,
+.analytics-logout-icon,
+.alerts-logout-icon,
+.dashboard-logout-icon,
+.containers-logout-icon,
+.timeline-logout-icon,
+.locations-logout-icon,
+.audit-logout-icon {
+  margin-left: auto !important;
+
+  width: 30px !important;
+  height: 30px !important;
+
+  padding: 0 !important;
+  border: 0 !important;
+
+  background: transparent !important;
+
+  color: #938c9f !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  font-family: Inter, sans-serif !important;
+  font-size: 22px !important;
+
+  cursor: pointer !important;
+
+  transition: 0.2s ease !important;
+}
+
+.sidebar-logout:hover,
+.analytics-logout-icon:hover,
+.alerts-logout-icon:hover,
+.dashboard-logout-icon:hover,
+.containers-logout-icon:hover,
+.timeline-logout-icon:hover,
+.locations-logout-icon:hover,
+.audit-logout-icon:hover {
+  color: #b78cff !important;
+  transform: translateX(2px) !important;
+}
+
+
+/* =========================================================
+   OLD "LOGOUT" TEXT BUTTONS
+   Make them visually match the new icon style
+========================================================= */
+
+.analytics-logout,
+.alerts-logout,
+.dashboard-logout,
+.containers-logout,
+.timeline-logout,
+.locations-logout,
+.audit-logout {
+  margin-left: auto !important;
+
+  width: 30px !important;
+  height: 30px !important;
+
+  padding: 0 !important;
+  border: 0 !important;
+
+  background: transparent !important;
+
+  color: #938c9f !important;
+
+  font-size: 0 !important;
+
+  cursor: pointer !important;
+}
+
+/* Replace text-style logout with icon */
+.analytics-logout::after,
+.alerts-logout::after,
+.dashboard-logout::after,
+.containers-logout::after,
+.timeline-logout::after,
+.locations-logout::after,
+.audit-logout::after {
+  content: "↪";
+  font-size: 22px !important;
+  color: #938c9f;
+}
+
+.analytics-logout:hover::after,
+.alerts-logout:hover::after,
+.dashboard-logout:hover::after,
+.containers-logout:hover::after,
+.timeline-logout:hover::after,
+.locations-logout:hover::after,
+.audit-logout:hover::after {
+  color: #b78cff;
+}
+/* =========================================================
+   AUDITTRAIL — ONE GLOBAL FONT SYSTEM
+   Dashboard-style typography across the ENTIRE frontend
+========================================================= */
+
+/* ---------- FONT ---------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --audit-font:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+/* ---------- EVERYTHING ---------- */
+
+html,
+body,
+#root,
+* {
+  font-family: var(--audit-font) !important;
+}
+
+/* ---------- BODY ---------- */
+
+body {
+  font-size: 14px !important;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+/* ---------- HEADINGS ---------- */
+
+h1 {
+  font-family: var(--audit-font) !important;
+  font-size: 40px !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -1.4px !important;
+}
+
+h2 {
+  font-family: var(--audit-font) !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.3px !important;
+}
+
+h3 {
+  font-family: var(--audit-font) !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+}
+
+h4,
+h5,
+h6 {
+  font-family: var(--audit-font) !important;
+  font-weight: 600 !important;
+}
+
+/* ---------- NORMAL TEXT ---------- */
+
+p {
+  font-family: var(--audit-font) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+/* ---------- BUTTONS ---------- */
+
+button {
+  font-family: var(--audit-font) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+}
+
+/* ---------- INPUTS ---------- */
+
+input,
+textarea,
+select {
+  font-family: var(--audit-font) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+}
+
+/* ---------- LABELS ---------- */
+
+label {
+  font-family: var(--audit-font) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.analytics-nav-item,
+.alerts-nav-item,
+.audit-nav-item,
+.dashboard-nav-item,
+.containers-nav-item,
+.timeline-nav-item,
+.locations-nav-item,
+.nav-item {
+  font-family: var(--audit-font) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+}
+
+.analytics-nav-title,
+.alerts-nav-title,
+.audit-menu-label,
+.dashboard-nav-title,
+.containers-nav-title,
+.timeline-nav-title,
+.locations-nav-title,
+.nav-title {
+  font-family: var(--audit-font) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.7px !important;
+}
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.analytics-brand strong,
+.alerts-brand strong,
+.audit-brand strong,
+.dashboard-brand strong,
+.containers-brand strong,
+.timeline-brand strong,
+.locations-brand strong {
+  font-family: var(--audit-font) !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.4px !important;
+}
+
+.analytics-brand span,
+.alerts-brand span,
+.audit-brand span,
+.dashboard-brand span,
+.containers-brand span,
+.timeline-brand span,
+.locations-brand span {
+  font-family: var(--audit-font) !important;
+  font-size: 8px !important;
+  font-weight: 600 !important;
+  letter-spacing: 2px !important;
+}
+
+/* =========================================================
+   PAGE HEADERS
+========================================================= */
+
+.analytics-header h1,
+.alerts-header h1,
+.audit-heading-row h1,
+.dashboard-header h1,
+.containers-header h1,
+.timeline-header h1,
+.locations-header h1 {
+  font-family: var(--audit-font) !important;
+  font-size: 40px !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -1.4px !important;
+}
+
+.analytics-header p,
+.alerts-header p,
+.dashboard-header p,
+.containers-header p,
+.timeline-header p,
+.locations-header p {
+  font-family: var(--audit-font) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+/* Small purple heading above page title */
+
+.analytics-eyebrow,
+.alerts-eyebrow,
+.dashboard-eyebrow,
+.timeline-eyebrow,
+.audit-eyebrow {
+  font-family: var(--audit-font) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+}
+
+/* =========================================================
+   KPI / STAT CARDS
+========================================================= */
+
+.analytics-kpi-top > span,
+.stat-card span,
+.status-card .card-label,
+.location-card .card-label,
+.card-label,
+.metric-label {
+  font-family: var(--audit-font) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+}
+
+.analytics-kpi-card > strong,
+.stat-card strong,
+.stat-value,
+.metric-value {
+  font-family: var(--audit-font) !important;
+  font-size: 30px !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.7px !important;
+}
+
+/* Small card description */
+
+.analytics-kpi-footer,
+.analytics-kpi-footer span,
+.card-subtitle,
+.stat-card small {
+  font-family: var(--audit-font) !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
+}
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.analytics-panel-header h2,
+.analytics-table-panel h2,
+.alerts-panel-header h2,
+.audit-overview-card h2,
+.panel-header h2 {
+  font-family: var(--audit-font) !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.3px !important;
+}
+
+.analytics-panel-label,
+.alerts-panel-header > div > span,
+.audit-panel-label {
+  font-family: var(--audit-font) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.7px !important;
+}
+
+/* =========================================================
+   DASHBOARD CONTENT
+========================================================= */
+
+.dashboard-page,
+.analytics-page,
+.containers-page,
+.timeline-page,
+.locations-page,
+.alerts-page,
+.audit-page {
+  font-family: var(--audit-font) !important;
+}
+
+/* Recent Activity / events */
+
+.activity-title,
+.event-title,
+.timeline-event-title {
+  font-family: var(--audit-font) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.activity-description,
+.event-description,
+.timeline-event-description {
+  font-family: var(--audit-font) !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+}
+
+/* =========================================================
+   ANALYTICS
+========================================================= */
+
+.analytics-status-info strong {
+  font-family: var(--audit-font) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.analytics-status-info span {
+  font-family: var(--audit-font) !important;
+  font-size: 10px !important;
+}
+
+.analytics-status-row > b {
+  font-family: var(--audit-font) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+
+.health-circle strong {
+  font-family: var(--audit-font) !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+}
+
+.health-circle span {
+  font-family: var(--audit-font) !important;
+  font-size: 8px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1px !important;
+}
+
+.health-metrics span {
+  font-family: var(--audit-font) !important;
+  font-size: 10px !important;
+}
+
+.health-metrics strong {
+  font-family: var(--audit-font) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+table {
+  font-family: var(--audit-font) !important;
+}
+
+table th {
+  font-family: var(--audit-font) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.2px !important;
+}
+
+table td {
+  font-family: var(--audit-font) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+}
+
+table td strong {
+  font-family: var(--audit-font) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* =========================================================
+   SYSTEM OPERATIONAL + ADMIN
+   SAME TYPOGRAPHY EVERYWHERE
+========================================================= */
+
+.system-status strong,
+.analytics-system-status strong,
+.alerts-system-status strong {
+  font-family: var(--audit-font) !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+}
+
+.system-status small,
+.analytics-system-status small,
+.alerts-system-status small {
+  font-family: var(--audit-font) !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+}
+
+.sidebar-user-name,
+.user-info strong,
+.analytics-admin-info strong,
+.alerts-admin-info strong {
+  font-family: var(--audit-font) !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+}
+
+.sidebar-user-role,
+.user-info span,
+.analytics-admin-info span,
+.alerts-admin-info span {
+  font-family: var(--audit-font) !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+}
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.alerts-summary-card span {
+  font-family: var(--audit-font) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+}
+
+.alerts-summary-card strong {
+  font-family: var(--audit-font) !important;
+  font-size: 30px !important;
+  font-weight: 700 !important;
+}
+
+.alert-item-top strong {
+  font-family: var(--audit-font) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.alert-item-content p {
+  font-family: var(--audit-font) !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+}
+
+.alert-item-meta {
+  font-family: var(--audit-font) !important;
+  font-size: 9px !important;
+}
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.analytics-modal h2,
+.alert-modal h2 {
+  font-family: var(--audit-font) !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.5px !important;
+}
+
+.analytics-modal-grid span,
+.alert-detail-grid span {
+  font-family: var(--audit-font) !important;
+  font-size: 9px !important;
+  font-weight: 600 !important;
+}
+
+.analytics-modal-grid strong,
+.alert-detail-grid strong {
+  font-family: var(--audit-font) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* =========================================================
+   LOGIN
+   Same Inter font, but preserve its existing visual sizing
+========================================================= */
+
+.auth-page,
+.auth-page *,
+.auth-card,
+.auth-card *,
+.auth-intro,
+.auth-intro * {
+  font-family: var(--audit-font) !important;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 760px) {
+  h1,
+  .analytics-header h1,
+  .alerts-header h1,
+  .audit-heading-row h1,
+  .dashboard-header h1,
+  .containers-header h1,
+  .timeline-header h1,
+  .locations-header h1 {
+    font-size: 34px !important;
+    letter-spacing: -1px !important;
+  }
+
+  p {
+    font-size: 13px !important;
+  }
+}
