@@ -15,6 +15,7 @@ const projectionQueryController = require('./controllers/projectionQueryControll
 const projectionQueryRoutes = require('./routes/projectionQueryRoutes');
 const projectionWorker = require('./workers/projectionWorker');
 const { registerWorkerListeners, shutdownWorker } = require('./workers/workerEventListener');
+const { DLQModel, dlqHandler } = require('./dlq/dlqHandler');
 
 module.exports = {
   ContainerReadModel,
@@ -31,4 +32,6 @@ module.exports = {
   projectionWorker,
   registerWorkerListeners,
   shutdownWorker,
+  DLQModel,
+  dlqHandler,
 };
