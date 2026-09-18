@@ -10910,3 +10910,248 @@ table td strong {
     font-size: 13px !important;
   }
 }
+/* =========================================================
+   UNIVERSAL SIDEBAR STATUS
+   MATCHES ANALYTICS EXACTLY
+========================================================= */
+
+.system-status,
+.analytics-system-status,
+.alerts-system-status,
+.dashboard-system-status,
+.containers-system-status,
+.timeline-system-status,
+.locations-system-status,
+.audit-system-status {
+
+  width: 100% !important;
+  min-height: 60px !important;
+  height: 60px !important;
+
+  padding: 0 18px !important;
+  box-sizing: border-box !important;
+
+  border: 1px solid #292532 !important;
+  border-radius: 12px !important;
+
+  background: #121018 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+
+  color: #b9b2c7 !important;
+
+  font-family: "Inter", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* GREEN DOT */
+
+.system-status .status-dot,
+.analytics-system-status > span,
+.alerts-system-status > span,
+.dashboard-system-status > span,
+.containers-system-status > span,
+.timeline-system-status > span,
+.locations-system-status > span,
+.audit-system-status > span {
+
+  width: 9px !important;
+  height: 9px !important;
+  min-width: 9px !important;
+
+  border-radius: 50% !important;
+
+  background: #72f5a2 !important;
+  box-shadow: 0 0 10px rgba(114,245,162,.6) !important;
+}
+
+
+/* REMOVE TWO-LINE STRUCTURE */
+
+.system-status > div,
+.analytics-system-status > div,
+.alerts-system-status > div,
+.dashboard-system-status > div,
+.containers-system-status > div,
+.timeline-system-status > div,
+.locations-system-status > div,
+.audit-system-status > div {
+
+  display: block !important;
+}
+
+
+/* MAIN TEXT */
+
+.system-status strong,
+.analytics-system-status strong,
+.alerts-system-status strong,
+.dashboard-system-status strong,
+.containers-system-status strong,
+.timeline-system-status strong,
+.locations-system-status strong,
+.audit-system-status strong {
+
+  color: #b9b2c7 !important;
+
+  font-family: "Inter", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+
+/* HIDE SECONDARY TEXT */
+
+.system-status small,
+.analytics-system-status small,
+.alerts-system-status small,
+.dashboard-system-status small,
+.containers-system-status small,
+.timeline-system-status small,
+.locations-system-status small,
+.audit-system-status small {
+
+  display: none !important;
+}
+
+
+/* =========================================================
+   SIDEBAR BOTTOM SPACING
+========================================================= */
+
+.sidebar-bottom,
+.analytics-sidebar-bottom,
+.alerts-sidebar-bottom,
+.dashboard-sidebar-bottom,
+.containers-sidebar-bottom,
+.timeline-sidebar-bottom,
+.locations-sidebar-bottom,
+.audit-sidebar-bottom {
+
+  margin-top: auto !important;
+  padding-top: 18px !important;
+}
+
+
+/* =========================================================
+   LOGOUT — SAME COMPACT STYLE
+========================================================= */
+
+.sidebar-logout,
+.logout-button,
+.analytics-logout,
+.analytics-logout-icon,
+.alerts-logout,
+.alerts-logout-icon,
+.dashboard-logout,
+.dashboard-logout-icon,
+.containers-logout,
+.containers-logout-icon,
+.timeline-logout,
+.timeline-logout-icon,
+.locations-logout,
+.locations-logout-icon,
+.audit-logout,
+.audit-logout-icon {
+
+  margin-left: auto !important;
+
+  width: 30px !important;
+  height: 30px !important;
+
+  padding: 0 !important;
+  border: none !important;
+
+  background: transparent !important;
+
+  color: #938c9f !important;
+
+  font-family: "Inter", sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 400 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  cursor: pointer !important;
+}
+
+
+/* =========================================================
+   ADMIN ROW — SAME EVERYWHERE
+========================================================= */
+
+.sidebar-user,
+.analytics-admin-row,
+.alerts-admin-row {
+
+  margin-top: 18px !important;
+  padding: 0 8px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+
+/* ADMIN AVATAR */
+
+.sidebar-avatar,
+.user-avatar,
+.analytics-admin-avatar,
+.alerts-admin-avatar {
+
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+
+  border-radius: 11px !important;
+
+  background: #211833 !important;
+  color: #b98cff !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  font-family: "Inter", sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+
+/* ADMIN NAME */
+
+.sidebar-user-name,
+.user-info strong,
+.analytics-admin-info strong,
+.alerts-admin-info strong {
+
+  color: #f1eef8 !important;
+
+  font-family: "Inter", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+
+/* ADMIN ROLE */
+
+.sidebar-user-role,
+.user-info span,
+.analytics-admin-info span,
+.alerts-admin-info span {
+
+  color: #817b91 !important;
+
+  font-family: "Inter", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+}
