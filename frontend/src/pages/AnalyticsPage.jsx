@@ -93,13 +93,16 @@ function AnalyticsPage({ onNavigate, onLogout }) {
 
   const filteredContainers = useMemo(() => {
     return containers.filter((container) => {
+      const searchValue = search.toLowerCase();
+
       const matchesSearch =
-        container.id.toLowerCase().includes(search.toLowerCase()) ||
-        container.location.toLowerCase().includes(search.toLowerCase()) ||
-        container.shipment.toLowerCase().includes(search.toLowerCase());
+        container.id.toLowerCase().includes(searchValue) ||
+        container.location.toLowerCase().includes(searchValue) ||
+        container.shipment.toLowerCase().includes(searchValue);
 
       const matchesStatus =
-        selectedStatus === "All" || container.status === selectedStatus;
+        selectedStatus === "All" ||
+        container.status === selectedStatus;
 
       return matchesSearch && matchesStatus;
     });
@@ -108,14 +111,28 @@ function AnalyticsPage({ onNavigate, onLogout }) {
   const total = containers.length;
 
   const statusCounts = {
-    "In Transit": containers.filter((c) => c.status === "In Transit").length,
-    "At Warehouse": containers.filter((c) => c.status === "At Warehouse").length,
-    Delivered: containers.filter((c) => c.status === "Delivered").length,
-    Alert: containers.filter((c) => c.status === "Alert").length,
+    "In Transit": containers.filter(
+      (c) => c.status === "In Transit"
+    ).length,
+
+    "At Warehouse": containers.filter(
+      (c) => c.status === "At Warehouse"
+    ).length,
+
+    Delivered: containers.filter(
+      (c) => c.status === "Delivered"
+    ).length,
+
+    Alert: containers.filter(
+      (c) => c.status === "Alert"
+    ).length,
   };
 
   const averageTemperature =
-    containers.reduce((sum, c) => sum + c.temperature, 0) / total;
+    containers.reduce(
+      (sum, container) => sum + container.temperature,
+      0
+    ) / total;
 
   const alertPercentage = Math.round(
     (statusCounts.Alert / total) * 100
@@ -125,7 +142,9 @@ function AnalyticsPage({ onNavigate, onLogout }) {
     (statusCounts.Delivered / total) * 100
   );
 
-  const locations = [...new Set(containers.map((c) => c.location))];
+  const locations = [
+    ...new Set(containers.map((container) => container.location)),
+  ];
 
   const handleStatusClick = (status) => {
     setSelectedStatus((current) =>
@@ -149,10 +168,19 @@ function AnalyticsPage({ onNavigate, onLogout }) {
 
   return (
     <div className="analytics-page">
-      {/* SIDEBAR */}
+
+      {/* =====================================================
+          SIDEBAR
+      ===================================================== */}
+
       <aside className="analytics-sidebar">
+
+        {/* BRAND */}
+
         <div className="analytics-brand">
-          <div className="analytics-brand-logo">AT</div>
+          <div className="analytics-brand-logo">
+            AT
+          </div>
 
           <div>
             <strong>AuditTrail</strong>
@@ -160,7 +188,12 @@ function AnalyticsPage({ onNavigate, onLogout }) {
           </div>
         </div>
 
-        <div className="analytics-nav-title">MONITORING</div>
+
+        {/* MONITORING */}
+
+        <div className="analytics-nav-title">
+          MONITORING
+        </div>
 
         <button
           className="analytics-nav-item"
@@ -190,7 +223,7 @@ function AnalyticsPage({ onNavigate, onLogout }) {
           className="analytics-nav-item"
           onClick={() => onNavigate("locations")}
         >
-          <span>⌖</span>
+          <span>⚑</span>
           Locations
         </button>
 
@@ -199,13 +232,18 @@ function AnalyticsPage({ onNavigate, onLogout }) {
           Analytics
         </button>
 
-        <div className="analytics-nav-title">SECURITY</div>
+
+        {/* SECURITY */}
+
+        <div className="analytics-nav-title security-title">
+          SECURITY
+        </div>
 
         <button
           className="analytics-nav-item"
           onClick={() => onNavigate("audit")}
         >
-          <span>✓</span>
+          <span>◇</span>
           Audit Integrity
         </button>
 
@@ -213,40 +251,94 @@ function AnalyticsPage({ onNavigate, onLogout }) {
           className="analytics-nav-item"
           onClick={() => onNavigate("alerts")}
         >
-          <span>⚠</span>
+          <span>!</span>
           Alerts
         </button>
 
+
+        {/* =================================================
+            SIDEBAR BOTTOM
+        ================================================= */}
+
         <div className="analytics-sidebar-bottom">
+
+          {/* SYSTEM STATUS */}
+
           <div className="analytics-system-status">
-            <span></span>
-            All systems operational
+
+            <span className="status-dot"></span>
+
+            <strong>
+              System Operational
+            </strong>
+
           </div>
 
-          <button className="analytics-logout" onClick={logout}>
-            ⇥ Logout
-          </button>
+
+          {/* ADMIN */}
+
+          <div className="analytics-admin-row">
+
+            <div className="analytics-admin-avatar">
+              A
+            </div>
+
+            <div className="analytics-admin-info">
+              <strong>
+                Admin
+              </strong>
+
+              <span>
+                Administrator
+              </span>
+            </div>
+
+            <button
+              className="analytics-logout-icon"
+              onClick={logout}
+              title="Logout"
+              aria-label="Logout"
+            >
+              ↪
+            </button>
+
+          </div>
+
         </div>
+
       </aside>
 
-      {/* MAIN */}
+
+      {/* =====================================================
+          MAIN
+      ===================================================== */}
+
       <main className="analytics-main">
+
         {/* HEADER */}
+
         <header className="analytics-header">
+
           <div>
+
             <div className="analytics-eyebrow">
               AUDIT INTELLIGENCE
             </div>
 
-            <h1>Analytics</h1>
+            <h1>
+              Analytics
+            </h1>
 
             <p>
               Monitor shipment activity, container health and
               forensic audit metrics.
             </p>
+
           </div>
 
+
           <div className="analytics-header-right">
+
             <div className="analytics-live">
               <span></span>
               LIVE DATA
@@ -255,84 +347,142 @@ function AnalyticsPage({ onNavigate, onLogout }) {
             <div className="analytics-time">
               Updated just now
             </div>
+
           </div>
+
         </header>
 
-        {/* KPI CARDS */}
+
+        {/* =================================================
+            KPI CARDS
+        ================================================= */}
+
         <section className="analytics-kpi-grid">
+
           <div className="analytics-kpi-card">
+
             <div className="analytics-kpi-top">
               <span>Total Containers</span>
               <b>▣</b>
             </div>
 
-            <strong>{total}</strong>
+            <strong>
+              {total}
+            </strong>
 
             <div className="analytics-kpi-footer">
-              <span className="analytics-positive">↑ 12.4%</span>
-              <span>vs last period</span>
+              <span className="analytics-positive">
+                ↑ 12.4%
+              </span>
+
+              <span>
+                vs last period
+              </span>
             </div>
+
           </div>
 
+
           <div className="analytics-kpi-card">
+
             <div className="analytics-kpi-top">
               <span>Verified Events</span>
               <b>✓</b>
             </div>
 
-            <strong>5,421</strong>
+            <strong>
+              5,421
+            </strong>
 
             <div className="analytics-kpi-footer">
-              <span className="analytics-positive">↑ 8.7%</span>
-              <span>verified successfully</span>
+              <span className="analytics-positive">
+                ↑ 8.7%
+              </span>
+
+              <span>
+                verified successfully
+              </span>
             </div>
+
           </div>
 
+
           <div className="analytics-kpi-card">
+
             <div className="analytics-kpi-top">
               <span>Integrity Score</span>
               <b>◇</b>
             </div>
 
-            <strong>99.8%</strong>
+            <strong>
+              99.8%
+            </strong>
 
             <div className="analytics-kpi-footer">
-              <span className="analytics-positive">Stable</span>
-              <span>hash verification</span>
+              <span className="analytics-positive">
+                Stable
+              </span>
+
+              <span>
+                hash verification
+              </span>
             </div>
+
           </div>
 
+
           <div className="analytics-kpi-card">
+
             <div className="analytics-kpi-top">
               <span>Active Alerts</span>
               <b>⚠</b>
             </div>
 
-            <strong>{statusCounts.Alert}</strong>
+            <strong>
+              {statusCounts.Alert}
+            </strong>
 
             <div className="analytics-kpi-footer">
               <span className="analytics-warning">
                 {alertPercentage}%
               </span>
-              <span>of monitored containers</span>
+
+              <span>
+                of monitored containers
+              </span>
             </div>
+
           </div>
+
         </section>
 
-        {/* CONTROLS */}
+
+        {/* =================================================
+            SEARCH / FILTERS
+        ================================================= */}
+
         <section className="analytics-controls">
+
           <div className="analytics-search">
-            <span>⌕</span>
+
+            <span>
+              ⌕
+            </span>
 
             <input
               type="text"
               placeholder="Search container, shipment or location..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
             />
+
           </div>
 
+
           <div className="analytics-filters">
+
             {[
               "All",
               "In Transit",
@@ -340,6 +490,7 @@ function AnalyticsPage({ onNavigate, onLogout }) {
               "Delivered",
               "Alert",
             ].map((status) => (
+
               <button
                 key={status}
                 className={
@@ -347,48 +498,74 @@ function AnalyticsPage({ onNavigate, onLogout }) {
                     ? "selected"
                     : ""
                 }
-                onClick={() => setSelectedStatus(status)}
+                onClick={() =>
+                  setSelectedStatus(status)
+                }
               >
                 {status}
               </button>
+
             ))}
+
           </div>
 
+
           {(search || selectedStatus !== "All") && (
+
             <button
               className="analytics-reset"
               onClick={handleReset}
             >
               Reset
             </button>
+
           )}
+
         </section>
 
-        {/* ANALYTICS GRID */}
+
+        {/* =================================================
+            ANALYTICS GRID
+        ================================================= */}
+
         <section className="analytics-grid">
+
           {/* STATUS DISTRIBUTION */}
+
           <div className="analytics-panel">
+
             <div className="analytics-panel-header">
+
               <div>
+
                 <span className="analytics-panel-label">
                   CONTAINER STATUS
                 </span>
-                <h2>Status Distribution</h2>
+
+                <h2>
+                  Status Distribution
+                </h2>
+
               </div>
 
               <span className="analytics-panel-count">
                 {total} total
               </span>
+
             </div>
 
+
             <div className="analytics-status-list">
+
               {Object.entries(statusCounts).map(
                 ([status, count]) => {
+
                   const percentage = Math.round(
                     (count / total) * 100
                   );
 
                   return (
+
                     <button
                       key={status}
                       className={`analytics-status-row ${
@@ -400,127 +577,230 @@ function AnalyticsPage({ onNavigate, onLogout }) {
                         handleStatusClick(status)
                       }
                     >
+
                       <div
                         className={`analytics-status-icon ${statusInfo[status].className}`}
                       >
                         {statusInfo[status].icon}
                       </div>
 
+
                       <div className="analytics-status-info">
+
                         <div>
-                          <strong>{status}</strong>
-                          <span>{count} containers</span>
+
+                          <strong>
+                            {status}
+                          </strong>
+
+                          <span>
+                            {count} containers
+                          </span>
+
                         </div>
 
+
                         <div className="analytics-progress">
+
                           <span
                             style={{
                               width: `${percentage}%`,
                             }}
-                          ></span>
+                          />
+
                         </div>
+
                       </div>
 
-                      <b>{percentage}%</b>
+
+                      <b>
+                        {percentage}%
+                      </b>
+
                     </button>
+
                   );
                 }
               )}
+
             </div>
+
           </div>
 
-          {/* HEALTH */}
+
+          {/* SHIPMENT HEALTH */}
+
           <div className="analytics-panel">
+
             <div className="analytics-panel-header">
+
               <div>
+
                 <span className="analytics-panel-label">
                   ENVIRONMENT
                 </span>
-                <h2>Shipment Health</h2>
+
+                <h2>
+                  Shipment Health
+                </h2>
+
               </div>
+
             </div>
+
 
             <div className="analytics-health">
+
               <div className="health-circle">
+
                 <div>
-                  <strong>{averageTemperature.toFixed(1)}°</strong>
-                  <span>AVG TEMP</span>
+
+                  <strong>
+                    {averageTemperature.toFixed(1)}°
+                  </strong>
+
+                  <span>
+                    AVG TEMP
+                  </span>
+
                 </div>
+
               </div>
+
 
               <div className="health-metrics">
+
                 <div>
-                  <span>Temperature alerts</span>
-                  <strong>{statusCounts.Alert}</strong>
+                  <span>
+                    Temperature alerts
+                  </span>
+
+                  <strong>
+                    {statusCounts.Alert}
+                  </strong>
                 </div>
 
                 <div>
-                  <span>Within threshold</span>
-                  <strong>{100 - alertPercentage}%</strong>
+                  <span>
+                    Within threshold
+                  </span>
+
+                  <strong>
+                    {100 - alertPercentage}%
+                  </strong>
                 </div>
 
                 <div>
-                  <span>Delivered</span>
-                  <strong>{deliveryPercentage}%</strong>
+                  <span>
+                    Delivered
+                  </span>
+
+                  <strong>
+                    {deliveryPercentage}%
+                  </strong>
                 </div>
+
               </div>
+
             </div>
+
           </div>
 
+
           {/* LOCATIONS */}
+
           <div className="analytics-panel">
+
             <div className="analytics-panel-header">
+
               <div>
+
                 <span className="analytics-panel-label">
                   GLOBAL COVERAGE
                 </span>
-                <h2>Tracked Locations</h2>
+
+                <h2>
+                  Tracked Locations
+                </h2>
+
               </div>
 
               <span className="analytics-panel-count">
                 {locations.length}
               </span>
+
             </div>
 
+
             <div className="analytics-location-list">
+
               {locations.map((location) => {
+
                 const count = containers.filter(
-                  (c) => c.location === location
+                  (container) =>
+                    container.location === location
                 ).length;
 
                 return (
+
                   <div
                     className="analytics-location-row"
                     key={location}
                   >
+
                     <div className="location-dot"></div>
 
                     <div>
-                      <strong>{location}</strong>
-                      <span>{count} tracked</span>
+
+                      <strong>
+                        {location}
+                      </strong>
+
+                      <span>
+                        {count} tracked
+                      </span>
+
                     </div>
 
-                    <b>→</b>
+                    <b>
+                      →
+                    </b>
+
                   </div>
+
                 );
+
               })}
+
             </div>
+
           </div>
 
+
           {/* AUDIT */}
+
           <div className="analytics-panel analytics-audit-panel">
+
             <div className="analytics-panel-header">
+
               <div>
+
                 <span className="analytics-panel-label">
                   FORENSIC AUDIT
                 </span>
-                <h2>Audit Activity</h2>
+
+                <h2>
+                  Audit Activity
+                </h2>
+
               </div>
 
               <span className="audit-verified-badge">
                 VERIFIED
               </span>
+
             </div>
+
 
             <div className="audit-big-number">
               5,421
@@ -531,7 +811,9 @@ function AnalyticsPage({ onNavigate, onLogout }) {
               immutable audit ledger.
             </p>
 
+
             <div className="audit-mini-grid">
+
               <div>
                 <span>Hash Checks</span>
                 <strong>12,842</strong>
@@ -551,7 +833,9 @@ function AnalyticsPage({ onNavigate, onLogout }) {
                 <span>Verified</span>
                 <strong>100%</strong>
               </div>
+
             </div>
+
 
             <button
               className="audit-view-button"
@@ -559,28 +843,51 @@ function AnalyticsPage({ onNavigate, onLogout }) {
             >
               View Audit Integrity →
             </button>
+
           </div>
+
         </section>
 
-        {/* CONTAINER TABLE */}
+
+        {/* =================================================
+            CONTAINER ACTIVITY
+        ================================================= */}
+
         <section className="analytics-table-panel">
+
           <div className="analytics-panel-header">
+
             <div>
+
               <span className="analytics-panel-label">
                 LIVE MONITORING
               </span>
-              <h2>Container Activity</h2>
+
+              <h2>
+                Container Activity
+              </h2>
+
             </div>
 
             <span className="analytics-results">
               Showing {filteredContainers.length} of {total}
             </span>
+
           </div>
 
+
           {filteredContainers.length === 0 ? (
+
             <div className="analytics-empty">
-              <div>⌕</div>
-              <h3>No containers found</h3>
+
+              <div>
+                ⌕
+              </div>
+
+              <h3>
+                No containers found
+              </h3>
+
               <p>
                 Try changing your search or status filter.
               </p>
@@ -588,11 +895,17 @@ function AnalyticsPage({ onNavigate, onLogout }) {
               <button onClick={handleReset}>
                 Clear Filters
               </button>
+
             </div>
+
           ) : (
+
             <div className="analytics-table-wrap">
+
               <table className="analytics-table">
+
                 <thead>
+
                   <tr>
                     <th>CONTAINER</th>
                     <th>SHIPMENT</th>
@@ -601,25 +914,37 @@ function AnalyticsPage({ onNavigate, onLogout }) {
                     <th>STATUS</th>
                     <th>UPDATED</th>
                   </tr>
+
                 </thead>
 
+
                 <tbody>
+
                   {filteredContainers.map((container) => (
+
                     <tr
                       key={container.id}
                       onClick={() =>
                         setSelectedContainer(container)
                       }
                     >
+
                       <td>
-                        <strong>{container.id}</strong>
+                        <strong>
+                          {container.id}
+                        </strong>
                       </td>
 
-                      <td>{container.shipment}</td>
-
-                      <td>{container.location}</td>
+                      <td>
+                        {container.shipment}
+                      </td>
 
                       <td>
+                        {container.location}
+                      </td>
+
+                      <td>
+
                         <span
                           className={
                             container.temperature > 8
@@ -629,93 +954,153 @@ function AnalyticsPage({ onNavigate, onLogout }) {
                         >
                           {container.temperature}°C
                         </span>
+
                       </td>
 
                       <td>
+
                         <span
                           className={`analytics-table-status status-${container.status
                             .toLowerCase()
                             .replaceAll(" ", "-")}`}
                         >
+
                           <i></i>
+
                           {container.status}
+
                         </span>
+
                       </td>
 
-                      <td>{container.updated}</td>
+                      <td>
+                        {container.updated}
+                      </td>
+
                     </tr>
+
                   ))}
+
                 </tbody>
+
               </table>
+
             </div>
+
           )}
+
         </section>
+
       </main>
 
-      {/* DETAILS MODAL */}
+
+      {/* =====================================================
+          DETAILS MODAL
+      ===================================================== */}
+
       {selectedContainer && (
+
         <div
           className="analytics-modal-overlay"
-          onClick={() => setSelectedContainer(null)}
+          onClick={() =>
+            setSelectedContainer(null)
+          }
         >
+
           <div
             className="analytics-modal"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) =>
+              e.stopPropagation()
+            }
           >
+
             <div className="analytics-modal-header">
+
               <div>
-                <span>CONTAINER DETAILS</span>
-                <h2>{selectedContainer.id}</h2>
+
+                <span>
+                  CONTAINER DETAILS
+                </span>
+
+                <h2>
+                  {selectedContainer.id}
+                </h2>
+
               </div>
 
               <button
-                onClick={() => setSelectedContainer(null)}
+                onClick={() =>
+                  setSelectedContainer(null)
+                }
               >
                 ×
               </button>
+
             </div>
 
+
             <div className="analytics-modal-grid">
+
               <div>
                 <span>Shipment</span>
-                <strong>{selectedContainer.shipment}</strong>
+                <strong>
+                  {selectedContainer.shipment}
+                </strong>
               </div>
 
               <div>
                 <span>Status</span>
-                <strong>{selectedContainer.status}</strong>
+                <strong>
+                  {selectedContainer.status}
+                </strong>
               </div>
 
               <div>
                 <span>Location</span>
-                <strong>{selectedContainer.location}</strong>
+                <strong>
+                  {selectedContainer.location}
+                </strong>
               </div>
 
               <div>
                 <span>Temperature</span>
-                <strong>{selectedContainer.temperature}°C</strong>
+                <strong>
+                  {selectedContainer.temperature}°C
+                </strong>
               </div>
 
               <div>
                 <span>Last Update</span>
-                <strong>{selectedContainer.updated}</strong>
+                <strong>
+                  {selectedContainer.updated}
+                </strong>
               </div>
 
               <div>
                 <span>Audit State</span>
-                <strong>Verified</strong>
+                <strong>
+                  Verified
+                </strong>
               </div>
+
             </div>
+
 
             <button
               className="analytics-modal-close"
-              onClick={() => setSelectedContainer(null)}
+              onClick={() =>
+                setSelectedContainer(null)
+              }
             >
               Close
             </button>
+
           </div>
+
         </div>
+
       )}
+
     </div>
   );
 }
