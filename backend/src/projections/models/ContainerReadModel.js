@@ -1,67 +1,85 @@
 const mongoose = require('mongoose');
 
-/**
- * Container Read Model Schema (Member 4 - Item #17)
- * 
- * Highly optimized Mongoose model with compound indexes for high-speed read queries.
- */
 const containerReadModelSchema = new mongoose.Schema(
   {
-    containerId: {
+    aggregateId: {
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
-    currentLocation: {
+    location: {
       type: String,
-      default: 'Unknown',
-      index: true,
+      index: true
     },
     status: {
       type: String,
-      enum: ['CREATED', 'IN_TRANSIT', 'LOADED_ON_SHIP', 'ARRIVED_AT_PORT', 'DELIVERED', 'ALERT_SPIKE'],
-      default: 'CREATED',
       index: true,
+      enum: ['CREATED', 'LOADED', 'IN_TRANSIT', 'ARRIVED', 'DELAYED', 'DAMAGED', 'INSPECTED', 'ALERT', 'WARNING']
     },
-    currentTemperature: {
-      type: Number,
-      default: null,
-    },
-    temperatureAlert: {
-      type: Boolean,
-      default: false,
-    },
-    lastEventId: {
+    ship: {
       type: String,
-      default: null,
+      index: true
+    },
+    temperature: {
+      type: Number
+    },
+    temperatureHistory: [{
+      value: Number,
+      timestamp: Date,
+      alert: Boolean
+    }],
+    lastEventVersion: {
+      type: Number,
+      required: true
     },
     lastEventType: {
-      type: String,
-      default: null,
+      type: String
     },
     lastEventTimestamp: {
-      type: Date,
-      default: null,
+      type: Date
     },
-    version: {
+    totalEvents: {
       type: Number,
-      default: 0,
-      required: true,
+      default: 0
     },
+    alerts: [{
+      type: {
+        type: String,
+        enum: ['TEMPERATURE', 'DELAY', 'DAMAGE', 'STOCK']
+      },
+      message: String,
+      severity: {
+        type: String,
+        enum: ['info', 'warning', 'critical']
+      },
+      timestamp: Date,
+      acknowledged: {
+        type: Boolean,
+        default: false
+      }
+    }],
+    timeline: [{
+      version: Number,
+      eventType: String,
+      timestamp: Date,
+      summary: String
+    }]
   },
   {
-    timestamps: true,
-    versionKey: false,
+    timestamps: true
   }
 );
 
-// Compound indexes for fast filtering by status, location, alerts and timestamps (Item #17)
-containerReadModelSchema.index({ status: 1, currentLocation: 1 });
-containerReadModelSchema.index({ temperatureAlert: 1, status: 1 });
-containerReadModelSchema.index({ currentLocation: 1, updatedAt: -1 });
-containerReadModelSchema.index({ version: 1 });
+containerReadModelSchema.index({ status: 1, updatedAt: -1 });
+containerReadModelSchema.index({ location: 1, status: 1 });
+containerReadModelSchema.index({ ship: 1, status: 1 });
+containerReadModelSchema.index({ 'alerts.acknowledged': 1 });
 
-const ContainerReadModel = mongoose.model('ContainerReadModel', containerReadModelSchema);
+containerReadModelSchema.virtual('alertCount').get(function() {
+  return this.alerts ? this.alerts.length : 0;
+});
 
-module.exports = ContainerReadModel;
+containerReadModelSchema.set('toJSON', { virtuals: true });
+
+module.exports = mongoose.model('ContainerReadModel', containerReadModelSchema);
