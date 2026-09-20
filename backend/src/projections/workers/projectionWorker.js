@@ -1,78 +1,106 @@
-const EventEmitter = require('events');
-const projectionService = require('./services/projectionService');
+const { projectContainer, rebuildAllProjections } = require('./projectionService');
+const { getEventById } = require('../events/services/eventStore');
+const logger = require('../utils/logger');
 
-/**
- * Projection Worker (Member 4 - Item #18)
- * 
- * Background worker that listens to emitted domain events and automatically
- * updates Read Model collections in real-time.
- */
-class ProjectionWorker extends EventEmitter {
+class ProjectionWorker {
   constructor() {
-    super();
     this.isRunning = false;
-    this.processedCount = 0;
-    this.errorCount = 0;
+    this.interval = null;
+    this.processingInterval = 1000; // 1 second
+    this.lastProcessedEventId = null;
+    this.stats = {
+      processed: 0,
+      failed: 0,
+      lastRun: null
+    };
   }
 
-  /**
-   * Start the projection worker and bind event listeners
-   */
-  start() {
-    if (this.isRunning) return this;
-
-    this.isRunning = true;
-    this.on('event', this._handleEvent.bind(this));
-
-    console.log('[ProjectionWorker] Background worker started and listening for events');
-    return this;
-  }
-
-  /**
-   * Stop the projection worker gracefully
-   */
-  stop() {
-    this.isRunning = false;
-    this.removeAllListeners('event');
-    console.log(`[ProjectionWorker] Worker stopped. Processed: ${this.processedCount}, Errors: ${this.errorCount}`);
-  }
-
-  /**
-   * Emit a new domain event for projection processing
-   * @param {Object} event Domain event object
-   */
-  dispatch(event) {
-    if (!this.isRunning) {
-      console.warn('[ProjectionWorker] Worker is not running. Call start() first.');
+  async start() {
+    if (this.isRunning) {
+      logger.warn('Projection worker is already running');
       return;
     }
-    this.emit('event', event);
+
+    this.isRunning = true;
+    logger.info('🔄 Projection worker started');
+
+    await this.rebuild();
+
+    this.interval = setInterval(async () => {
+      await this.processNewEvents();
+    }, this.processingInterval);
   }
 
-  /**
-   * Internal event handler - processes the event through projection service
-   * @param {Object} event Domain event
-   */
-  async _handleEvent(event) {
+
+  stop() {
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
+    this.isRunning = false;
+    logger.info('🛑 Projection worker stopped');
+  }
+
+
+  async rebuild() {
     try {
-      await projectionService.projectEvent(event);
-      this.processedCount++;
+      logger.info('🔄 Rebuilding all projections...');
+      const result = await rebuildAllProjections();
+      this.stats.lastRun = new Date();
+      logger.info(`✅ Rebuild complete: ${result.success}/${result.total}`);
     } catch (error) {
-      this.errorCount++;
-      console.error(`[ProjectionWorker] Failed to project event ${event?.eventType}:`, error.message);
+      logger.error(`Rebuild failed: ${error.message}`);
     }
   }
 
-  /**
-   * Get current worker health stats
-   */
+  async processNewEvents() {
+    try {
+      const Event = require('../events/models/Event');
+      
+
+      const query = this.lastProcessedEventId 
+        ? { _id: { $gt: this.lastProcessedEventId } }
+        : {};
+      
+      const events = await Event.find(query)
+        .sort({ timestamp: 1 })
+        .limit(100);
+
+      if (events.length === 0) return;
+
+      const aggregates = [...new Set(events.map(e => e.aggregateId))];
+      
+      for (const aggregateId of aggregates) {
+        try {
+          await projectContainer(aggregateId);
+          this.stats.processed++;
+        } catch (error) {
+          this.stats.failed++;
+          logger.error(`Failed to project ${aggregateId}: ${error.message}`);
+        }
+      }
+
+      if (events.length > 0) {
+        this.lastProcessedEventId = events[events.length - 1]._id;
+      }
+
+      this.stats.lastRun = new Date();
+
+    } catch (error) {
+      logger.error(`Failed to process new events: ${error.message}`);
+    }
+  }
+
   getStats() {
     return {
+      ...this.stats,
       isRunning: this.isRunning,
-      processedCount: this.processedCount,
-      errorCount: this.errorCount,
+      lastProcessedEventId: this.lastProcessedEventId
     };
   }
 }
 
-module.exports = new ProjectionWorker();
+
+const worker = new ProjectionWorker();
+
+module.exports = worker;
