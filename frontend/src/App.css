@@ -13163,3 +13163,627 @@ select {
     min-width: 720px;
   }
 }
+/* =========================================================
+   EXACT EVENT TIMELINE TYPOGRAPHY
+   FOR ANALYTICS + ALERTS
+   ========================================================= */
+
+.analytics-page,
+.alerts-page {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.analytics-sidebar,
+.alerts-sidebar {
+  font-family: inherit !important;
+}
+
+.analytics-brand strong,
+.alerts-brand strong {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+}
+
+.analytics-brand span,
+.alerts-brand span {
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+}
+
+.analytics-nav-title,
+.alerts-nav-title {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.8px !important;
+}
+
+.analytics-nav-item,
+.alerts-nav-item {
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.analytics-header h1,
+.alerts-header h1 {
+  font-size: 38px !important;
+  line-height: 1.1 !important;
+  font-weight: 800 !important;
+  letter-spacing: -1.2px !important;
+}
+
+.analytics-eyebrow,
+.alerts-eyebrow {
+  font-size: 10px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  letter-spacing: 2.5px !important;
+}
+
+.analytics-header > div:first-child > p,
+.alerts-header > div:first-child > p {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  font-weight: 400 !important;
+}
+
+/* LIVE */
+.analytics-live,
+.alerts-live {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1px !important;
+}
+
+.analytics-time {
+  font-size: 10px !important;
+}
+
+/* =========================
+   ANALYTICS KPI CARDS
+========================= */
+
+.analytics-kpi-top {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1px !important;
+}
+
+.analytics-kpi-top span {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+}
+
+.analytics-kpi-card > strong {
+  font-size: 29px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.5px !important;
+}
+
+.analytics-kpi-footer {
+  font-size: 10px !important;
+}
+
+.analytics-kpi-footer span {
+  font-size: 10px !important;
+}
+
+/* =========================
+   ANALYTICS PANELS
+========================= */
+
+.analytics-panel-label {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 2px !important;
+}
+
+.analytics-panel h2 {
+  font-size: 16px !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.2px !important;
+}
+
+.analytics-panel-count {
+  font-size: 10px !important;
+}
+
+/* Status rows */
+.analytics-status-info strong {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+.analytics-status-info span {
+  font-size: 10px !important;
+}
+
+.analytics-status-row > b {
+  font-size: 10px !important;
+}
+
+/* Health */
+.health-metrics span {
+  font-size: 10px !important;
+}
+
+.health-metrics strong {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+.health-circle strong {
+  font-size: 29px !important;
+  font-weight: 800 !important;
+}
+
+.health-circle span {
+  font-size: 9px !important;
+  letter-spacing: 1px !important;
+}
+
+/* =========================
+   ANALYTICS SEARCH + FILTERS
+========================= */
+
+.analytics-search input {
+  font-family: inherit !important;
+  font-size: 12px !important;
+}
+
+.analytics-search input::placeholder {
+  font-size: 12px !important;
+}
+
+.analytics-filters button {
+  font-family: inherit !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+}
+
+/* =========================
+   ALERTS SUMMARY CARDS
+========================= */
+
+.alerts-summary-card {
+  font-family: inherit !important;
+}
+
+.alerts-summary-card > strong {
+  font-size: 29px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+}
+
+.alerts-summary-card span {
+  font-size: 10px !important;
+}
+
+.alerts-summary-card small {
+  font-size: 10px !important;
+}
+
+/* =========================
+   ALERT LIST
+========================= */
+
+.alerts-panel-label {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 2px !important;
+}
+
+.alerts-panel h2 {
+  font-size: 16px !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+}
+
+.alerts-panel p {
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+}
+
+.alert-title {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+.alert-description {
+  font-size: 10px !important;
+  line-height: 1.5 !important;
+}
+
+.alert-meta {
+  font-size: 9px !important;
+}
+
+.alert-status,
+.alert-severity {
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* =========================
+   ALERT SEARCH / FILTERS
+========================= */
+
+.alerts-search input {
+  font-family: inherit !important;
+  font-size: 12px !important;
+}
+
+.alerts-search input::placeholder {
+  font-size: 12px !important;
+}
+
+.alerts-filters button {
+  font-family: inherit !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+}
+
+/* =========================
+   MODALS
+========================= */
+
+.alert-modal {
+  font-family: inherit !important;
+}
+
+.alert-modal h2 {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+}
+
+.alert-modal span {
+  font-size: 10px !important;
+}
+
+.alert-modal p {
+  font-size: 11px !important;
+  line-height: 1.6 !important;
+}
+
+.alert-modal button {
+  font-family: inherit !important;
+  font-size: 11px !important;
+}
+/* =========================================================
+   AUDITTRAIL — GLOBAL TYPOGRAPHY SYSTEM
+   ONE FONT FOR THE ENTIRE FRONTEND
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  font-family: Inter, "Segoe UI", system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif !important;
+}
+
+/* NORMAL WEBSITE TEXT */
+body,
+button,
+input,
+textarea,
+select {
+  font-family: Inter, "Segoe UI", system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif !important;
+}
+
+/* =========================================================
+   GLOBAL FONT SIZES
+   ========================================================= */
+
+/* Normal text */
+body {
+  font-size: 14px;
+}
+
+/* Main page headings */
+h1 {
+  font-size: 38px !important;
+  line-height: 1.1 !important;
+  font-weight: 800 !important;
+  letter-spacing: -1.2px !important;
+}
+
+/* Section / panel headings */
+h2 {
+  font-size: 16px !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+}
+
+/* Small headings */
+h3 {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+}
+
+/* Normal paragraphs */
+p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Small supporting text */
+small {
+  font-size: 10px !important;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   SIDEBAR — SAME EVERYWHERE
+   ========================================================= */
+
+.audit-sidebar,
+.analytics-sidebar,
+.alerts-sidebar {
+  font-family: inherit !important;
+}
+
+.audit-brand h2,
+.analytics-brand strong,
+.alerts-brand strong {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+}
+
+.audit-brand span,
+.analytics-brand span,
+.alerts-brand span {
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+}
+
+.sidebar-label,
+.analytics-nav-title,
+.alerts-nav-title {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.8px !important;
+}
+
+.nav-link,
+.analytics-nav-item,
+.alerts-nav-item {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+/* =========================================================
+   PAGE EYEBROW
+   ========================================================= */
+
+.eyebrow,
+.analytics-eyebrow,
+.alerts-eyebrow {
+  font-size: 10px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  letter-spacing: 2.5px !important;
+}
+
+/* =========================================================
+   PAGE SUBTITLE
+   ========================================================= */
+
+.page-heading p:last-child,
+.analytics-header p,
+.alerts-header p {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  font-weight: 400 !important;
+}
+
+/* =========================================================
+   LIVE BADGES
+   ========================================================= */
+
+.dashboard-live,
+.analytics-live,
+.alerts-live {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1px !important;
+}
+
+/* =========================================================
+   DASHBOARD STAT NUMBERS
+   ========================================================= */
+
+.stat-card > strong {
+  font-size: 29px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+}
+
+.stat-top {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1px !important;
+}
+
+.stat-card small {
+  font-size: 10px !important;
+}
+
+/* =========================================================
+   PANEL HEADERS
+   ========================================================= */
+
+.panel-header h2 {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.panel-header p {
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+}
+
+.panel-action {
+  font-size: 11px !important;
+}
+
+/* =========================================================
+   DASHBOARD ACTIVITY
+   ========================================================= */
+
+.activity-item strong {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+.activity-item span {
+  font-size: 10px !important;
+}
+
+.activity-item > small {
+  font-size: 8px !important;
+}
+
+/* =========================================================
+   QUICK ACCESS
+   ========================================================= */
+
+.quick-actions strong {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+.quick-actions small {
+  font-size: 9px !important;
+}
+
+/* =========================================================
+   ANALYTICS
+   ========================================================= */
+
+.analytics-kpi-card strong {
+  font-size: 29px !important;
+  font-weight: 800 !important;
+}
+
+.analytics-kpi-card {
+  font-size: 14px !important;
+}
+
+.analytics-kpi-card small {
+  font-size: 10px !important;
+}
+
+.analytics-panel h2 {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.analytics-panel p {
+  font-size: 11px !important;
+}
+
+.analytics-page input,
+.analytics-page button {
+  font-family: inherit !important;
+  font-size: 12px !important;
+}
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+
+.alerts-summary-card strong {
+  font-size: 29px !important;
+  font-weight: 800 !important;
+}
+
+.alerts-summary-card {
+  font-size: 14px !important;
+}
+
+.alerts-panel h2 {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.alerts-panel p {
+  font-size: 11px !important;
+}
+
+.alerts-page input,
+.alerts-page button {
+  font-family: inherit !important;
+  font-size: 12px !important;
+}
+
+/* =========================================================
+   EVENT TIMELINE
+   ========================================================= */
+
+.timeline-page h1,
+.event-timeline-page h1 {
+  font-size: 38px !important;
+  font-weight: 800 !important;
+}
+
+.timeline-page h2,
+.event-timeline-page h2 {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+/* =========================================================
+   CONTAINERS
+   ========================================================= */
+
+.containers-page h1 {
+  font-size: 38px !important;
+  font-weight: 800 !important;
+}
+
+.containers-page h2 {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+/* =========================================================
+   LOCATIONS
+   ========================================================= */
+
+.locations-page h1 {
+  font-size: 38px !important;
+  font-weight: 800 !important;
+}
+
+.locations-page h2 {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+/* =========================================================
+   LOGIN
+   SAME FONT, KEEP EXISTING DESIGN
+   ========================================================= */
+
+.login-page,
+.login-page button,
+.login-page input {
+  font-family: Inter, "Segoe UI", system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif !important;
+}
