@@ -17,6 +17,7 @@ const projectionWorker = require('./workers/projectionWorker');
 const { registerWorkerListeners, shutdownWorker } = require('./workers/workerEventListener');
 const { DLQModel, dlqHandler } = require('./dlq/dlqHandler');
 const retryMechanism = require('./dlq/retryMechanism');
+const projectionSocketEvents = require('./events/projectionSocketEvents');
 
 module.exports = {
   ContainerReadModel,
@@ -36,4 +37,5 @@ module.exports = {
   DLQModel,
   dlqHandler,
   retryMechanism,
+  projectionSocketEvents,
 };
