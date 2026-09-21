@@ -1,5 +1,5 @@
 /**
- * Projections Module Entry Point
+ * Projections Module Entry Point (Member 4 - 100% Complete)
  */
 
 const ContainerReadModel = require('./models/ContainerReadModel');
@@ -18,6 +18,7 @@ const { registerWorkerListeners, shutdownWorker } = require('./workers/workerEve
 const { DLQModel, dlqHandler } = require('./dlq/dlqHandler');
 const retryMechanism = require('./dlq/retryMechanism');
 const projectionSocketEvents = require('./events/projectionSocketEvents');
+const projectionSystem = require('./projectionSystem');
 
 module.exports = {
   ContainerReadModel,
@@ -38,4 +39,5 @@ module.exports = {
   dlqHandler,
   retryMechanism,
   projectionSocketEvents,
+  projectionSystem,
 };
