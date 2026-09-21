@@ -13787,3 +13787,364 @@ small {
   font-family: Inter, "Segoe UI", system-ui, -apple-system,
     BlinkMacSystemFont, sans-serif !important;
 }
+/* =========================================================
+   AUDITTRAIL — COMPACT PAGE SCALE
+   Match Analytics + Alerts to Event Timeline
+   ========================================================= */
+
+/* SAME MAIN PAGE WIDTH / SPACING */
+.analytics-page .analytics-main,
+.alerts-page .alerts-main {
+  width: calc(100% - 270px);
+  margin-left: 270px;
+  min-height: 100vh;
+}
+
+.analytics-page .analytics-content,
+.alerts-page .alerts-content {
+  width: min(1500px, 100%);
+  margin: auto;
+  padding: 42px 48px;
+}
+
+
+/* =========================================================
+   ANALYTICS HEADER
+   ========================================================= */
+
+.analytics-header {
+  margin-bottom: 28px !important;
+}
+
+.analytics-header h1,
+.alerts-header h1 {
+  font-size: 38px !important;
+  line-height: 1.1 !important;
+  font-weight: 800 !important;
+  letter-spacing: -1.2px !important;
+}
+
+.analytics-header p,
+.alerts-header p {
+  margin-top: 9px !important;
+  font-size: 14px !important;
+}
+
+
+/* =========================================================
+   KPI CARDS — COMPACT LIKE EVENT TIMELINE
+   ========================================================= */
+
+.analytics-kpi-grid,
+.alerts-summary-grid {
+  gap: 14px !important;
+  margin-bottom: 18px !important;
+}
+
+.analytics-kpi-card,
+.alerts-summary-card {
+  min-height: 118px !important;
+  height: 118px !important;
+  padding: 18px 20px !important;
+  border-radius: 15px !important;
+}
+
+.analytics-kpi-top {
+  font-size: 10px !important;
+}
+
+.analytics-kpi-card > strong {
+  margin-top: 16px !important;
+  font-size: 29px !important;
+  line-height: 1 !important;
+}
+
+.analytics-kpi-footer {
+  margin-top: 7px !important;
+  font-size: 10px !important;
+}
+
+
+/* =========================================================
+   SEARCH + FILTERS
+   ========================================================= */
+
+.analytics-controls,
+.alerts-controls {
+  gap: 10px !important;
+  margin-bottom: 18px !important;
+}
+
+.analytics-search,
+.alerts-search {
+  min-height: 44px !important;
+  height: 44px !important;
+  border-radius: 11px !important;
+}
+
+.analytics-search input,
+.alerts-search input {
+  font-size: 12px !important;
+}
+
+.analytics-filters {
+  gap: 7px !important;
+}
+
+.analytics-filters button,
+.alerts-filters button {
+  height: 40px !important;
+  padding: 0 13px !important;
+  border-radius: 10px !important;
+  font-size: 11px !important;
+}
+
+
+/* =========================================================
+   ANALYTICS GRID
+   ========================================================= */
+
+.analytics-grid {
+  gap: 18px !important;
+}
+
+
+/* =========================================================
+   ALL ANALYTICS PANELS
+   ========================================================= */
+
+.analytics-panel {
+  border-radius: 16px !important;
+}
+
+.analytics-panel-header {
+  min-height: 78px !important;
+  padding: 20px 24px !important;
+}
+
+.analytics-panel-label {
+  font-size: 10px !important;
+  letter-spacing: 2px !important;
+}
+
+.analytics-panel-header h2 {
+  margin-top: 5px !important;
+  font-size: 16px !important;
+  line-height: 1.3 !important;
+}
+
+
+/* =========================================================
+   STATUS DISTRIBUTION
+   ========================================================= */
+
+.analytics-status-row {
+  min-height: 68px !important;
+  height: 68px !important;
+  padding: 12px 20px !important;
+}
+
+.analytics-status-row strong {
+  font-size: 12px !important;
+}
+
+.analytics-status-row span {
+  font-size: 10px !important;
+}
+
+.analytics-status-icon {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+
+/* =========================================================
+   SHIPMENT HEALTH
+   ========================================================= */
+
+.analytics-health-content {
+  padding: 24px !important;
+  min-height: 260px !important;
+}
+
+.health-circle {
+  width: 140px !important;
+  height: 140px !important;
+}
+
+.health-circle strong {
+  font-size: 29px !important;
+}
+
+.health-circle span {
+  font-size: 9px !important;
+}
+
+.health-metrics {
+  gap: 0 !important;
+}
+
+.health-metrics > div {
+  padding: 12px 0 !important;
+}
+
+.health-metrics span {
+  font-size: 10px !important;
+}
+
+.health-metrics strong {
+  font-size: 12px !important;
+}
+
+
+/* =========================================================
+   LOCATION ROWS
+   ========================================================= */
+
+.analytics-location-row {
+  min-height: 58px !important;
+  padding: 12px 20px !important;
+}
+
+.analytics-location-row strong {
+  font-size: 12px !important;
+}
+
+.analytics-location-row span {
+  font-size: 10px !important;
+}
+
+
+/* =========================================================
+   AUDIT PANEL
+   ========================================================= */
+
+.analytics-audit-panel {
+  padding-bottom: 20px !important;
+}
+
+.audit-big-number {
+  font-size: 29px !important;
+  margin: 20px 24px 6px !important;
+}
+
+.analytics-audit-panel > p {
+  font-size: 11px !important;
+  margin: 0 24px 18px !important;
+}
+
+.audit-mini-grid {
+  gap: 10px !important;
+  padding: 0 24px !important;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.analytics-table-panel {
+  margin-top: 18px !important;
+}
+
+.analytics-table-panel .analytics-panel-header {
+  min-height: 78px !important;
+}
+
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+
+.alerts-header {
+  margin-bottom: 28px !important;
+}
+
+.alerts-summary-card {
+  min-height: 118px !important;
+  height: 118px !important;
+}
+
+.alerts-summary-card strong {
+  font-size: 29px !important;
+}
+
+.alerts-panel {
+  border-radius: 16px !important;
+}
+
+.alerts-panel-header {
+  min-height: 78px !important;
+  padding: 20px 24px !important;
+}
+
+
+/* ALERT ROWS — COMPACT */
+.alert-item {
+  min-height: 78px !important;
+  padding: 14px 20px !important;
+}
+
+.alert-item-content strong {
+  font-size: 12px !important;
+}
+
+.alert-item-content p {
+  font-size: 10px !important;
+  margin-top: 4px !important;
+}
+
+.alert-item-meta {
+  font-size: 9px !important;
+  margin-top: 5px !important;
+}
+
+.alert-severity-icon {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.alert-item-status {
+  font-size: 9px !important;
+}
+
+
+/* =========================================================
+   REMOVE EXCESSIVE EMPTY SPACE
+   ========================================================= */
+
+.analytics-page section,
+.alerts-page section {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .analytics-page .analytics-main,
+  .alerts-page .alerts-main {
+    width: calc(100% - 240px);
+    margin-left: 240px;
+  }
+
+  .analytics-page .analytics-content,
+  .alerts-page .alerts-content {
+    padding: 34px 30px;
+  }
+}
+
+@media (max-width: 800px) {
+  .analytics-page .analytics-main,
+  .alerts-page .alerts-main {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .analytics-page .analytics-content,
+  .alerts-page .alerts-content {
+    padding: 28px 20px;
+  }
+}
