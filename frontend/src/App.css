@@ -14148,3 +14148,229 @@ small {
     padding: 28px 20px;
   }
 }
+/* =========================================================
+   AUDITTRAIL — ONE GLOBAL FONT SYSTEM
+   Applies to EVERY FRONTEND PAGE
+   ========================================================= */
+
+:root {
+  --audit-font:
+    Inter, "Segoe UI", system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif;
+
+  --audit-text: 14px;
+  --audit-heading: 38px;
+  --audit-section: 16px;
+  --audit-small-heading: 12px;
+  --audit-label: 10px;
+  --audit-description: 11px;
+}
+
+/* ONE FONT EVERYWHERE */
+html,
+body,
+#root,
+#root * {
+  font-family: var(--audit-font) !important;
+}
+
+/* Normal text */
+body,
+#root {
+  font-size: var(--audit-text) !important;
+}
+
+/* Main page heading — SAME on every page */
+.audit-app h1,
+.analytics-page h1,
+.alerts-page h1,
+#root h1 {
+  font-size: var(--audit-heading) !important;
+  line-height: 1.1 !important;
+  font-weight: 800 !important;
+  letter-spacing: -1.2px !important;
+}
+
+/* Section headings — SAME everywhere */
+.audit-app h2,
+.analytics-page h2,
+.alerts-page h2,
+#root h2 {
+  font-size: var(--audit-section) !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+}
+
+/* Small headings */
+#root h3 {
+  font-size: var(--audit-small-heading) !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+}
+
+/* Normal paragraphs */
+#root p {
+  font-size: var(--audit-text) !important;
+  line-height: 1.5 !important;
+}
+
+/* Descriptions */
+.panel-header p,
+.analytics-panel p,
+.alerts-panel p,
+.activity-item span {
+  font-size: var(--audit-description) !important;
+}
+
+/* =========================================================
+   SIDEBAR — IDENTICAL EVERYWHERE
+   ========================================================= */
+
+.audit-sidebar,
+.analytics-sidebar,
+.alerts-sidebar {
+  font-family: var(--audit-font) !important;
+}
+
+.audit-brand h2,
+.analytics-brand strong,
+.alerts-brand strong {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+}
+
+.audit-brand span,
+.analytics-brand span,
+.alerts-brand span {
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+}
+
+.sidebar-label,
+.analytics-nav-title,
+.alerts-nav-title {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.8px !important;
+}
+
+.nav-link,
+.analytics-nav-item,
+.alerts-nav-item {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+/* =========================================================
+   EYEBROW — IDENTICAL EVERYWHERE
+   ========================================================= */
+
+.eyebrow,
+.analytics-eyebrow,
+.alerts-eyebrow {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 2.5px !important;
+}
+
+/* =========================================================
+   CARD NUMBERS — IDENTICAL EVERYWHERE
+   ========================================================= */
+
+.stat-card > strong,
+.analytics-kpi-card > strong,
+.alerts-summary-card > strong {
+  font-size: 29px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+}
+
+/* =========================================================
+   CARD LABELS
+   ========================================================= */
+
+.stat-top,
+.analytics-kpi-top,
+.alerts-summary-card > span {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1px !important;
+}
+
+.stat-card small,
+.analytics-kpi-card small,
+.alerts-summary-card small {
+  font-size: 10px !important;
+}
+
+/* =========================================================
+   PANEL HEADERS — IDENTICAL
+   ========================================================= */
+
+.panel-header h2,
+.analytics-panel h2,
+.alerts-panel h2 {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.panel-header p,
+.analytics-panel p,
+.alerts-panel p {
+  font-size: 11px !important;
+}
+
+/* =========================================================
+   BUTTONS — IDENTICAL
+   ========================================================= */
+
+#root button {
+  font-family: var(--audit-font) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* Navigation buttons remain 14px */
+#root .nav-link,
+#root .analytics-nav-item,
+#root .alerts-nav-item {
+  font-size: 14px !important;
+}
+
+/* =========================================================
+   INPUTS / SEARCH — IDENTICAL
+   ========================================================= */
+
+#root input,
+#root textarea,
+#root select {
+  font-family: var(--audit-font) !important;
+  font-size: 12px !important;
+}
+
+/* =========================================================
+   SMALL TEXT / BADGES
+   ========================================================= */
+
+#root small {
+  font-size: 10px !important;
+}
+
+.panel-status,
+.analytics-live,
+.alerts-live,
+.dashboard-live {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+}
+
+/* =========================================================
+   LOGIN — SAME FONT
+   Keep its existing visual sizes otherwise
+   ========================================================= */
+
+.login-page,
+.login-page * {
+  font-family: var(--audit-font) !important;
+}
