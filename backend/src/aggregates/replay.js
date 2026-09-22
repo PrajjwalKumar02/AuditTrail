@@ -1,7 +1,10 @@
 const {
-  createInitialContainerState,
+  initialState,
+} = require("./container/containerState");
+
+const {
   applyEvent,
-} = require("./containerAggregate");
+} = require("./container/containerReducer");
 
 const {
   validateReplayEvents,
@@ -20,7 +23,7 @@ function replayEvents(events) {
 
   return orderedEvents.reduce((state, event) => {
     return applyEvent(state, event);
-  }, createInitialContainerState());
+  }, initialState());
 }
 
 module.exports = {
