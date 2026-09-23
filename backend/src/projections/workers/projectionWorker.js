@@ -1,6 +1,6 @@
-const { projectContainer, rebuildAllProjections } = require('./projectionService');
-const { getEventById } = require('../events/services/eventStore');
-const logger = require('../utils/logger');
+const { projectContainer, rebuildAllProjections } = require('../services/projectionService');
+const { getEventById } = require('../../events/services/eventStore');
+const logger = require('../../utils/logger');
 
 class ProjectionWorker {
   constructor() {
@@ -55,7 +55,7 @@ class ProjectionWorker {
 
   async processNewEvents() {
     try {
-      const Event = require('../events/models/Event');
+      const Event = require('../../events/models/Event');
       
 
       const query = this.lastProcessedEventId 

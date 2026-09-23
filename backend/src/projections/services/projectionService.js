@@ -1,7 +1,7 @@
-const ContainerReadModel = require('./models/ContainerReadModel');
-const { getEventsForAggregate } = require('../events/services/eventStore');
-const { replay } = require('../aggregates/container/containerAggregate');
-const logger = require('../utils/logger');
+const ContainerReadModel = require('../models/ContainerReadModel');
+const { getEventsForAggregate } = require('../../events/services/eventStore');
+const { replay } = require('../../aggregates/container/containerAggregate');
+const logger = require('../../utils/logger');
 
 const projectContainer = async (aggregateId) => {
   try {
@@ -112,7 +112,7 @@ const getEventSummary = (event) => {
 
 const rebuildAllProjections = async () => {
   try {
-    const Event = require('../events/models/Event');
+    const Event = require('../../events/models/Event');
     const aggregates = await Event.distinct('aggregateId');
     
     logger.info(`Rebuilding ${aggregates.length} projections...`);
@@ -151,8 +151,33 @@ const deleteProjection = async (aggregateId) => {
   }
 };
 
+const resetProjections = async () => {
+  try {
+    await ContainerReadModel.deleteMany({});
+    logger.info('All projections reset successfully');
+    return { success: true, message: 'All read model projections reset successfully' };
+  } catch (error) {
+    logger.error(`Failed to reset projections: ${error.message}`);
+    throw error;
+  }
+};
+
+const getProjectionMetrics = async () => {
+  const totalContainers = await ContainerReadModel.countDocuments();
+  const totalAlerts = await ContainerReadModel.countDocuments({ 'alerts.0': { $exists: true } });
+
+  return {
+    totalContainers,
+    totalAlerts,
+    status: 'healthy',
+    timestamp: new Date(),
+  };
+};
+
 module.exports = {
   projectContainer,
   rebuildAllProjections,
-  deleteProjection
+  deleteProjection,
+  resetProjections,
+  getProjectionMetrics
 };
