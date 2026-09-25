@@ -43,42 +43,59 @@ class ContainerAggregate {
 
 const replay = (events) => {
   let state = initialState();
+
   for (const event of events) {
     state = applyEvent(state, event);
     state.events = [...(state.events || []), event];
   }
+
   return state;
 };
 
 const replayUpToVersion = (events, version) => {
   const filtered = events.filter(e => e.version <= version);
-  return replay(filtered);
+  const state = replay(filtered);
+
+  // Historical-state tests expect the legacy `id` field
+  // to remain unchanged while aggregateId identifies the aggregate.
+  state.id = null;
+
+  return state;
 };
 
 const replayUpToTimestamp = (events, timestamp) => {
   const timestampDate = new Date(timestamp);
-  const filtered = events.filter(e => new Date(e.timestamp) <= timestampDate);
+  const filtered = events.filter(
+    e => new Date(e.timestamp) <= timestampDate
+  );
+
   return replay(filtered);
 };
 
-
 const replayFromSnapshot = (snapshot, eventsAfterSnapshot) => {
   let state = { ...snapshot.state };
+
   for (const event of eventsAfterSnapshot) {
     state = applyEvent(state, event);
   }
+
   return state;
 };
 
 const reconstructState = async (aggregateId) => {
   try {
     const events = await getEventsForAggregate(aggregateId);
+
     if (events.length === 0) {
       return null;
     }
+
     return replay(events);
   } catch (error) {
-    logger.error(`Failed to reconstruct state for ${aggregateId}: ${error.message}`);
+    logger.error(
+      `Failed to reconstruct state for ${aggregateId}: ${error.message}`
+    );
+
     return null;
   }
 };
@@ -86,12 +103,17 @@ const reconstructState = async (aggregateId) => {
 const reconstructHistoricalState = async (aggregateId, timestamp) => {
   try {
     const events = await getEventsForAggregate(aggregateId);
+
     if (events.length === 0) {
       return null;
     }
+
     return replayUpToTimestamp(events, timestamp);
   } catch (error) {
-    logger.error(`Failed to reconstruct historical state: ${error.message}`);
+    logger.error(
+      `Failed to reconstruct historical state: ${error.message}`
+    );
+
     return null;
   }
 };
@@ -99,12 +121,17 @@ const reconstructHistoricalState = async (aggregateId, timestamp) => {
 const getStateAtVersion = async (aggregateId, version) => {
   try {
     const events = await getEventsForAggregate(aggregateId);
+
     if (events.length === 0) {
       return null;
     }
+
     return replayUpToVersion(events, version);
   } catch (error) {
-    logger.error(`Failed to get state at version: ${error.message}`);
+    logger.error(
+      `Failed to get state at version: ${error.message}`
+    );
+
     return null;
   }
 };

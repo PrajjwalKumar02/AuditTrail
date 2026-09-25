@@ -1,13 +1,17 @@
 const initialState = () => ({
   id: null,
+  aggregateId: null,
   location: null,
   status: 'CREATED',
   ship: null,
   temperature: null,
+  temperatureAlert: false,
   version: 0,
   events: [],
   createdAt: null,
   updatedAt: null,
+  lastEventType: null,
+  lastEventAt: null,
   metadata: {
     totalEvents: 0,
     lastEventType: null,
@@ -38,6 +42,10 @@ const updateMetadata = (state, event) => {
   state.metadata.totalEvents += 1;
   state.metadata.lastEventType = event.eventType;
   state.metadata.lastEventTimestamp = event.timestamp;
+
+  state.lastEventType = event.eventType;
+  state.lastEventAt = event.timestamp;
+
   return state;
 };
 
