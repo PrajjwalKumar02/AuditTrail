@@ -20,6 +20,7 @@ const retryMechanism = require('./dlq/retryMechanism');
 const projectionSocketEvents = require('./events/projectionSocketEvents');
 const projectionSystem = require('./projectionSystem');
 const projectionValidation = require('./middleware/projectionValidation');
+const projectionMetrics = require('./utils/projectionMetrics');
 
 module.exports = {
   ContainerReadModel,
@@ -42,4 +43,5 @@ module.exports = {
   projectionSocketEvents,
   projectionSystem,
   projectionValidation,
+  projectionMetrics,
 };
