@@ -96,4 +96,20 @@ describe("Optimistic Concurrency Control", () => {
       "Failed to get current version: Database unavailable"
     );
   });
+
+  test("returns false when aggregate existence check fails", async () => {
+    Event.countDocuments.mockRejectedValue(
+      new Error("Database unavailable")
+    );
+
+    await expect(aggregateExists("CNT-001")).resolves.toBe(false);
+  });
+
+  test("returns zero when event count check fails", async () => {
+    Event.countDocuments.mockRejectedValue(
+      new Error("Database unavailable")
+    );
+
+    await expect(getEventCount("CNT-001")).resolves.toBe(0);
+  });
 });
