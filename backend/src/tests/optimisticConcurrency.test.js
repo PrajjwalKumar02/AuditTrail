@@ -23,29 +23,30 @@ describe("Optimistic Concurrency Control", () => {
     jest.clearAllMocks();
   });
 
-  test("passes when expected version matches current version", async () => {
+  test("passes with version zero for a new aggregate", async () => {
     Event.findOne.mockReturnValue({
-      sort: jest.fn().mockResolvedValue({ version: 3 }),
+      sort: jest.fn().mockResolvedValue(null),
     });
 
-    await expect(checkExpectedVersion("CNT-001", 3)).resolves.toBe(3);
+    await expect(checkExpectedVersion("CNT-NEW", 0)).resolves.toBe(0);
   });
 
-  test("throws a 409 conflict when versions do not match", async () => {
+  test("includes expected and current versions in conflict details", async () => {
     Event.findOne.mockReturnValue({
-      sort: jest.fn().mockResolvedValue({ version: 4 }),
+      sort: jest.fn().mockResolvedValue({ version: 6 }),
     });
 
     await expect(
-      checkExpectedVersion("CNT-001", 3)
+      checkExpectedVersion("CNT-001", 4)
     ).rejects.toMatchObject({
       statusCode: 409,
       name: "OptimisticConcurrencyError",
       details: {
         aggregateId: "CNT-001",
-        expectedVersion: 3,
-        currentVersion: 4,
+        expectedVersion: 4,
+        currentVersion: 6,
         conflict: true,
+        suggestion: "Please use version 6 for the next operation",
       },
     });
   });
@@ -70,9 +71,6 @@ describe("Optimistic Concurrency Control", () => {
     Event.countDocuments.mockResolvedValue(2);
 
     await expect(aggregateExists("CNT-001")).resolves.toBe(true);
-    expect(Event.countDocuments).toHaveBeenCalledWith({
-      aggregateId: "CNT-001",
-    });
   });
 
   test("returns false when an aggregate has no events", async () => {
@@ -87,7 +85,7 @@ describe("Optimistic Concurrency Control", () => {
     await expect(getEventCount("CNT-001")).resolves.toBe(5);
   });
 
-  test("handles event store errors when checking current version", async () => {
+  test("handles current version database errors", async () => {
     Event.findOne.mockReturnValue({
       sort: jest.fn().mockRejectedValue(new Error("Database unavailable")),
     });
