@@ -72,6 +72,13 @@ function DashboardPage({ onNavigate, onLogout }) {
             <span>▥</span>
             Analytics
           </button>
+          <button
+  className="nav-link"
+  onClick={() => onNavigate("ai-insights")}
+>
+  <span>✦</span>
+  AI Insights
+</button>
 
 
           <div className="sidebar-label security-label">

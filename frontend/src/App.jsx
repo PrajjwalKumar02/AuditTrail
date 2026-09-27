@@ -7,6 +7,7 @@ import EventTimeline from "./pages/EventTimeline";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import AlertsPage from "./pages/AlertsPage";
 import ShipmentMap from "./components/map/ShipmentMap";
+import AIInsightsPage from "./pages/AIInsightsPage";
 
 /* =====================================================
    SHARED SIDEBAR
@@ -1118,7 +1119,14 @@ function App() {
       />
     );
   }
-
+if (page === "ai-insights") {
+  return (
+    <AIInsightsPage
+      onNavigate={setPage}
+      onLogout={handleLogout}
+    />
+  );
+}
 
   if (page === "locations") {
 
