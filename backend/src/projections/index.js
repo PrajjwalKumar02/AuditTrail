@@ -21,6 +21,7 @@ const projectionSocketEvents = require('./events/projectionSocketEvents');
 const projectionSystem = require('./projectionSystem');
 const projectionValidation = require('./middleware/projectionValidation');
 const projectionMetrics = require('./utils/projectionMetrics');
+const projectionHealthCheck = require('./utils/healthCheck');
 
 module.exports = {
   ContainerReadModel,
@@ -44,4 +45,5 @@ module.exports = {
   projectionSystem,
   projectionValidation,
   projectionMetrics,
+  projectionHealthCheck,
 };
