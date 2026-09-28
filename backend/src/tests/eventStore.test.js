@@ -17,7 +17,12 @@ const Event = require("../events/models/Event");
 
 const {
   appendEvent,
+  verifyEventChain,
 } = require("../events/services/eventStore");
+
+const {
+  generateEventHash,
+} = require("../events/services/hash");
 
 describe("Event Store", () => {
   beforeEach(() => {
@@ -116,5 +121,108 @@ describe("Event Store", () => {
 
     expect(result.version).toBe(2);
     expect(result.previousHash).toBe("a".repeat(64));
+  });
+
+  test("should verify a valid event hash chain", async () => {
+    const event1 = {
+      aggregateId: "container-001",
+      aggregateType: "Container",
+      eventType: "CONTAINER_CREATED",
+      payload: { status: "created" },
+      version: 1,
+      timestamp: new Date("2026-09-28T10:00:00.000Z"),
+      previousHash: "0".repeat(64),
+    };
+
+    event1.currentHash = generateEventHash(event1);
+
+    const event2 = {
+      aggregateId: "container-001",
+      aggregateType: "Container",
+      eventType: "MOVED",
+      payload: { location: "Mumbai Port" },
+      version: 2,
+      timestamp: new Date("2026-09-28T11:00:00.000Z"),
+      previousHash: event1.currentHash,
+    };
+
+    event2.currentHash = generateEventHash(event2);
+
+    Event.find.mockReturnValue({
+      sort: jest.fn().mockReturnValue({
+        lean: jest.fn().mockResolvedValue([event1, event2]),
+      }),
+    });
+
+    const result = await verifyEventChain("container-001");
+
+    expect(result.valid).toBe(true);
+    expect(result.totalEvents).toBe(2);
+    expect(result.message).toBe("All events verified successfully");
+  });
+
+  test("should detect a tampered event hash", async () => {
+    const event = {
+      aggregateId: "container-001",
+      aggregateType: "Container",
+      eventType: "CONTAINER_CREATED",
+      payload: { status: "created" },
+      version: 1,
+      timestamp: new Date("2026-09-28T10:00:00.000Z"),
+      previousHash: "0".repeat(64),
+      currentHash: "tampered".padEnd(64, "0"),
+    };
+
+    Event.find.mockReturnValue({
+      sort: jest.fn().mockReturnValue({
+        lean: jest.fn().mockResolvedValue([event]),
+      }),
+    });
+
+    const result = await verifyEventChain("container-001");
+
+    expect(result.valid).toBe(false);
+    expect(result.message).toBe(
+      "Hash verification failed at version 1"
+    );
+  });
+
+  test("should detect a broken previous hash link", async () => {
+    const event1 = {
+      aggregateId: "container-001",
+      aggregateType: "Container",
+      eventType: "CONTAINER_CREATED",
+      payload: { status: "created" },
+      version: 1,
+      timestamp: new Date("2026-09-28T10:00:00.000Z"),
+      previousHash: "0".repeat(64),
+    };
+
+    event1.currentHash = generateEventHash(event1);
+
+    const event2 = {
+      aggregateId: "container-001",
+      aggregateType: "Container",
+      eventType: "MOVED",
+      payload: { location: "Mumbai Port" },
+      version: 2,
+      timestamp: new Date("2026-09-28T11:00:00.000Z"),
+      previousHash: "b".repeat(64),
+    };
+
+    event2.currentHash = generateEventHash(event2);
+
+    Event.find.mockReturnValue({
+      sort: jest.fn().mockReturnValue({
+        lean: jest.fn().mockResolvedValue([event1, event2]),
+      }),
+    });
+
+    const result = await verifyEventChain("container-001");
+
+    expect(result.valid).toBe(false);
+    expect(result.message).toBe(
+      "Hash verification failed at version 2"
+    );
   });
 });
