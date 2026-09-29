@@ -255,6 +255,16 @@ function AnalyticsPage({ onNavigate, onLogout }) {
           Alerts
         </button>
 
+        {/* AI INSIGHTS */}
+
+        <button
+          className="analytics-nav-item"
+          onClick={() => onNavigate("ai-insights")}
+        >
+          <span>✦</span>
+          AI Insights
+        </button>
+
 
         {/* =================================================
             SIDEBAR BOTTOM
