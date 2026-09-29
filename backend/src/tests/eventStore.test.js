@@ -226,3 +226,15 @@ describe("Event Store", () => {
     );
   });
 });
+  test("should verify an empty event chain", async () => {
+    Event.find.mockReturnValue({
+      sort: jest.fn().mockReturnValue({
+        lean: jest.fn().mockResolvedValue([]),
+      }),
+    });
+
+    const result = await verifyEventChain("container-empty");
+
+    expect(result.valid).toBe(true);
+    expect(result.message).toBe("No events to verify");
+  });
